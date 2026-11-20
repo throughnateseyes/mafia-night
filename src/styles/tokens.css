@@ -1,0 +1,89 @@
+/*
+ * Mafia Night: "Cabin Noir" design tokens.
+ * Single source of truth. Components read only from these.
+ *
+ * Idea: a cabin at night. Warm ink-dark surroundings, ivory paper cards,
+ * hand-drawn ink line art, brass art-deco accents, a red that means blood.
+ * Every text/background pair below passes WCAG AA (see README).
+ */
+:root {
+  /* Night (the room) */
+  --color-bg: #14100D;
+  --color-surface: #201A15;
+  --color-surface-raised: #2C241D;
+  --color-border: #3A3028;
+  --color-text: #F2EADB;
+  --color-text-muted: #A99B89;
+
+  /* Paper (cards, case files) */
+  --color-paper: #F2EADB;
+  --color-paper-shade: #E4D8C3;
+  --color-ink: #1C1612;
+  --color-ink-muted: #6B5E50;
+
+  /* Teams and roles: bright for night, deep "-ink" for paper */
+  --color-mafia: #E5604B;
+  --color-mafia-ink: #A8312A;
+  --color-mafia-soft: #3A1A16;
+  --color-town: #7AA7E0;
+  --color-town-ink: #2F5C9A;
+  --color-town-soft: #172333;
+  --color-doctor: #7EC29A;
+  --color-doctor-ink: #276A44;
+  --color-detective: #DDA94B;
+  --color-detective-ink: #8A5F12;
+
+  /* Accents */
+  --color-brass: #D4AE6A;       /* deco linework, primary action */
+  --color-candle: #F2C46B;      /* lit windows, string lights, birthday glow */
+  --color-focus: #F2C46B;
+
+  /* Typography */
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;   /* role names, titles */
+  --font-deco: "Big Shoulders Display", "Arial Narrow", sans-serif;  /* stamps, labels */
+  --font-hand: "Caveat", "Bradley Hand", cursive;                    /* narrator's notes */
+  --font-body: "Inter Variable", "Inter", system-ui, sans-serif;     /* UI text */
+  --display-axes: "SOFT" 100, "WONK" 1;                             /* Fraunces at its most organic */
+
+  --line-height: 1.4;
+  --text-role: 600 48px/1.05 var(--font-display);
+  --text-h1: 600 40px/1.05 var(--font-display);
+  --text-h2: 600 24px/1.2 var(--font-display);
+  --text-body: 400 17px/var(--line-height) var(--font-body);
+  --text-caption: 500 14px/var(--line-height) var(--font-body);
+  --text-stamp: 700 15px/1 var(--font-deco);
+  --text-hand: 500 24px/1.15 var(--font-hand);
+  --tracking-stamp: 0.18em;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Shape, elevation, motion */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 999px;
+  --shadow-card: 0 1px 0 rgba(255, 240, 210, 0.06) inset, 0 10px 28px rgba(0, 0, 0, 0.5);
+  --shadow-lift: 0 18px 40px rgba(0, 0, 0, 0.55);
+  --tap-target: 48px;
+  --motion-fast: 150ms ease-out;
+  --motion-pop: 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --motion-reveal: 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Paper grain, drawn once and reused on every card */
+  --texture-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.15 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms linear;
+    --motion-pop: 0ms linear;
+    --motion-reveal: 0ms linear;
+  }
+}

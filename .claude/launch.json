@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "mafia-night", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "--port", "5179", "--strictPort"], "port": 5179, "url": "http://localhost:5179" }
+  ]
+}

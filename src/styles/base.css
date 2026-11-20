@@ -1,0 +1,193 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  color: var(--color-text);
+  font: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  /* a faint warm glow, like a fire in the next room */
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(242, 196, 107, 0.10), transparent 60%),
+    var(--color-bg);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-variation-settings: var(--display-axes);
+}
+
+h1 { font: var(--text-h1); font-variation-settings: var(--display-axes); letter-spacing: -0.015em; }
+h2 { font: var(--text-h2); font-variation-settings: var(--display-axes); }
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Layout ---------- */
+
+.screen {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: calc(var(--space-5) + env(safe-area-inset-top)) var(--space-4) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ---------- Type helpers ---------- */
+
+.caption {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.stamp {
+  font: var(--text-stamp);
+  letter-spacing: var(--tracking-stamp);
+  text-transform: uppercase;
+  color: var(--color-brass);
+}
+
+.hand {
+  font: var(--text-hand);
+  color: var(--color-candle);
+}
+
+/* ---------- Deco rule: a thin brass line with a diamond in the middle ---------- */
+
+.deco-rule {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-brass);
+}
+
+.deco-rule::before,
+.deco-rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.deco-rule > span {
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  border: 1px solid currentColor;
+}
+
+/* ---------- Paper card ---------- */
+
+.paper {
+  position: relative;
+  background: var(--texture-paper), var(--color-paper);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  min-height: var(--tap-target);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: transform var(--motion-fast), background var(--motion-fast), opacity var(--motion-fast);
+  touch-action: manipulation;
+}
+
+.btn:active { transform: scale(0.95); }
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  width: 100%;
+  min-height: 60px;
+  background: var(--color-brass);
+  border-color: transparent;
+  color: var(--color-bg);
+  font: var(--text-stamp);
+  font-size: 20px;
+  letter-spacing: var(--tracking-stamp);
+  text-transform: uppercase;
+  box-shadow: 0 0 0 4px var(--color-bg), 0 0 0 5px rgba(212, 174, 106, 0.5);
+}
+
+.btn-round {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-color: var(--color-brass);
+  color: var(--color-brass);
+  background: transparent;
+}
+
+.btn-round svg { width: 26px; height: 26px; }
+
+/* ---------- Hand-drawn art ---------- */
+
+.ink {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wobble { filter: url(#wobble); }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

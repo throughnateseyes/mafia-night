@@ -1,0 +1,211 @@
+/* ---------- Title ---------- */
+
+.title-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+}
+
+.case-stamp {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  padding: 8px 14px 7px;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+}
+
+.title {
+  margin-top: var(--space-3);
+  font-size: 68px;
+  line-height: 0.9;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-brass);
+}
+
+.tagline {
+  transform: rotate(-2deg);
+  margin-top: var(--space-1);
+}
+
+.cabin-scene {
+  width: calc(100% + var(--space-4) * 2);
+  max-width: none;
+  margin: var(--space-3) calc(var(--space-4) * -1) 0;
+  color: var(--color-text);
+}
+
+.cabin-scene .stars { opacity: 0.6; }
+.cabin-scene .bulb { fill: var(--color-candle); animation: twinkle 2.4s ease-in-out infinite; }
+.cabin-scene .window-glow { animation: flicker 5s steps(1) infinite; }
+.cabin-scene .smoke { animation: drift 6s ease-in-out infinite; transform-origin: 212px 76px; }
+
+@keyframes twinkle { 50% { opacity: 0.35; } }
+@keyframes flicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.85; } 49% { opacity: 1; } 83% { opacity: 0.9; } }
+@keyframes drift { 50% { transform: translateX(3px) skewX(-4deg); opacity: 0.4; } }
+
+/* ---------- Section head ---------- */
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.note {
+  font-size: 21px;
+  transform: rotate(-3deg);
+  white-space: nowrap;
+}
+
+/* ---------- Stepper ---------- */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-2) 0;
+}
+
+.count {
+  min-width: 2ch;
+  text-align: center;
+  font-family: var(--font-display);
+  font-variation-settings: var(--display-axes);
+  font-size: 88px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+}
+
+.count.bump { animation: bump var(--motion-pop); }
+@keyframes bump { 40% { transform: scale(1.14) rotate(-3deg); } }
+
+/* ---------- Lineup ---------- */
+
+.lineup {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  min-height: 52px;
+}
+
+.suspect { width: 28px; height: 47px; }
+.suspect .suspect-body { fill: var(--color-town); }
+.suspect .suspect-hat { fill: var(--color-text); opacity: 0.9; }
+.suspect[data-role="mafia"] .suspect-body { fill: var(--color-mafia); }
+.suspect[data-role="mafia"] .suspect-hat { fill: var(--color-ink); opacity: 1; }
+.suspect[data-role="doctor"] .suspect-body { fill: var(--color-doctor); }
+.suspect[data-role="detective"] .suspect-body { fill: var(--color-detective); }
+.suspect[data-new] { animation: pop-in var(--motion-pop) both; animation-delay: calc(var(--i, 0) * 0ms); }
+
+@keyframes pop-in {
+  from { transform: translateY(10px) scale(0.4); opacity: 0; }
+}
+
+/* ---------- Cast ---------- */
+
+.cast {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cast-card {
+  width: 100%;
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-2);
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--motion-fast);
+}
+
+/* Each card sits a hair askew, like cards on a table */
+.cast li:nth-child(odd) .cast-card { transform: rotate(-0.6deg); }
+.cast li:nth-child(even) .cast-card { transform: rotate(0.5deg); }
+.cast .cast-card:active { transform: scale(0.97) rotate(0deg); }
+
+.cast-card .role-art { flex: none; color: var(--color-ink); }
+
+.cast-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cast-name {
+  font-family: var(--font-display);
+  font-variation-settings: var(--display-axes);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.cast-line {
+  font: var(--text-caption);
+  color: var(--color-ink-muted);
+}
+
+.cast-count {
+  flex: none;
+  font-family: var(--font-display);
+  font-variation-settings: var(--display-axes);
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--color-town-ink);
+}
+
+.cast-count[data-team="mafia"] { color: var(--color-mafia-ink); }
+
+/* ---------- PIN ---------- */
+
+.pin input {
+  width: 100%;
+  min-height: 64px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 34px;
+  letter-spacing: 0.6em;
+  text-indent: 0.6em;
+  transition: border-color var(--motion-fast);
+}
+
+.pin input::placeholder { color: var(--color-text-muted); opacity: 0.6; }
+.pin input:focus { outline: none; border-color: var(--color-brass); }
+
+.pin-hint { font-style: italic; }
+
+/* ---------- Deal bar (sticks to the bottom of the phone) ---------- */
+
+.deal-bar {
+  position: sticky;
+  bottom: 0;
+  margin: 0 calc(var(--space-4) * -1) calc(var(--space-7) * -1);
+  padding: var(--space-4) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--color-bg) 70%, transparent);
+}

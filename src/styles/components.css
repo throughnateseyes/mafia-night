@@ -1,0 +1,207 @@
+/* ---------- Rules sheet (role index card) ---------- */
+
+.rules-sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: 92dvh;
+  margin: auto auto 0;
+  padding: 0 var(--space-3) calc(var(--space-3) + env(safe-area-inset-bottom));
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.rules-sheet::backdrop {
+  background: rgba(8, 6, 4, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.rules-sheet[open] { animation: sheet-up var(--motion-reveal) both; }
+.rules-sheet[open]::backdrop { animation: fade-in var(--motion-reveal) both; }
+.rules-sheet.closing { animation: sheet-down 220ms ease-in both; }
+
+@keyframes sheet-up {
+  from { transform: translateY(105%) rotate(2deg); }
+  to { transform: none; }
+}
+@keyframes sheet-down {
+  to { transform: translateY(105%) rotate(-1deg); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+.rules-card {
+  max-height: calc(92dvh - var(--space-3));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-6) var(--space-5) var(--space-5);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lift);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  --role-ink: var(--color-town-ink);
+}
+
+/* Double inner rule, like an old ticket */
+.rules-card::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid currentColor;
+  border-radius: calc(var(--radius-lg) - 6px);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.rules-sheet[data-team="mafia"] .rules-card { --role-ink: var(--color-mafia-ink); }
+.rules-sheet[data-role="doctor"] .rules-card { --role-ink: var(--color-doctor-ink); }
+.rules-sheet[data-role="detective"] .rules-card { --role-ink: var(--color-detective-ink); }
+
+.rules-close {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  width: var(--tap-target);
+  height: var(--tap-target);
+  border: 0;
+  background: none;
+  color: var(--color-ink);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.rules-close svg { width: 22px; height: 22px; }
+
+.team-stamp {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-4);
+  padding: 6px 10px 4px;
+  border: 2.5px solid var(--role-team, var(--color-town-ink));
+  border-radius: 6px;
+  color: var(--role-team, var(--color-town-ink));
+  font: var(--text-stamp);
+  font-size: 18px;
+  letter-spacing: var(--tracking-stamp);
+  text-transform: uppercase;
+  transform: rotate(8deg);
+  opacity: 0.85;
+  mix-blend-mode: multiply;
+}
+
+.rules-sheet[data-team="mafia"] .team-stamp { --role-team: var(--color-mafia-ink); }
+
+.rules-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-1);
+}
+
+.rules-head .role-art { margin-bottom: var(--space-2); color: var(--color-ink); }
+
+.rules-eyebrow {
+  font: var(--text-stamp);
+  letter-spacing: var(--tracking-stamp);
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.rules-name {
+  font: var(--text-role);
+  font-variation-settings: var(--display-axes);
+  color: var(--role-ink);
+}
+
+.rules-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 19px;
+  font-variation-settings: var(--display-axes);
+  color: var(--color-ink);
+}
+
+.rules-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.rules-list > div {
+  padding-top: var(--space-3);
+  border-top: 1px dashed rgba(28, 22, 18, 0.25);
+}
+
+.rules-list dt {
+  font: var(--text-stamp);
+  letter-spacing: var(--tracking-stamp);
+  text-transform: uppercase;
+  color: var(--role-ink);
+  margin-bottom: var(--space-1);
+}
+
+.rules-list dd {
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.rules-tip {
+  font: var(--text-hand);
+  font-size: 23px;
+  color: var(--color-ink);
+  transform: rotate(-1.2deg);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(242, 196, 107, 0.35);
+  border-radius: 4px 14px 6px 12px;
+}
+
+.rules-tip span { color: var(--role-ink); }
+
+.rules-done {
+  align-self: stretch;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border-color: transparent;
+}
+
+/* ---------- Win strip ---------- */
+
+.win-strip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.win-strip strong {
+  font: var(--text-stamp);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  margin-right: var(--space-2);
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  margin-right: var(--space-2);
+  vertical-align: 1px;
+}
+.dot-mafia { background: var(--color-mafia); }
+.dot-town { background: var(--color-town); }
+
+/* ---------- Placeholder screens ---------- */
+
+.placeholder { min-height: 100dvh; justify-content: center; text-align: center; align-items: center; }
+.placeholder h1 em { color: var(--color-brass); }
