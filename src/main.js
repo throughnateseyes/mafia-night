@@ -1,20 +1,24 @@
-import '@fontsource-variable/fraunces/full';
-import '@fontsource-variable/fraunces/full-italic';
-import '@fontsource-variable/inter';
-import '@fontsource/big-shoulders-display/latin-700';
-import '@fontsource/caveat/latin-500';
+import '@fontsource-variable/shantell-sans/full.css';
 
 import './styles/tokens.css';
 import './styles/base.css';
-import './styles/components.css';
-import './styles/setup.css';
+import './styles/art.css';
+import './styles/ui.css';
+import './styles/screens.css';
 
 import { route, start } from './router.js';
-import { renderSetup } from './screens/setup.js';
-import { renderDeal } from './screens/deal.js';
+import { renderHome } from './screens/home.js';
+import { renderTable } from './screens/table.js';
+import { renderPlayer } from './screens/player.js';
+import { renderNarrator } from './screens/narrator.js';
+import { renderTV } from './screens/display.js';
+import { renderGallery } from './screens/gallery.js';
 
-route('/', renderSetup);
-route('/setup', renderSetup);
-route('/deal', renderDeal);
+route('/', renderHome);
+route('/t', renderTable);
+route('/j', renderPlayer);
+route('/n', renderNarrator);
+route('/tv', renderTV);
+route('/gallery', renderGallery);
 
 start(document.getElementById('app'));

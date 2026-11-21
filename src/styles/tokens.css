@@ -1,89 +1,78 @@
 /*
- * Mafia Night: "Cabin Noir" design tokens.
- * Single source of truth. Components read only from these.
- *
- * Idea: a cabin at night. Warm ink-dark surroundings, ivory paper cards,
- * hand-drawn ink line art, brass art-deco accents, a red that means blood.
- * Every text/background pair below passes WCAG AA (see README).
+ * Mafia Night design tokens: "Paper Theater".
+ * Cut paper, brush ink, colored tiles. Everything on screen reads from these.
+ * Art colors mirror src/art/palette.js.
  */
 :root {
-  /* Night (the room) */
-  --color-bg: #14100D;
-  --color-surface: #201A15;
-  --color-surface-raised: #2C241D;
-  --color-border: #3A3028;
-  --color-text: #F2EADB;
-  --color-text-muted: #A99B89;
+  /* Paper and ink */
+  --ink: #191714;
+  --ink-soft: #4A443C;      /* secondary text on light paper (7.9:1 on sand) */
+  --bone: #FAF6EE;
+  --sand: #EADFC6;
+  --stone: #E4E1DA;
+  --terracotta: #D9714E;
+  --clay: #D3A07C;
+  --sage: #788F62;
+  --periwinkle: #8B88E3;
+  --sky: #87A9F2;
+  --night: #15151C;
+  --dusk: #2A2A3A;
+  --blood: #B8321F;
+  --candle: #F0BE4A;
 
-  /* Paper (cards, case files) */
-  --color-paper: #F2EADB;
-  --color-paper-shade: #E4D8C3;
-  --color-ink: #1C1612;
-  --color-ink-muted: #6B5E50;
+  /* Roles */
+  --role-mafia: var(--night);
+  --role-doctor: var(--sage);
+  --role-detective: var(--terracotta);
+  --role-villager: var(--sand);
 
-  /* Teams and roles: bright for night, deep "-ink" for paper */
-  --color-mafia: #E5604B;
-  --color-mafia-ink: #A8312A;
-  --color-mafia-soft: #3A1A16;
-  --color-town: #7AA7E0;
-  --color-town-ink: #2F5C9A;
-  --color-town-soft: #172333;
-  --color-doctor: #7EC29A;
-  --color-doctor-ink: #276A44;
-  --color-detective: #DDA94B;
-  --color-detective-ink: #8A5F12;
+  /* Type: one hand-drawn family, tuned per use with its variable axes */
+  --font: "Shantell Sans Variable", "Shantell Sans", "Comic Neue", ui-rounded, system-ui, sans-serif;
+  --axes-shout: "wght" 800, "INFM" 1, "BNCE" 0.6, "SPAC" 0;
+  --axes-say: "wght" 560, "INFM" 0.6, "BNCE" 0.3, "SPAC" 0;
+  --axes-read: "wght" 420, "INFM" 0.25, "BNCE" 0, "SPAC" 0;
+  --text-hero: 44px;
+  --text-big: 30px;
+  --text-title: 24px;
+  --text-body: 18px;
+  --text-small: 15px;
+  --line: 1.3;
 
-  /* Accents */
-  --color-brass: #D4AE6A;       /* deco linework, primary action */
-  --color-candle: #F2C46B;      /* lit windows, string lights, birthday glow */
-  --color-focus: #F2C46B;
+  /* Space */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
 
-  /* Typography */
-  --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;   /* role names, titles */
-  --font-deco: "Big Shoulders Display", "Arial Narrow", sans-serif;  /* stamps, labels */
-  --font-hand: "Caveat", "Bradley Hand", cursive;                    /* narrator's notes */
-  --font-body: "Inter Variable", "Inter", system-ui, sans-serif;     /* UI text */
-  --display-axes: "SOFT" 100, "WONK" 1;                             /* Fraunces at its most organic */
+  /* Shape: deliberately uneven radii so nothing looks machine-cut */
+  --wobble-a: 255px 18px 225px 18px / 18px 225px 18px 255px;
+  --wobble-b: 18px 225px 18px 255px / 255px 18px 225px 18px;
+  --tile-radius: 28px 34px 26px 32px;
+  --card-radius: 22px 26px 20px 24px;
+  --stroke: 2.5px;
+  --sticker: 4px 5px 0 var(--ink);
+  --sticker-pressed: 1px 1px 0 var(--ink);
+  --tap: 52px;
 
-  --line-height: 1.4;
-  --text-role: 600 48px/1.05 var(--font-display);
-  --text-h1: 600 40px/1.05 var(--font-display);
-  --text-h2: 600 24px/1.2 var(--font-display);
-  --text-body: 400 17px/var(--line-height) var(--font-body);
-  --text-caption: 500 14px/var(--line-height) var(--font-body);
-  --text-stamp: 700 15px/1 var(--font-deco);
-  --text-hand: 500 24px/1.15 var(--font-hand);
-  --tracking-stamp: 0.18em;
+  /* Motion */
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-draw: cubic-bezier(0.6, 0.05, 0.4, 1);
+  --fast: 140ms;
+  --med: 320ms;
+  --slow: 600ms;
 
-  /* Spacing */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-
-  /* Shape, elevation, motion */
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-full: 999px;
-  --shadow-card: 0 1px 0 rgba(255, 240, 210, 0.06) inset, 0 10px 28px rgba(0, 0, 0, 0.5);
-  --shadow-lift: 0 18px 40px rgba(0, 0, 0, 0.55);
-  --tap-target: 48px;
-  --motion-fast: 150ms ease-out;
-  --motion-pop: 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  --motion-reveal: 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
-
-  /* Paper grain, drawn once and reused on every card */
-  --texture-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.15 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Paper grain overlay */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --motion-fast: 0ms linear;
-    --motion-pop: 0ms linear;
-    --motion-reveal: 0ms linear;
+    --fast: 0ms;
+    --med: 0ms;
+    --slow: 0ms;
   }
 }

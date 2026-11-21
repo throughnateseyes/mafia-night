@@ -1,12 +1,5 @@
 import { PLAYER_LIMITS, ROLES, SCALING } from '../config/game.js';
 
-/** Clamp any input to a legal player count. */
-export function clampCount(n) {
-  const v = Math.round(Number(n));
-  if (!Number.isFinite(v)) return PLAYER_LIMITS.default;
-  return Math.min(PLAYER_LIMITS.max, Math.max(PLAYER_LIMITS.min, v));
-}
-
 /**
  * How many of each role a game of `count` players gets.
  * @returns {{mafia:number, doctor:number, detective:number, villager:number}}
@@ -29,7 +22,7 @@ export function roleList(count) {
 }
 
 /** Unbiased random integer in [0, max) from the platform CSPRNG. */
-function randomInt(max) {
+export function randomInt(max) {
   const limit = Math.floor(0x100000000 / max) * max;
   const buf = new Uint32Array(1);
   do crypto.getRandomValues(buf);
@@ -45,9 +38,4 @@ export function shuffle(items, rand = randomInt) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
-}
-
-/** Deal a fresh hand of roles to seats 1..count. */
-export function deal(count) {
-  return shuffle(roleList(count)).map((role, i) => ({ seat: i + 1, role, alive: true }));
 }

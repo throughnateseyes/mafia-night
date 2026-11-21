@@ -1,17 +1,17 @@
 /*
- * Every game rule and every word a player reads about a role lives here.
+ * Every game rule and every word a player or the narrator reads lives here.
  * Change the table or the copy in this one file; the screens follow.
  */
 
-/** Who this edition is for. Shows on the title stamp. */
+/** Who this edition is for. */
 export const EVENT = {
   honoree: 'Steph',
-  occasion: 'Birthday Cabin Trip',
-  caseNo: '11·20',
+  occasion: 'birthday cabin trip',
+  narrator: 'Nate',
 };
 
-/** Players, not counting the narrator (the host narrates and does not play). */
-export const PLAYER_LIMITS = { min: 5, max: 14, default: 9 };
+/** Players, not counting the narrator (the narrator runs the game and does not play). */
+export const PLAYER_LIMITS = { min: 5, max: 14 };
 
 /**
  * Role scaling by player count (spec table). Villagers fill whatever is left.
@@ -24,61 +24,91 @@ export const SCALING = [
   { min: 11, max: 14, mafia: 4, detective: 1, doctor: 1 },
 ];
 
+/** Show a dead player's role to everyone when they die. */
+export const REVEAL_ROLE_ON_DEATH = true;
+
 export const TEAMS = {
-  mafia: {
-    name: 'The Mafia',
-    short: 'Mafia',
-    win: 'Equal the town, and the town is yours.',
-  },
-  town: {
-    name: 'The Town',
-    short: 'Town',
-    win: 'Catch every last member of the Mafia.',
-  },
+  mafia: { name: 'The Mafia', short: 'Mafia', win: 'Outnumber the town. Then the cabin is yours.' },
+  town: { name: 'The Town', short: 'Town', win: 'Find and vote out every member of the Mafia.' },
 };
 
-/**
- * Display order is the order here. `color` names a token family in tokens.css
- * (--color-<color>, --color-<color>-ink).
- */
+/** Display order is the order here. `art` is the role portrait id in src/art/roles. */
 export const ROLES = {
   mafia: {
     name: 'Mafia',
     team: 'mafia',
-    color: 'mafia',
-    tagline: 'Each night, pick someone to take out.',
-    night: 'When the narrator calls the Mafia, open your eyes and find your crew. Silently agree on one player to kill by pointing. Then close your eyes.',
+    art: 'role-mafia',
+    tile: 'night',
+    line: 'Each night, you and your crew pick someone to take out.',
+    night: 'When the narrator says "Mafia, open your eyes," find your crew. Silently agree on one person by pointing at them. Then close your eyes.',
     day: 'Blend in. Accuse, defend, act shocked. Vote like an innocent person would.',
-    tip: "Don't all leap to defend each other. Nothing looks guiltier.",
+    tip: "Don't all rush to defend each other. Nothing looks guiltier.",
   },
   doctor: {
     name: 'Doctor',
     team: 'town',
-    color: 'doctor',
-    tagline: 'Each night, save one person.',
-    night: 'When called, point at one player to protect. If the Mafia picked them, they live. You can save yourself, but never the same person two nights running.',
-    day: 'Help the town find the Mafia, but keep your job quiet.',
+    art: 'role-doctor',
+    tile: 'sage',
+    line: 'Each night, pick one person to save.',
+    night: 'When called, point at one person to protect. If the Mafia chose them, they live. You can save yourself, but never the same person two nights in a row.',
+    day: 'Help the town find the Mafia, but keep your job to yourself.',
     tip: 'If the Mafia figure out who you are, you are next.',
   },
   detective: {
     name: 'Detective',
     team: 'town',
-    color: 'detective',
-    tagline: 'Each night, check one suspect.',
-    night: 'When called, point at one player. The narrator gives a silent thumbs up if they are Mafia, thumbs down if not.',
+    art: 'role-detective',
+    tile: 'terracotta',
+    line: 'Each night, check one suspect.',
+    night: 'When called, point at one person. The narrator gives you a silent thumbs up if they are Mafia, thumbs down if not.',
     day: 'Steer the vote without blowing your cover. Timing is everything.',
     tip: 'Reveal yourself too early and the Mafia will make sure you never check again.',
   },
   villager: {
     name: 'Villager',
     team: 'town',
-    color: 'town',
-    tagline: 'No night moves. Read the room, then vote.',
+    art: 'role-villager',
+    tile: 'sand',
+    line: 'No night moves. Read the room, then vote.',
     night: 'Keep your eyes closed and sleep tight. Hopefully.',
     day: 'Argue, question, notice who goes quiet. Then vote someone out.',
-    tip: 'Watch who the Mafia never seem to target.',
+    tip: 'Watch who the Mafia never seem to go after.',
   },
 };
 
-/** The loop every round follows. */
-export const ROUND = ['Night', 'Morning', 'Vote'];
+/** The loop every round follows, for the how-to-play page. */
+export const ROUND = [
+  { id: 'night', name: 'Night', icon: 'moon', text: 'Eyes closed. The Mafia pick a victim. The Doctor saves someone. The Detective checks a suspect.' },
+  { id: 'morning', name: 'Morning', icon: 'sun', text: 'Everyone wakes up. The narrator reveals who died, if anyone.' },
+  { id: 'vote', name: 'Vote', icon: 'hand', text: 'Argue it out, then vote. Whoever gets the most votes is out.' },
+];
+
+/**
+ * The narrator's night script. `pick` records a choice; `role` names who acts.
+ * Steps for a role whose players are all dead still run (so nobody can tell), with no pick.
+ */
+export const NIGHT_STEPS = [
+  { id: 'sleep', art: 'night-falls', say: 'Everyone, close your eyes. Night falls on the cabin.' },
+  { id: 'mafia', art: 'mafia-wake', role: 'mafia', pick: 'target', say: 'Mafia, open your eyes. Silently choose who to take out tonight.', ask: 'Who did the Mafia choose?' },
+  { id: 'doctor', art: 'doctor-wake', role: 'doctor', pick: 'save', say: 'Mafia, close your eyes. Doctor, open your eyes. Who will you save tonight?', ask: 'Who did the Doctor save?' },
+  { id: 'detective', art: 'detective-wake', role: 'detective', pick: 'check', say: 'Doctor, close your eyes. Detective, open your eyes. Point at someone you suspect.', ask: 'Who did the Detective point at?' },
+  { id: 'dawn', art: 'morning-clear', say: 'Detective, close your eyes. … Everyone, wake up.' },
+];
+
+/**
+ * Scenes the narrator can put on every screen. `art` is the scene id.
+ * {name} and {role} are filled in from the game.
+ */
+export const SCENES = {
+  lobby: { art: 'lobby', caption: 'Pull up a chair', sub: 'Waiting for everyone to join.' },
+  dealt: { art: 'lobby', caption: 'Roles are out', sub: 'Hold your thumb on your card to peek. Tell no one.' },
+  night: { art: 'night-falls', caption: 'Night falls', sub: 'Everyone, close your eyes.', dark: true },
+  dead: { art: 'morning-dead', caption: '{name} didn’t wake up', sub: 'They were the {role}.', subHidden: 'Who did this?' },
+  clear: { art: 'morning-clear', caption: 'Everyone woke up', sub: 'Nobody died last night. Suspicious.' },
+  talk: { art: 'discussion', caption: 'Talk it out', sub: 'Who’s lying? Make your case.' },
+  vote: { art: 'vote', caption: 'Time to vote', sub: 'On three, point at who you think is Mafia.' },
+  out: { art: 'eliminated', caption: '{name} is out', sub: 'The town has spoken. They were the {role}.', subHidden: 'The town has spoken.' },
+  hung: { art: 'no-elimination', caption: 'No one is out', sub: 'The town couldn’t decide.' },
+  town: { art: 'town-wins', caption: 'The town wins', sub: 'Every member of the Mafia has been caught.' },
+  mafia: { art: 'mafia-wins', caption: 'The Mafia wins', sub: 'They took over the cabin.', dark: true },
+};
