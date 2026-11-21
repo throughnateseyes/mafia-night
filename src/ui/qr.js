@@ -1,5 +1,5 @@
 /*
- * QR codes drawn to match the art (soft ink modules, rounded finder eyes) while
+ * QR codes drawn to match the app (square modules, softly rounded finder eyes) while
  * keeping everything a phone camera needs: exact module grid, 4-module quiet zone,
  * dark-on-light contrast, error correction level M (15% damage tolerated).
  * scripts/check-qr.mjs renders these and decodes them to prove they scan.
@@ -18,14 +18,17 @@ export function qrSvg(text, { ink = '#191714', paper = '#FAF6EE', label = 'QR co
   const total = size + q * 2;
   const isFinder = (x, y) => (x < 7 && y < 7) || (x >= size - 7 && y < 7) || (x < 7 && y >= size - 7);
   let mods = '';
+  // solid square modules, merged into horizontal runs: the most scannable form, even when the link is long
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       if (!dark(x, y) || isFinder(x, y)) continue;
-      // tiny seeded variation in corner roundness keeps it feeling inked, never changes coverage
-      const r = 0.28 + (((x * 7 + y * 13) % 5) * 0.02);
-      mods += `<rect x="${x + q + 0.04}" y="${y + q + 0.04}" width="0.92" height="0.92" rx="${r}"/>`;
+      let end = x;
+      while (end + 1 < size && dark(end + 1, y) && !isFinder(end + 1, y)) end++;
+      mods += `M${x + q} ${y + q}h${end - x + 1}v1h${-(end - x + 1)}z`;
+      x = end;
     }
   }
+  mods = `<path d="${mods}"/>`;
   const eye = (fx, fy) => {
     const X = fx + q;
     const Y = fy + q;
