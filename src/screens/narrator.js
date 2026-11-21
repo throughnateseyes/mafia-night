@@ -24,16 +24,16 @@ export function renderNarrator(root, arg) {
   root.innerHTML = `
     <main class="view narr">
       <header class="narr-bar">
-        <span class="narr-badge">${icon('sparkle', { size: 22 })}<span>Narrator</span></span>
+        <span class="narr-badge">Narrator</span>
         <span class="narr-round"></span>
         <span class="narr-net"></span>
-        <button class="btn-round small" id="menu" type="button" aria-label="Narrator menu">${icon('users', { size: 22 })}</button>
+        <button class="btn-round small" id="menu" type="button" aria-label="Narrator tools">${icon('users', { size: 20 })}</button>
       </header>
       <section class="narr-screen">
         <div class="stage"></div>
         <p class="narr-screen-label small">On everyone’s screen</p>
       </section>
-      <section class="narr-body"><div class="center"><div class="knock-art">${artHTML('role-narrator')}</div><h2>Taking over the table…</h2><p class="say soft">Grabbing the game from the device that started it.</p></div></section>
+      <section class="narr-body"><div class="center"><div class="knock-art">${artHTML('role-narrator')}</div><h2>Taking over the table…</h2><p class="soft">Grabbing the game from the device that started it.</p></div></section>
     </main>`;
   const body = $('.narr-body', root);
   let host = null;
@@ -49,7 +49,7 @@ export function renderNarrator(root, arg) {
   narrate(room, {
     onChange: () => render(),
     onDemote: () => {
-      body.innerHTML = `<div class="center"><h2>Another phone took over</h2><p class="say soft">Someone opened the narrator code on another device. Open it here again to take it back.</p><button class="btn" id="back" type="button">Take it back</button></div>`;
+      body.innerHTML = `<div class="center"><h2>Another phone took over</h2><p class="soft">Someone opened the narrator code on another device. Open it here again to take it back.</p><button class="btn" id="back" type="button">Take it back</button></div>`;
       $('#back', body).addEventListener('click', () => location.reload());
     },
   }).then((h0) => {
@@ -104,17 +104,17 @@ export function renderNarrator(root, arg) {
           ${g.players.map((p) => `<li><span class="chip-av">${avatarHTML(p.avatar)}</span><span>${esc(p.name)}</span><button class="kick" type="button" data-kick="${esc(p.id)}" aria-label="Remove ${esc(p.name)}">${icon('close', { size: 18 })}</button></li>`).join('')}
         </ul>
         <div class="row">
-          <button class="btn btn-quiet" data-show="join" type="button">${icon('qr', { size: 22 })}<span>Show join code</span></button>
+          <button class="btn btn-quiet" data-show="join" type="button">${icon('qr')}<span>Show join code</span></button>
         </div>
-        <button class="btn btn-big" data-cmd="deal" type="button" ${g.players.length < PLAYER_LIMITS.min ? 'disabled' : ''}>${icon('sparkle', { size: 24 })}<span>Deal the roles</span></button>
+        <button class="btn btn-big" data-cmd="deal" type="button" ${g.players.length < PLAYER_LIMITS.min ? 'disabled' : ''}>${icon('sparkle')}<span>Deal the roles</span></button>
       </div>`,
 
     dealt: (g) => `
       <div class="panel">
         <h2>Roles are out</h2>
-        <p class="say soft">Everyone’s peeking at their phone. Once they’ve all seen it, start the first night.</p>
+        <p class="soft">Everyone’s checking their phone. Once they’ve all seen it, start the first night.</p>
         ${secretRoster(g)}
-        <button class="btn btn-big" data-cmd="night" type="button">${icon('moon', { size: 24 })}<span>Start night 1</span></button>
+        <button class="btn btn-big" data-cmd="night" type="button">${icon('moon')}<span>Start night 1</span></button>
       </div>`,
 
     night: (g) => {
@@ -125,7 +125,7 @@ export function renderNarrator(root, arg) {
       let pick = '';
       if (step.pick) {
         if (!actorsAlive) {
-          pick = `<p class="note">${icon('skull', { size: 22 })} The ${roleName(step.role)} is dead. Read it anyway and wait a few seconds, so nobody can tell.</p>`;
+          pick = `<p class="note">${icon('skull')} The ${roleName(step.role)} is dead. Read it anyway and wait a few seconds, so nobody can tell.</p>`;
         } else {
           pick = `<h3 class="ask">${esc(step.ask)}</h3>${playerButtons(g, {
             pickKind: step.pick,
@@ -145,11 +145,11 @@ export function renderNarrator(root, arg) {
           <ol class="steps">${NIGHT_STEPS.map((s, i) => `<li class="${i < g.night.step ? 'done' : i === g.night.step ? 'now' : ''}"></li>`).join('')}</ol>
           <div class="step-art">${artHTML(step.art)}</div>
           <p class="read-label small">Read aloud</p>
-          <p class="read say">${esc(step.say)}</p>
+          <p class="read">${esc(step.say)}</p>
           ${pick}
           <div class="row nav">
-            <button class="btn btn-quiet" data-step="${g.night.step - 1}" type="button" ${g.night.step === 0 ? 'disabled' : ''}>${icon('arrow-left', { size: 22 })}<span>Back</span></button>
-            ${last ? `<button class="btn btn-big" data-cmd="dawn" type="button">${icon('sun', { size: 24 })}<span>Wake everyone up</span></button>` : `<button class="btn btn-big" data-step="${g.night.step + 1}" type="button"><span>Next</span>${icon('arrow-right', { size: 22 })}</button>`}
+            <button class="btn btn-quiet" data-step="${g.night.step - 1}" type="button" ${g.night.step === 0 ? 'disabled' : ''}>${icon('arrow-left')}<span>Back</span></button>
+            ${last ? `<button class="btn btn-big" data-cmd="dawn" type="button">${icon('sun')}<span>Wake everyone up</span></button>` : `<button class="btn btn-big" data-step="${g.night.step + 1}" type="button"><span>Next</span>${icon('arrow-right')}</button>`}
           </div>
         </div>`;
     },
@@ -161,13 +161,13 @@ export function renderNarrator(root, arg) {
       const summary =
         !afterVote && lastNight
           ? `<ul class="summary">
-            <li>${icon('knife', { size: 20 })} Mafia chose <strong>${lastNight.target ? name(lastNight.target) : 'nobody'}</strong></li>
-            <li>${icon('heart', { size: 20 })} Doctor saved <strong>${lastNight.save ? name(lastNight.save) : 'nobody'}</strong>${lastNight.saved ? ' <span class="badge good">saved!</span>' : ''}</li>
-            <li>${icon('eye', { size: 20 })} Detective checked <strong>${lastNight.check ? name(lastNight.check) : 'nobody'}</strong></li>
+            <li>${icon('knife', { size: 18 })} Mafia chose <strong>${lastNight.target ? name(lastNight.target) : 'nobody'}</strong></li>
+            <li>${icon('heart', { size: 18 })} ${ROLES.doctor.name} saved <strong>${lastNight.save ? name(lastNight.save) : 'nobody'}</strong>${lastNight.saved ? ' <span class="badge good">saved!</span>' : ''}</li>
+            <li>${icon('flashlight', { size: 18 })} ${ROLES.detective.name} checked <strong>${lastNight.check ? name(lastNight.check) : 'nobody'}</strong></li>
           </ul>`
           : '';
       if (g.winner) {
-        return `<div class="panel"><h2>That’s the game</h2><p class="say">${esc(TEAMS[g.winner].name)} wins. Build the suspense, then reveal it.</p>${summary}<button class="btn btn-big" data-cmd="finish" type="button">${icon('crown', { size: 24 })}<span>Reveal the winner</span></button></div>`;
+        return `<div class="panel"><h2>That’s the game</h2><p class="soft">${esc(TEAMS[g.winner].name)} won. Build the suspense, then reveal it.</p>${summary}<button class="btn btn-big" data-cmd="finish" type="button">${icon('crown')}<span>Reveal the winner</span></button></div>`;
       }
       return `
         <div class="panel">
@@ -178,9 +178,9 @@ export function renderNarrator(root, arg) {
             ${[0, 2, 3, 5].map((m) => `<button class="btn btn-chip" data-talk="${m}" type="button">${m ? `${m} min` : 'No timer'}</button>`).join('')}
           </div>`}
           <div class="row">
-            ${afterVote ? '' : `<button class="btn btn-quiet" data-cmd="vote" type="button">${icon('hand', { size: 22 })}<span>Skip to the vote</span></button>`}
+            ${afterVote ? '' : `<button class="btn btn-quiet" data-cmd="vote" type="button">${icon('hand')}<span>Skip to the vote</span></button>`}
           </div>
-          ${afterVote ? `<button class="btn btn-big" data-cmd="night" type="button">${icon('moon', { size: 24 })}<span>Start night ${g.round + 1}</span></button>` : ''}
+          ${afterVote ? `<button class="btn btn-big" data-cmd="night" type="button">${icon('moon')}<span>Start night ${g.round + 1}</span></button>` : ''}
         </div>`;
     },
 
@@ -192,31 +192,31 @@ export function renderNarrator(root, arg) {
           ${[1, 2, 3].map((m) => `<button class="btn btn-chip" data-timer="${m}" type="button">+${m} min</button>`).join('')}
           <button class="btn btn-chip" data-timer="0" type="button">Stop timer</button>
         </div>
-        <button class="btn btn-big" data-cmd="vote" type="button">${icon('hand', { size: 24 })}<span>Start the vote</span></button>
+        <button class="btn btn-big" data-cmd="vote" type="button">${icon('hand')}<span>Start the vote</span></button>
       </div>`,
 
     vote: (g) => `
       <div class="panel">
-        <h2>Who did the town vote out?</h2>
-        <p class="say soft">Count to three, everyone points. Tap whoever got the most.</p>
+        <h2>Who did the campers vote out?</h2>
+        <p class="soft">Count to three, everyone points. Tap whoever got the most.</p>
         ${playerButtons(g, { pickKind: 'vote' })}
-        <button class="btn btn-quiet wide" data-eliminate="" type="button">${icon('close', { size: 22 })}<span>Tie or no one</span></button>
+        <button class="btn btn-quiet wide" data-eliminate="" type="button">${icon('close')}<span>Tie or no one</span></button>
       </div>`,
 
     end: (g) => `
       <div class="panel">
-        <h2>${esc(TEAMS[g.winner]?.name ?? '')} wins</h2>
+        <h2>${esc(TEAMS[g.winner]?.name ?? '')} won</h2>
         <ul class="narr-roster reveal-all">
           ${g.players.map((p) => `<li class="${p.alive ? '' : 'dead'}"><span class="chip-av">${avatarHTML(p.avatar)}</span><span>${esc(p.name)}</span>${roleTag(p)}</li>`).join('')}
         </ul>
-        <button class="btn btn-big" data-cmd="again" type="button">${icon('refresh', { size: 24 })}<span>Play again, new roles</span></button>
-        <button class="btn btn-quiet wide" data-cmd="lobby" type="button">${icon('users', { size: 22 })}<span>Back to the lobby (let people join)</span></button>
+        <button class="btn btn-big" data-cmd="again" type="button">${icon('refresh')}<span>Play again, new roles</span></button>
+        <button class="btn btn-quiet wide" data-cmd="lobby" type="button">${icon('users')}<span>Back to the lobby (let people join)</span></button>
       </div>`,
   };
 
   function secretRoster(g) {
     return `<div class="secret">
-      <button class="secret-hold" type="button">${icon('eye', { size: 22 })}<span>Hold to see the roles</span></button>
+      <button class="secret-hold" type="button">${icon('eye')}<span>Hold to see the roles</span></button>
       <ul class="narr-roster secret-list">${g.players.map((p) => `<li><span class="chip-av">${avatarHTML(p.avatar)}</span><span>${esc(p.name)}</span>${roleTag(p)}</li>`).join('')}</ul>
     </div>`;
   }
@@ -257,7 +257,7 @@ export function renderNarrator(root, arg) {
   function confirmVote(id) {
     const p = host.game.players.find((x) => x.id === id);
     const s = sheet(
-      `<div class="confirm"><span class="chip-av big">${avatarHTML(p.avatar, { animate: true })}</span><h2>Vote out ${esc(p.name)}?</h2><p class="say soft">Everyone’s screen will show it.</p><button class="btn btn-big" id="yes" type="button">${icon('check', { size: 24 })}<span>Yes, they’re out</span></button></div>`,
+      `<div class="confirm"><span class="chip-av big">${avatarHTML(p.avatar, { animate: true })}</span><h2>Vote out ${esc(p.name)}?</h2><p class="soft">Everyone’s screen will show it.</p><button class="btn btn-big" id="yes" type="button">${icon('check')}<span>Yes, they’re out</span></button></div>`,
       { className: 'confirm-sheet' },
     );
     $('#yes', s.el).addEventListener('click', () => {
@@ -280,8 +280,8 @@ export function renderNarrator(root, arg) {
       `<div class="menu">
         <p class="kicker">Narrator tools</p>
         <div class="row">
-          <button class="btn btn-quiet" id="undo" type="button">${icon('arrow-left', { size: 22 })}<span>Undo last step</span></button>
-          <button class="btn btn-quiet" id="join" type="button">${icon('qr', { size: 22 })}<span>Join code</span></button>
+          <button class="btn btn-quiet" id="undo" type="button">${icon('arrow-left')}<span>Undo last step</span></button>
+          <button class="btn btn-quiet" id="join" type="button">${icon('qr')}<span>Join code</span></button>
         </div>
         <h3>Put a scene on every screen</h3>
         <div class="scene-grid">
@@ -292,7 +292,7 @@ export function renderNarrator(root, arg) {
         ${g.players.some((p) => p.role) ? `<h3>Fix a mistake</h3>
         <ul class="narr-roster fix">${g.players.map((p) => `<li class="${p.alive ? '' : 'dead'}"><span class="chip-av">${avatarHTML(p.avatar)}</span><span>${esc(p.name)}</span><button class="btn btn-chip" type="button" data-fix="${esc(p.id)}" data-alive="${p.alive}">${p.alive ? 'Mark dead' : 'Bring back'}</button></li>`).join('')}</ul>` : ''}
         <label class="toggle"><input type="checkbox" id="reveal" ${g.reveal ? 'checked' : ''}/> <span>Show a player’s role when they die</span></label>
-        <button class="btn btn-quiet wide danger" id="close" type="button">${icon('close', { size: 22 })}<span>End the night and close the room</span></button>
+        <button class="btn btn-quiet wide danger" id="close" type="button">${icon('close')}<span>End the night and close the room</span></button>
       </div>`,
       { className: 'menu-sheet' },
     );

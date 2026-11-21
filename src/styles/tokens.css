@@ -1,78 +1,102 @@
 /*
- * Mafia Night design tokens: "Paper Theater".
- * Cut paper, brush ink, colored tiles. Everything on screen reads from these.
+ * Mafia Night design tokens: "Cabin weekend".
+ * Quiet and flat: cream paper, pine, ember. No outlines, no shadows doing the work.
+ * Screens use the semantic tokens (--bg, --surface, --text…); night mode swaps those.
  * Art colors mirror src/art/palette.js.
  */
 :root {
-  /* Paper and ink */
-  --ink: #191714;
-  --ink-soft: #4A443C;      /* secondary text on light paper (7.9:1 on sand) */
-  --bone: #FAF6EE;
-  --sand: #EADFC6;
-  --stone: #E4E1DA;
-  --terracotta: #D9714E;
-  --clay: #D3A07C;
-  --sage: #788F62;
-  --periwinkle: #8B88E3;
-  --sky: #87A9F2;
-  --night: #15151C;
-  --dusk: #2A2A3A;
-  --blood: #B8321F;
-  --candle: #F0BE4A;
+  /* palette */
+  --cream: #F4EFE6;
+  --paper: #FBF8F3;
+  --birch: #E9E2D5;
+  --smoke: #BDB5A8;
+  --ink: #1F1E1C;
+  --pine: #2E4A3B;
+  --pine-press: #243C30;
+  --moss: #7F9672;
+  --lake: #9CB7C7;
+  --ember: #DE6F3E;
+  --clay: #D7A27F;
+  --candle: #F1C24F;
+  --berry: #B03A2E;
+  --night: #121820;
+  --dusk: #1F2833;
 
-  /* Roles */
+  /* semantic: day */
+  --bg: var(--cream);
+  --surface: var(--paper);
+  --surface-2: var(--birch);
+  --text: var(--ink);
+  --text-2: #5F5950;       /* 6.6:1 on cream */
+  --text-3: #8A8377;       /* labels, 3.4:1: large/uppercase only */
+  --line: rgba(31, 30, 28, 0.09);
+  --primary: var(--pine);
+  --primary-press: var(--pine-press);
+  --on-primary: var(--paper);
+  --accent: var(--ember);
+  --highlight: #FBEBC2;    /* candle, softened: "this is you" */
+
+  /* roles (card colors) */
   --role-mafia: var(--night);
-  --role-doctor: var(--sage);
-  --role-detective: var(--terracotta);
-  --role-villager: var(--sand);
+  --role-doctor: var(--moss);
+  --role-detective: var(--ember);
+  --role-villager: var(--birch);
 
-  /* Type: one hand-drawn family, tuned per use with its variable axes */
-  --font: "Shantell Sans Variable", "Shantell Sans", "Comic Neue", ui-rounded, system-ui, sans-serif;
-  --axes-shout: "wght" 800, "INFM" 1, "BNCE" 0.6, "SPAC" 0;
-  --axes-say: "wght" 560, "INFM" 0.6, "BNCE" 0.3, "SPAC" 0;
-  --axes-read: "wght" 420, "INFM" 0.25, "BNCE" 0, "SPAC" 0;
-  --text-hero: 44px;
-  --text-big: 30px;
-  --text-title: 24px;
-  --text-body: 18px;
-  --text-small: 15px;
-  --line: 1.3;
+  /* type */
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --t-display: clamp(52px, 15vw, 72px);
+  --t-h1: 40px;
+  --t-h2: 30px;
+  --t-h3: 20px;
+  --t-body: 17px;
+  --t-small: 14px;
+  --t-label: 12px;
 
-  /* Space */
+  /* space: one scale, used everywhere */
   --s1: 4px;
   --s2: 8px;
   --s3: 12px;
   --s4: 16px;
-  --s5: 24px;
-  --s6: 32px;
-  --s7: 48px;
+  --s5: 20px;
+  --s6: 24px;
+  --s7: 32px;
+  --s8: 40px;
+  --s9: 56px;
+  --gutter: 20px;
 
-  /* Shape: deliberately uneven radii so nothing looks machine-cut */
-  --wobble-a: 255px 18px 225px 18px / 18px 225px 18px 255px;
-  --wobble-b: 18px 225px 18px 255px / 255px 18px 225px 18px;
-  --tile-radius: 28px 34px 26px 32px;
-  --card-radius: 22px 26px 20px 24px;
-  --stroke: 2.5px;
-  --sticker: 4px 5px 0 var(--ink);
-  --sticker-pressed: 1px 1px 0 var(--ink);
+  /* shape */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
   --tap: 52px;
 
-  /* Motion */
-  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* motion */
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.3, 1.3, 0.5, 1);
   --ease-draw: cubic-bezier(0.6, 0.05, 0.4, 1);
-  --fast: 140ms;
-  --med: 320ms;
+  --fast: 150ms;
+  --med: 300ms;
   --slow: 600ms;
+}
 
-  /* Paper grain overlay */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* night mode: same components, darker room */
+body.dark {
+  --bg: var(--night);
+  --surface: #19212B;
+  --surface-2: #232D39;
+  --text: #F2EDE4;
+  --text-2: #AEB4BB;
+  --text-3: #7D858F;
+  --line: rgba(242, 237, 228, 0.1);
+  --primary: #F2EDE4;
+  --primary-press: #DCD6CC;
+  --on-primary: var(--night);
+  --highlight: #3A3524;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root {
-    --fast: 0ms;
-    --med: 0ms;
-    --slow: 0ms;
-  }
+  :root { --fast: 0ms; --med: 0ms; --slow: 0ms; }
 }

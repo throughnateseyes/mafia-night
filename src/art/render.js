@@ -14,6 +14,12 @@
  *   { text: 'SAM' | slot: 'name', x, y, size: 40, align: 'middle', w: 4.5, color, at, dur }
  *       hand-lettered text in the brush alphabet; `slot` is filled at render time
  *
+ * Clean nodes (the minimal style — use these; set `style: 'clean'` on the art):
+ *   { shape: 'M..Z', fill: 'pine', opacity: 1, at, anim }        exact flat fill
+ *   { circle: [cx, cy, r], fill, at, anim }                       flat circle
+ *   { rect: [x, y, w, h, rx], fill, at, anim }                    flat rounded rect
+ *   { line: 'M.. M..', w: 3, color: 'ink', at, dur, cap: 'round' } even monoline, draws on
+ *
  * Entrance anims: pop rise drop fade grow slide-l slide-r unfold
  * `at` is seconds from the scene start.
  */
@@ -36,7 +42,8 @@ const BOIL = 3; // frames of line boil
  * @param {number}  opts.delay    seconds added to every `at`
  */
 export function renderArt(art, opts = {}) {
-  const { animate = true, boil = animate, slots = {}, speed = 1, delay = 0, className = '', label = art.title ?? '' } = opts;
+  const clean = art.style === 'clean';
+  const { animate = true, boil = animate && !clean, slots = {}, speed = 1, delay = 0, className = '', label = art.title ?? '' } = opts;
   const id = `a${(instance++).toString(36)}`;
   const base = hashString(art.id ?? 'art');
   const defs = [];
@@ -91,6 +98,32 @@ export function renderArt(art, opts = {}) {
     return `<g class="n">${parts.join('')}</g>`;
   }
 
+  function flat(node, d) {
+    const fill = esc(color(node.fill ?? 'cream'));
+    const opacity = node.opacity != null ? ` opacity="${node.opacity}"` : '';
+    return `<g class="n${animClass(node)}"${anim(node, originStyle(node))}>${d.replace('/>', ` fill="${fill}"${opacity}/>`)}</g>`;
+  }
+
+  function renderLine(node) {
+    const subs = splitSubpaths(node.line);
+    const w = node.w ?? 3;
+    const stroke = esc(color(node.color ?? 'ink'));
+    const cap = node.cap ?? 'round';
+    const lens = subs.map((sub) => sample(sub, 4).len);
+    const total = lens.reduce((a, b) => a + b, 0) || 1;
+    const duration = node.dur ?? Math.min(1.4, Math.max(0.3, total / 500));
+    let t = node.at ?? 0;
+    const opacity = node.opacity != null ? ` opacity="${node.opacity}"` : '';
+    const parts = subs.map((sub, i) => {
+      const subDur = (duration * lens[i]) / total;
+      const drawn = animate && node.draw !== false;
+      const out = `<path d="${sub}" fill="none" stroke="${stroke}" stroke-width="${w}" stroke-linecap="${cap}" stroke-linejoin="round"${opacity}${drawn ? ` pathLength="1" class="draw" style="--at:${T(t)};--dur:${(subDur * speed).toFixed(2)}s"` : ''}/>`;
+      t += subDur;
+      return out;
+    });
+    return `<g class="n${animClass(node)}"${anim(node, originStyle(node))}>${parts.join('')}</g>`;
+  }
+
   function renderText(node) {
     const str = node.slot ? slots[node.slot] ?? '' : node.text;
     if (!str) return '';
@@ -123,6 +156,13 @@ export function renderArt(art, opts = {}) {
   function renderNode(node) {
     nodeIndex++;
     if (node.hidden) return '';
+    if (node.shape) return flat(node, `<path d="${node.shape}"/>`);
+    if (node.circle) return flat(node, `<circle cx="${node.circle[0]}" cy="${node.circle[1]}" r="${node.circle[2]}"/>`);
+    if (node.rect) {
+      const [x, y, w, h, rx = 0] = node.rect;
+      return flat(node, `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"/>`);
+    }
+    if (node.line) return renderLine(node);
     if (node.paper) return renderPaper(node, false);
     if (node.blob) return renderPaper(node, true);
     if (node.ink) {
@@ -146,7 +186,7 @@ export function renderArt(art, opts = {}) {
   const body = (art.layers ?? []).map(renderNode).join('');
   const [, , vw, vh] = art.viewBox.split(/[ ,]+/).map(Number);
   const tile = art.tile ? `<rect width="${vw}" height="${vh}" fill="${esc(color(art.tile))}"/>` : '';
-  defs.unshift(
+  if (!clean) defs.unshift(
     `<filter id="${id}-grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="${base % 97}" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.5 1.32" result="a"/><feComposite in="SourceGraphic" in2="a" operator="in"/></filter>`,
   );
   const a11y = label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"';

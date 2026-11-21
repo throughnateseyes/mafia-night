@@ -19,7 +19,7 @@ export function sceneText(scene) {
 
 export function sceneTile(scene) {
   const { art } = sceneText(scene);
-  return getArt(art).tile ?? 'sand';
+  return getArt(art).tile ?? 'cream';
 }
 
 /**
@@ -31,15 +31,17 @@ export function renderStage(el, scene, opts = {}) {
   if (el.dataset.sig === sig) return false;
   el.dataset.sig = sig;
   const { caption, sub, art } = sceneText(scene);
-  const tile = getArt(art).tile ?? 'sand';
-  const dark = DARK.has(tile);
-  el.className = `stage ${dark ? 'is-dark' : ''} ${opts.compact ? 'compact' : ''} ${opts.className ?? ''}`;
+  const data = getArt(art);
+  const tile = data.tile ?? 'cream';
+  // a scene can say its caption sits on something dark (`dark`), or that its art should fade out before the caption (`fade`)
+  const dark = data.dark ?? DARK.has(tile);
+  el.className = `stage ${dark ? 'is-dark' : ''} ${data.fade ? 'fade' : ''} ${opts.compact ? 'compact' : ''} ${opts.className ?? ''}`;
   el.style.setProperty('--tile', PALETTE[tile] ?? tile);
   el.innerHTML = `
     <div class="stage-art"></div>
     ${opts.quiet ? '' : `<div class="stage-text">
       <h2 class="stage-caption">${bounceText(caption, { delay: 0.5 })}</h2>
-      ${sub ? `<p class="stage-sub say">${esc(sub)}</p>` : ''}
+      ${sub ? `<p class="stage-sub">${esc(sub)}</p>` : ''}
     </div>`}`;
   mountArt(el.querySelector('.stage-art'), art, { slots: { name: scene.name ?? '' }, label: caption });
   return true;

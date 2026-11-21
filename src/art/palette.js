@@ -1,22 +1,33 @@
 /*
- * The art palette. Mirrors tokens.css; scenes name colors by key.
- * Pulled from the reference boards: ink, bone-white cut paper, sand, stone,
- * terracotta, clay, sage, periwinkle, sky; plus night, blood, candle for the murder.
+ * The art palette. Mirrors tokens.css; art names colors by key.
+ * A cabin weekend: cream paper, pine, ember from the fire, lake blue, night sky,
+ * one candle yellow for the birthday, and berry red used very sparingly.
  */
 export const PALETTE = {
-  ink: '#191714',
-  bone: '#FAF6EE',
-  sand: '#EADFC6',
-  stone: '#E4E1DA',
-  terracotta: '#D9714E',
-  clay: '#D3A07C',
-  sage: '#788F62',
-  periwinkle: '#8B88E3',
-  sky: '#87A9F2',
-  night: '#15151C',
-  dusk: '#2A2A3A',
-  blood: '#B8321F',
-  candle: '#F0BE4A',
+  cream: '#F4EFE6',
+  paper: '#FBF8F3',
+  birch: '#E6DED0',
+  smoke: '#BDB5A8',
+  ink: '#1F1E1C',
+  pine: '#2E4A3B',
+  moss: '#7F9672',
+  lake: '#9CB7C7',
+  ember: '#DE6F3E',
+  clay: '#D7A27F',
+  candle: '#F1C24F',
+  berry: '#B03A2E',
+  night: '#121820',
+  dusk: '#1F2833',
+
+  // older names, kept so earlier drawings still render
+  bone: '#FBF8F3',
+  sand: '#F4EFE6',
+  stone: '#E6DED0',
+  terracotta: '#DE6F3E',
+  sage: '#7F9672',
+  periwinkle: '#9CB7C7',
+  sky: '#9CB7C7',
+  blood: '#B03A2E',
 };
 
 export const color = (key) => PALETTE[key] ?? key;

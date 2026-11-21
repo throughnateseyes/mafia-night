@@ -21,29 +21,29 @@
 .art.calm .boil > * { animation-duration: 0.9s; }
 
 /* entrances */
-.art .a-pop { animation: a-pop 0.55s var(--ease-pop) var(--at) both; }
-.art .a-rise { animation: a-rise 0.6s var(--ease-out) var(--at) both; }
-.art .a-drop { animation: a-drop 0.6s var(--ease-pop) var(--at) both; }
-.art .a-fade { animation: a-fade 0.7s ease-out var(--at) both; }
-.art .a-grow { animation: a-grow 0.8s var(--ease-out) var(--at) both; }
+.art .a-pop { animation: a-pop 0.6s var(--ease-spring) var(--at) both; }
+.art .a-rise { animation: a-rise 0.9s var(--ease-out) var(--at) both; }
+.art .a-drop { animation: a-drop 0.7s var(--ease-out) var(--at) both; }
+.art .a-fade { animation: a-fade 1s ease-out var(--at) both; }
+.art .a-grow { animation: a-grow 1s var(--ease-out) var(--at) both; }
 .art .a-slide-l { animation: a-slide-l 0.6s var(--ease-out) var(--at) both; }
 .art .a-slide-r { animation: a-slide-r 0.6s var(--ease-out) var(--at) both; }
-.art .a-unfold { animation: a-unfold 0.6s var(--ease-pop) var(--at) both; }
+.art .a-unfold { animation: a-unfold 0.6s var(--ease-out) var(--at) both; }
 
-@keyframes a-pop { from { transform: scale(0.3) rotate(-8deg); opacity: 0; } }
-@keyframes a-rise { from { transform: translateY(24px); opacity: 0; } }
-@keyframes a-drop { from { transform: translateY(-60px) rotate(6deg); opacity: 0; } }
+@keyframes a-pop { from { transform: scale(0.8); opacity: 0; } }
+@keyframes a-rise { from { transform: translateY(16px); opacity: 0; } }
+@keyframes a-drop { from { transform: translateY(-24px); opacity: 0; } }
 @keyframes a-fade { from { opacity: 0; } }
-@keyframes a-grow { from { transform: scale(0.6); opacity: 0; } }
-@keyframes a-slide-l { from { transform: translateX(-50px); opacity: 0; } }
-@keyframes a-slide-r { from { transform: translateX(50px); opacity: 0; } }
+@keyframes a-grow { from { transform: scale(0.9); opacity: 0; } }
+@keyframes a-slide-l { from { transform: translateX(-28px); opacity: 0; } }
+@keyframes a-slide-r { from { transform: translateX(28px); opacity: 0; } }
 @keyframes a-unfold { from { transform: scaleY(0.05); opacity: 0; } }
 
 /* loops (start after the entrance; --loop-at set per group) */
 .art .loop-float { animation: l-float 3.2s ease-in-out infinite; }
 .art .loop-sway { animation: l-sway 2.8s ease-in-out infinite; }
 .art .loop-bob { animation: l-bob 1.6s ease-in-out infinite; }
-.art .loop-flicker { animation: l-flicker 0.9s steps(3, end) infinite; }
+.art .loop-flicker { animation: l-flicker 2.4s ease-in-out infinite; }
 .art .loop-blink { animation: l-blink 4.2s ease-in-out infinite; }
 .art .loop-wave { animation: l-wave 1.4s ease-in-out infinite; }
 .art .loop-pulse { animation: l-pulse 2s ease-in-out infinite; }
@@ -55,10 +55,10 @@
 /* loops wait for their entrance */
 .art .n[class*="loop-"] { animation-delay: var(--loop-at, 0s); }
 
-@keyframes l-float { 50% { transform: translateY(-6px); } }
-@keyframes l-sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+@keyframes l-float { 50% { transform: translateY(-4px); } }
+@keyframes l-sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 @keyframes l-bob { 50% { transform: translateY(-3px) rotate(1deg); } }
-@keyframes l-flicker { 0% { transform: scale(1, 1); } 33% { transform: scale(0.92, 1.08) rotate(-3deg); } 66% { transform: scale(1.06, 0.95) rotate(2deg); } }
+@keyframes l-flicker { 0%, 100% { opacity: 1; transform: scale(1); } 40% { opacity: 0.82; transform: scale(0.97, 1.03); } 70% { opacity: 0.95; transform: scale(1.02, 0.98); } }
 @keyframes l-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.08); } }
 @keyframes l-wave { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(10deg); } }
 @keyframes l-pulse { 50% { transform: scale(1.06); } }

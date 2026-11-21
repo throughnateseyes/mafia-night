@@ -125,7 +125,7 @@ export function reduce(state, cmd, now = Date.now()) {
       if (!['target', 'save', 'check'].includes(cmd.kind)) return fail('Unknown pick.');
       const p = cmd.id ? playerById(s, cmd.id) : null;
       if (cmd.id && (!p || !p.alive)) return fail('Pick someone who is still alive.');
-      if (cmd.kind === 'save' && cmd.id && cmd.id === s.lastSave) return fail('The Doctor saved them last night. Pick someone else.');
+      if (cmd.kind === 'save' && cmd.id && cmd.id === s.lastSave) return fail('The Medic saved them last night. Pick someone else.');
       s.night[cmd.kind] = cmd.id ?? null;
       return s;
     }

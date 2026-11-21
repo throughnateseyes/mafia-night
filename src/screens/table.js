@@ -14,7 +14,7 @@ import { lobbyHTML, renderDisplayInto, rosterHTML, mixLine } from './display.js'
 export function renderTable(root, roomId) {
   const saved = savedHost(roomId);
   if (!saved) {
-    root.innerHTML = `<main class="view center"><div class="center-art">${artHTML('role-ghost')}</div><h2>This game lives on another device.</h2><p class="say soft">Scan the join code instead, or start a new game.</p><a class="btn" href="#/">Start over</a></main>`;
+    root.innerHTML = `<main class="view center"><div class="center-art">${artHTML('role-ghost')}</div><h2>This game lives on another device.</h2><p class="soft">Scan the join code instead, or start a new game.</p><a class="btn" href="#/">Start over</a></main>`;
     return;
   }
   const room = { roomId, rk: saved.rk, nk: saved.nk, broker: saved.broker };
@@ -27,7 +27,7 @@ export function renderTable(root, roomId) {
 
   const narratorButton = () => `
     <section class="narrator-card">
-      <button class="btn btn-narrator" id="narrator" type="button">${icon('lock', { size: 24 })}<span>${esc(EVENT.narrator ?? 'Narrator')}? Get your secret code</span></button>
+      <button class="btn btn-narrator" id="narrator" type="button">${icon('lock')}<span>${esc(EVENT.narrator ?? 'Narrator')}, scan your narrator code</span></button>
     </section>`;
 
   function renderLobby(st) {
@@ -58,10 +58,10 @@ export function renderTable(root, roomId) {
     const s = sheet(
       `<div class="narr-code">
         <p class="kicker">For the narrator only</p>
-        <h2>Your secret code</h2>
-        <p class="say soft">Scan this with your phone. It becomes your control panel: the role list, the night script, every scene.</p>
+        <h2>Your <em>narrator</em> code</h2>
+        <p class="soft">Scan this with your phone. It becomes your control panel: who’s who, the night script, and every scene.</p>
         <div class="qr-frame small">${qrSvg(links(room).narrator, { label: 'Narrator code' })}</div>
-        <button class="btn btn-quiet" id="here" type="button">${icon('users', { size: 22 })}<span>No, I’ll narrate on this device</span></button>
+        <button class="btn btn-quiet" id="here" type="button"><span>Narrate on this device instead</span></button>
       </div>`,
       { className: 'code-sheet' },
     );
@@ -87,7 +87,7 @@ export function renderTable(root, roomId) {
   const tvButton = () => {
     const b = h(`<button class="btn btn-tiny" type="button" title="Show this on a TV">${icon('qr', { size: 18 })}<span>TV</span></button>`);
     b.addEventListener('click', () =>
-      sheet(`<div class="narr-code"><p class="kicker">Big screen</p><h2>Put it on the TV</h2><p class="say soft">Open this code on a laptop or TV browser to show the scenes to the room.</p><div class="qr-frame small">${qrSvg(links(room).tv, { label: 'TV code' })}</div><p class="small soft break">${esc(links(room).tv)}</p></div>`, { className: 'code-sheet' }),
+      sheet(`<div class="narr-code"><p class="kicker">Big screen</p><h2>Put it on the TV</h2><p class="soft">Open this code on a laptop or TV browser to show the scenes to the room.</p><div class="qr-frame small">${qrSvg(links(room).tv, { label: 'TV code' })}</div><p class="small soft break">${esc(links(room).tv)}</p></div>`, { className: 'code-sheet' }),
     );
     return b;
   };

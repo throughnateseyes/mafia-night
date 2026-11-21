@@ -9,6 +9,7 @@ import { roleCounts } from '../game/roles.js';
 import { $, countdown, esc, h, keepAwake, statusBadge } from '../ui/kit.js';
 import { qrSvg } from '../ui/qr.js';
 import { renderStage, sceneTile } from '../ui/stage.js';
+import { eventLine } from './home.js';
 
 export function rosterHTML(players, { showRoles = false } = {}) {
   return players
@@ -16,7 +17,7 @@ export function rosterHTML(players, { showRoles = false } = {}) {
       (p, i) => `<li class="chip ${p.alive ? '' : 'dead'} ${p.honoree ? 'honoree' : ''}" style="--i:${i}" data-id="${esc(p.id)}">
         <span class="chip-av">${avatarHTML(p.avatar)}</span>
         <span class="chip-name">${esc(p.name)}</span>
-        ${p.honoree ? `<span class="chip-crown" title="Birthday!">${icon('crown', { size: 20 })}</span>` : ''}
+        ${p.honoree ? `<span class="chip-crown" title="Birthday!">${icon('crown', { size: 16 })}</span>` : ''}
         ${(showRoles || !p.alive) && p.role ? `<span class="chip-role" data-role="${p.role}">${ROLES[p.role].name}</span>` : ''}
       </li>`,
     )
@@ -26,7 +27,7 @@ export function rosterHTML(players, { showRoles = false } = {}) {
 export function mixLine(n) {
   if (n < PLAYER_LIMITS.min) return `Need at least ${PLAYER_LIMITS.min} to start · ${PLAYER_LIMITS.min - n} more`;
   const c = roleCounts(Math.min(n, PLAYER_LIMITS.max));
-  return `${c.mafia} Mafia · 1 Doctor · 1 Detective · ${c.villager} Villagers`;
+  return `${c.mafia} Mafia · 1 ${ROLES.doctor.name} · 1 ${ROLES.detective.name} · ${c.villager} ${ROLES.villager.name}s`;
 }
 
 /** Lobby panel with the join QR. Shared by the table and the TV. */
@@ -36,14 +37,15 @@ export function lobbyHTML(room, state) {
     <section class="join-card">
       <div class="qr-frame">${qrSvg(links(room).join, { label: 'Scan to join the game' })}</div>
       <div class="join-copy">
-        <h1>Scan to join</h1>
-        <p class="say soft">Everyone points their camera here. One code for the whole table.</p>
+        <p class="kicker">${eventLine()}</p>
+        <h1>Scan to <em>join</em></h1>
+        <p class="soft">Everyone at the cabin scans this once. Your phone does the rest.</p>
       </div>
     </section>
     <section class="roster-card">
-      <h3>At the table <span class="count">${n}</span></h3>
+      <h3 class="section-head">Around the fire <span class="count">${n}</span></h3>
       <ul class="chips">${rosterHTML(state?.players ?? [])}</ul>
-      ${n === 0 ? `<p class="empty say soft">No one yet. Be the first.</p>` : ''}
+      ${n === 0 ? `<p class="empty soft">No one yet. Be the first.</p>` : ''}
       <p class="mix small">${mixLine(n)}</p>
     </section>`;
 }
@@ -73,7 +75,7 @@ export function renderTV(root, arg) {
     return;
   }
   const room = { roomId, rk, broker: Number(broker) || 0 };
-  root.innerHTML = `<main class="view display" data-mode=""><div class="waiting">${artHTML('lobby')}<p class="say">Finding the game…</p></div></main>`;
+  root.innerHTML = `<main class="view display" data-mode=""><div class="waiting">${artHTML('lobby')}<p class="soft">Finding the game…</p></div></main>`;
   const main = $('main', root);
   const w = watch(room, { onState: (st) => renderDisplayInto(main, room, st) });
   root.prepend(h('<div class="corner"></div>'));

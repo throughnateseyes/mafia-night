@@ -1,54 +1,78 @@
-// Home hero: the whole game in one picture.
-// A birthday cake under a cut-paper moon and string lights. A knife stands in it,
-// one drop of red runs down the frosting, and a fedora has snuffed out one of the candles.
+/*
+ * Home hero: Steph's 26th, seen from inside the cabin.
+ * An arched window onto the night (moon, two pines), and on the sill a cake stand
+ * with a "2" and a "6" candle burning. The one quiet hint: a fedora left on the sill.
+ */
+const P = (ox, oy) => (x, y) => `${+(ox + x).toFixed(1)} ${+(oy + y).toFixed(1)}`;
 
-const bulb = (x, y) => `M${x} ${y} L${x + 5} ${y + 7} C ${x + 7} ${y + 15}, ${x - 7} ${y + 15}, ${x - 5} ${y + 7} Z`;
-const flame = (x, y) => `M${x} ${y - 24} C ${x - 10} ${y - 10}, ${x - 8} ${y}, ${x} ${y} C ${x + 8} ${y}, ${x + 10} ${y - 10}, ${x} ${y - 24} Z`;
+// number candles, 22 x 34, built from flat shapes (no glyphs)
+const two = (ox, oy) => {
+  const p = P(ox, oy);
+  return `M${p(0, 10)} C${p(0, 4)} ${p(5, 0)} ${p(11, 0)} C${p(17, 0)} ${p(22, 4)} ${p(22, 10)} C${p(22, 15)} ${p(19, 18)} ${p(15, 21.5)} L${p(9.5, 27)} L${p(22, 27)} L${p(22, 34)} L${p(0, 34)} L${p(0, 28.5)} L${p(11, 18)} C${p(13.5, 15.8)} ${p(15, 14)} ${p(15, 11)} C${p(15, 8.5)} ${p(13.3, 7)} ${p(11, 7)} C${p(8.7, 7)} ${p(7, 8.5)} ${p(7, 11)} L${p(0, 11)} Z`;
+};
+const six = (ox, oy) => {
+  const p = P(ox, oy);
+  return `M${p(0, 23)} L${p(0, 13)} C${p(0, 5)} ${p(5, 0)} ${p(13, 0)} L${p(19, 0)} L${p(19, 7)} L${p(13, 7)} C${p(9.5, 7)} ${p(7, 9)} ${p(7, 13)} L${p(7, 23)} Z `
+    + `M${p(0, 23)} A11 11 0 1 1 ${p(22, 23)} A11 11 0 1 1 ${p(0, 23)} Z `
+    + `M${p(7.5, 23)} A4 4 0 1 0 ${p(15.5, 23)} A4 4 0 1 0 ${p(7.5, 23)} Z`;
+};
+const flame = (x, y) => `M${x} ${y - 20} C ${x - 8} ${y - 9}, ${x - 6} ${y}, ${x} ${y} C ${x + 6} ${y}, ${x + 8} ${y - 9}, ${x} ${y - 20} Z`;
+
+// frosting: a band across the top with a few drips of different lengths
+const drips = [[222, 13], [198, 5], [174, 17], [148, 8]];
+const frosting = (() => {
+  const base = 230;
+  let d = `M126 222 C126 218 129 216 133 216 L227 216 C231 216 234 218 234 222 L234 ${base}`;
+  for (const [cx, depth] of drips) {
+    d += ` L${cx + 5} ${base} C${cx + 5} ${base + depth + 5}, ${cx - 5} ${base + depth + 5}, ${cx - 5} ${base}`;
+  }
+  return `${d} L126 ${base} Z`;
+})();
+
+const WINDOW = '#2A3542';
 
 export default {
   id: 'home',
-  title: 'A birthday cake under the moon and string lights, a knife standing in it, a drop of red on the frosting, and a fedora snuffing out one candle',
+  title: 'A birthday cake with a 2 and a 6 candle on a cabin windowsill at night, a fedora left beside it',
+  style: 'clean',
   viewBox: '0 0 360 400',
   tile: null,
   layers: [
-    // the moon
-    { paper: 'M184 36 C 248 34, 298 84, 296 148 C 294 212, 244 260, 180 258 C 116 256, 68 206, 70 142 C 72 80, 120 38, 184 36 Z', fill: 'periwinkle', anim: 'grow', at: 0.1, origin: '184 148' },
-    { ink: 'M60 122 C 70 66, 124 26, 188 26 C 254 28, 302 76, 308 138', w: 3.5, at: 0.3, taper: 0.8 },
-
-    // string lights
-    { ink: 'M-6 30 C 80 92, 260 96, 366 24', w: 3, at: 0.4, dur: 0.5 },
+    // the arched window onto the night
+    { shape: 'M70 352 L70 168 A110 110 0 0 1 290 168 L290 352 Z', fill: WINDOW, at: 0, anim: 'fade' },
     { group: [
-      { paper: [bulb(42, 56), bulb(100, 76), bulb(160, 84), bulb(220, 82), bulb(282, 68), bulb(334, 46)].join(' '), fill: 'candle', rough: 0.3 },
-    ], anim: 'pop', at: 0.8, loop: 'flicker', origin: '180 70', loopAt: 3.2 },
-
-    // the cake
-    { paper: 'M86 244 C 88 226, 276 224, 282 242 L284 330 C 240 344, 126 344, 84 330 Z', fill: 'bone', anim: 'rise', at: 0.6 },
-    { paper: 'M80 238 C 82 222, 278 220, 280 236 L280 258 C 272 274, 262 274, 258 262 C 250 280, 232 280, 228 262 C 218 276, 204 276, 200 262 C 190 282, 170 282, 166 262 C 156 276, 140 276, 136 262 C 126 278, 108 278, 104 262 C 96 274, 84 272, 80 258 Z', fill: 'terracotta', rough: 0.8, anim: 'fade', at: 0.9 },
-    { ink: 'M78 238 C 80 218, 278 216, 282 236 C 282 256, 80 258, 78 238 M78 240 L76 326 C 120 342, 240 344, 284 326 L282 238', w: 5, at: 1.0 },
-    { ink: 'M50 340 C 120 356, 240 356, 310 340 M180 350 L180 376 M142 382 C 164 374, 196 374, 218 382', w: 4.5, at: 1.4 },
-
-    // candles: two lit, one snuffed by a fedora
-    { paper: 'M174 238 L175 182 L187 182 L186 238 Z M221 238 L221 186 L233 186 L234 238 Z M127 240 L127 196 L139 196 L139 240 Z', fill: 'sky', rough: 0.5, anim: 'rise', at: 1.6 },
-    { ink: 'M176 222 L186 212 M176 202 L186 192 M222 222 L232 212 M222 204 L232 194', w: 2.5, at: 1.7 },
-    { group: [{ paper: flame(181, 178), fill: 'candle' }], anim: 'pop', at: 1.9, loop: 'flicker', origin: '181 178' },
-    { group: [{ paper: flame(227, 182), fill: 'candle' }], anim: 'pop', at: 2.0, loop: 'flicker', origin: '227 182' },
+        { circle: [232, 118, 21], fill: 'cream' },
+        { circle: [242, 111, 19], fill: WINDOW },
+        { circle: [128, 104, 1.6], fill: 'cream' },
+        { circle: [170, 142, 1.3], fill: 'cream' },
+      ], at: 0.2, anim: 'fade' },
+    // pines outside
+    { shape: 'M74 352 L104 222 L134 352 Z', fill: 'pine', at: 0.3, anim: 'rise' },
+    { shape: 'M238 352 L262 254 L286 352 Z', fill: 'pine', at: 0.4, anim: 'rise' },
+    // the sill
+    { rect: [52, 350, 256, 12, 3], fill: 'clay', at: 0.5, anim: 'fade' },
+    // cake stand + cake
     { group: [
-      { paper: 'M104 196 C 112 190, 124 188, 130 188 C 128 172, 132 160, 140 154 C 146 150, 150 156, 152 158 C 156 152, 162 150, 166 156 C 170 164, 168 176, 166 186 C 172 188, 178 192, 176 198 C 172 204, 150 204, 128 204 C 114 204, 100 202, 104 196 Z', fill: 'ink', rough: 0.6 },
-      { paper: 'M130 182 C 142 184, 156 184, 167 180 L166 188 C 154 192, 142 192, 129 190 Z', fill: 'blood', rough: 0.4 },
-      { ink: 'M138 152 C 130 164, 128 176, 130 188', w: 2.5, color: 'bone', taper: 0.9 },
-    ], anim: 'drop', at: 2.2, origin: '140 200' },
+        { shape: 'M170 297 L190 297 L197 340 L163 340 Z', fill: 'birch' },
+        { rect: [144, 338, 72, 12, 3], fill: 'birch' },
+        { rect: [94, 290, 172, 8, 4], fill: 'birch' },
+        { rect: [128, 222, 104, 68, 4], fill: 'clay' },
+        { shape: frosting, fill: 'paper' },
+      ], at: 0.7, anim: 'rise' },
+    // 2 and 6
     { group: [
-      { ink: 'M110 196 C 98 186, 112 176, 100 164 C 90 154, 102 144, 94 134', w: 2.5, taper: 0.9 },
-    ], anim: 'fade', at: 2.6, loop: 'drift', origin: '108 196' },
-
-    // the knife, last, standing in it
+        { shape: two(152, 182), fill: 'paper' },
+        { shape: six(186, 182), fill: 'paper' },
+      ], at: 1.1, anim: 'rise' },
     { group: [
-      { paper: 'M238 246 C 248 210, 266 168, 280 140 L302 148 L262 250 Z', fill: 'bone' },
-      { ink: 'M234 242 C 244 206, 262 166, 276 136 L298 144 L258 248', w: 4 },
-      { ink: 'M272 134 L306 148', w: 6, taper: 0.2 },
-      { ink: 'M291 144 L318 72', w: 18, taper: 0.12 },
-      { ink: 'M302 116 L304 117 M310 94 L312 95', w: 3.5, color: 'bone', taper: 0 },
-    ], anim: 'drop', at: 2.6, origin: '250 244' },
-    { paper: 'M244 250 C 250 250, 252 262, 250 272 C 252 280, 246 284, 242 280 C 240 274, 242 264, 240 254 C 240 250, 242 250, 244 250 Z', fill: 'blood', rough: 0.4, anim: 'grow', at: 3.1, origin: '245 250' },
+        { shape: flame(163, 176), fill: 'candle' },
+        { shape: flame(197, 176), fill: 'candle' },
+      ], at: 1.5, anim: 'grow', origin: '180 170', loop: 'flicker', loopAt: 2.2 },
+    // the fedora someone left on the sill
+    { group: [
+        { shape: 'M230 345 C230 330 234 321 243 323 L249 326 L255 323 C264 321 268 330 268 345 Z', fill: 'ink' },
+        { rect: [230, 336, 38, 5.5, 1], fill: 'smoke' },
+        { rect: [217, 343, 64, 7, 3.5], fill: 'ink' },
+      ], at: 1.9, anim: 'fade' },
   ],
 };

@@ -3,12 +3,12 @@
  */
 import { EVENT, ROLES, TEAMS } from '../config/game.js';
 import { AVATARS, artHTML, avatarHTML, icon, mountArt } from '../art/index.js';
-import { renderArt } from '../art/render.js';
 import { Player, parseRoomArg } from '../game/session.js';
 import { $, $$, buzz, countdown, esc, h, holdToPeek, keepAwake, sheet, statusBadge } from '../ui/kit.js';
 import { openHowToPlay, openRole } from '../ui/rules.js';
 import { renderStage, sceneTile } from '../ui/stage.js';
 import { rosterHTML } from './display.js';
+import { eventLine } from './home.js';
 
 const ackKey = (roomId) => `mn:ack:${roomId}`;
 const getAck = (roomId) => Number(localStorage.getItem(ackKey(roomId)) || 0);
@@ -20,18 +20,10 @@ const setAck = (roomId, deal) => {
   }
 };
 
-/** Brush-lettered word as its own little piece of art. */
-function lettering(text, { size = 70, w = 6, color = 'ink', width = 400, animate = true, delay = 0 } = {}) {
-  return renderArt(
-    { id: `word-${text}`, viewBox: `0 0 ${width} ${size * 1.25}`, tile: null, layers: [{ text, x: width / 2, y: size * 0.1, size, w, color, maxWidth: width - 20, at: delay }] },
-    { animate, label: text },
-  );
-}
-
 export function renderPlayer(root, arg) {
   const room = parseRoomArg(arg, 'j');
   if (!room) {
-    root.innerHTML = `<main class="view center"><h2>That code looks smudged.</h2><p class="say soft">Ask the host to show the join code again.</p></main>`;
+    root.innerHTML = `<main class="view center"><h2>That code looks smudged.</h2><p class="soft">Ask the host to show the join code again.</p></main>`;
     return;
   }
   keepAwake();
@@ -85,36 +77,33 @@ export function renderPlayer(root, arg) {
   function renderJoin() {
     const pick = Math.floor(Math.random() * Math.max(1, AVATARS.length));
     main.innerHTML = `
-      <div class="join-title">${artHTML('title', { label: 'Mafia Night' })}</div>
+      <header class="welcome">
+        <p class="kicker">${eventLine()}</p>
+        <h1>Welcome to <em>the cabin</em>.</h1>
+        <p class="soft">Tonight, someone here is a killer. First things first: who are you?</p>
+      </header>
       <form class="join-form" autocomplete="off">
         <label class="field">
-          <span class="field-label shout">What should we call you?</span>
-          <span class="name-preview" aria-hidden="true"></span>
-          <input id="name" name="name" maxlength="16" autocomplete="given-name" autocapitalize="words" enterkeyhint="go" placeholder="Your name" required />
+          <span class="field-label">Your name</span>
+          <input id="name" name="name" maxlength="16" autocomplete="given-name" autocapitalize="words" enterkeyhint="done" placeholder="First name" required />
         </label>
         <fieldset class="avatars">
-          <legend class="field-label shout">Pick your doodle</legend>
+          <legend class="field-label">Pick your camp badge</legend>
           <div class="av-grid">
             ${(AVATARS.length ? AVATARS : Array.from({ length: 12 })).map((a, i) => `
               <label class="av" style="--i:${i}">
                 <input type="radio" name="avatar" value="${i}" ${i === pick ? 'checked' : ''} />
                 <span class="av-art">${avatarHTML(i, { animate: true })}</span>
-                <span class="sr-only">${esc(a?.title ?? `Doodle ${i + 1}`)}</span>
+                <span class="sr-only">${esc(a?.title ?? `Badge ${i + 1}`)}</span>
               </label>`).join('')}
           </div>
         </fieldset>
-        <button class="btn btn-big" type="submit" disabled><span>Pull up a chair</span>${icon('arrow-right', { size: 24 })}</button>
+        <div class="join-go"><button class="btn btn-big" type="submit" disabled><span>Join the game</span>${icon('arrow-right')}</button></div>
       </form>`;
     const name = $('#name', main);
-    const preview = $('.name-preview', main);
     const submit = $('button[type=submit]', main);
-    let t;
     name.addEventListener('input', () => {
       submit.disabled = !name.value.trim();
-      clearTimeout(t);
-      t = setTimeout(() => {
-        preview.innerHTML = name.value.trim() ? lettering(name.value.trim(), { size: 60, animate: false }) : '';
-      }, 60);
     });
     $$('.av input', main).forEach((r) => r.addEventListener('change', () => buzz(6)));
     $('.join-form', main).addEventListener('submit', async (e) => {
@@ -132,14 +121,14 @@ export function renderPlayer(root, arg) {
     main.innerHTML = `<div class="center">
       <div class="knock-art">${artHTML('lobby', { className: 'calm' })}</div>
       <h2>${player.joined ? 'Knocking on the cabin door…' : 'Finding the game…'}</h2>
-      <p class="say soft">Hang tight. This takes a second.</p></div>`;
+      <p class="soft">Hang tight. This takes a second.</p></div>`;
   }
 
   function renderLocked() {
     main.innerHTML = `<div class="center">
       <div class="knock-art">${artHTML('role-ghost')}</div>
       <h2>The game already started</h2>
-      <p class="say soft">You can jump in next round. Ask the narrator to go back to the lobby.</p></div>`;
+      <p class="soft">You can jump in next round. Ask the narrator to go back to the lobby.</p></div>`;
   }
 
   /* ---------- lobby ---------- */
@@ -148,13 +137,13 @@ export function renderPlayer(root, arg) {
     main.innerHTML = `
       <div class="stage"></div>
       <section class="lobby-panel">
-        <h3>At the table <span class="count"></span></h3>
+        <h3 class="section-head">Around the fire <span class="count"></span></h3>
         <ul class="chips"></ul>
-        <button class="btn btn-quiet" id="how" type="button">${icon('rules', { size: 22 })}<span>How to play</span></button>
+        <button class="btn wide" id="how" type="button">${icon('rules')}<span>How to play</span></button>
       </section>`;
     $('#how', main).addEventListener('click', openHowToPlay);
     const name = player.me.name;
-    renderStage($('.stage', main), { key: 'lobby', at: 1, caption: `You’re in, ${name}`, sub: 'Waiting for the narrator to deal the roles.' });
+    renderStage($('.stage', main), { key: 'lobby', at: 1, caption: `You’re in, ${name}`, sub: 'Waiting for the narrator to hand out roles.' });
     updateLobby();
   }
 
@@ -177,8 +166,9 @@ export function renderPlayer(root, arg) {
     const r = ROLES[role.role];
     return `
       <div class="front-art">${artHTML(r.art, { label: r.name })}</div>
-      <div class="front-name">${lettering(r.name.toUpperCase(), { size: 64, w: 6.5, delay: 0.5, color: ROLES[role.role].team === 'mafia' ? 'bone' : 'ink' })}</div>
-      <p class="front-line say">${esc(r.line)}</p>
+      <p class="front-kicker">You are ${r.team === 'mafia' ? '' : 'a '}</p>
+      <h2 class="front-name">${r.team === 'mafia' ? 'the Mafia' : esc(r.name)}</h2>
+      <p class="front-line">${esc(r.line)}</p>
       ${role.crew.length ? `<p class="front-crew">Your crew: <strong>${role.crew.map(esc).join(', ')}</strong></p>` : ''}`;
   }
 
@@ -186,19 +176,18 @@ export function renderPlayer(root, arg) {
     const honoree = me()?.honoree;
     main.innerHTML = `
       <p class="kicker">Top secret · ${esc(player.me.name)} only</p>
-      <h1 class="reveal-title">${honoree ? 'Happy birthday. Here’s your role.' : 'Your role is in'}</h1>
+      <h1 class="reveal-title">${honoree ? `Happy 26th, ${esc(player.me.name)}. <em>Here’s your role.</em>` : 'Your role <em>is in</em>.'}</h1>
       <button class="peek-card" type="button" aria-label="Hold to see your role">
         <span class="card-inner">
           <span class="card-back">
-            <span class="card-back-art">${lettering('?', { size: 150, w: 9, width: 200 })}</span>
-            <span class="card-back-label shout">Hold to peek</span>
-            ${icon('eye', { size: 30 })}
+            <span class="card-back-mark serif">?</span>
+            <span class="card-back-label">${icon('eye')}<span>Hold to reveal</span></span>
           </span>
           <span class="card-front" data-role="${role.role}"></span>
         </span>
       </button>
-      <p class="say soft reveal-hint">Hold your thumb on the card. Let go and it hides. Don’t let anyone see.</p>
-      <button class="btn btn-big" id="gotit" type="button" hidden><span>Got it. Lips sealed.</span>${icon('check', { size: 24 })}</button>`;
+      <p class="soft reveal-hint">Let go and it hides. Tilt your screen away from your neighbors.</p>
+      <button class="btn btn-big" id="gotit" type="button" hidden><span>Got it, lips sealed</span>${icon('check')}</button>`;
     const card = $('.peek-card', main);
     const front = $('.card-front', main);
     const gotit = $('#gotit', main);
@@ -231,14 +220,14 @@ export function renderPlayer(root, arg) {
       <div class="peek-pop" aria-hidden="true"></div>
       <nav class="dock">
         <div class="dock-status"></div>
-        <button class="peek-pill" type="button">${icon('eye', { size: 24 })}<span>Hold to see your role</span></button>
-        <button class="btn-round" id="rules" type="button" aria-label="Rules for my role">${icon('rules', { size: 26 })}</button>
+        <button class="peek-pill" type="button">${icon('eye')}<span>Hold to see your role</span></button>
+        <button class="btn-round" id="rules" type="button" aria-label="Rules for my role">${icon('rules')}</button>
       </nav>`;
     const pop = $('.peek-pop', main);
     holdToPeek($('.peek-pill', main), {
       onShow: () => {
         const r = ROLES[role.role];
-        pop.innerHTML = `<div class="pop-card" data-role="${role.role}"><div class="pop-art">${artHTML(r.art, { speed: 0.6 })}</div><div class="pop-name">${lettering(r.name.toUpperCase(), { size: 54, w: 6, delay: 0.2, color: r.team === 'mafia' ? 'bone' : 'ink' })}</div>${role.crew.length ? `<p class="front-crew">Crew: ${role.crew.map(esc).join(', ')}</p>` : ''}</div>`;
+        pop.innerHTML = `<div class="pop-card" data-role="${role.role}"><div class="pop-art">${artHTML(r.art, { speed: 0.6 })}</div><h2 class="pop-name">${esc(r.name)}</h2>${role.crew.length ? `<p class="front-crew">Crew: ${role.crew.map(esc).join(', ')}</p>` : ''}</div>`;
         pop.classList.add('show');
       },
       onHide: () => pop.classList.remove('show'),
@@ -255,7 +244,7 @@ export function renderPlayer(root, arg) {
     const status = $('.dock-status', main);
     if (state.phase === 'end') {
       const won = state.winner && ROLES[role.role].team === state.winner;
-      status.innerHTML = `<button class="dock-banner ${won ? 'won' : 'lost'}" type="button" id="whowas">${icon(won ? 'crown' : 'skull', { size: 26 })}<span>${won ? 'You won!' : 'You lost.'} See who was who</span></button>`;
+      status.innerHTML = `<button class="dock-banner ${won ? 'won' : 'lost'}" type="button" id="whowas">${icon(won ? 'crown' : 'skull')}<span>${won ? 'You won.' : 'You lost.'} See who was who</span>${icon('arrow-right')}</button>`;
       $('#whowas', main).addEventListener('click', openWhoWasWho);
       if (endShown !== state.scene.at) {
         endShown = state.scene.at;
@@ -278,7 +267,7 @@ export function renderPlayer(root, arg) {
         <ul class="who-list">${state.players
           .map((p, i) => `<li style="--i:${i}" data-team="${team(p)}"><span class="chip-av">${avatarHTML(p.avatar)}</span><span class="who-name">${esc(p.name)}${p.alive ? '' : ' <span class="soft small">(out)</span>'}</span><span class="chip-role" data-role="${p.role}">${ROLES[p.role]?.name ?? ''}</span></li>`)
           .join('')}</ul>
-        <p class="say soft">Stick around. The narrator can deal a new round with new roles.</p>
+        <p class="soft">Stick around: the narrator can start a new round with new roles.</p>
       </div>`,
       { className: 'who-sheet' },
     );

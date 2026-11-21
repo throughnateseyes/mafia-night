@@ -1,6 +1,6 @@
 # Mafia Night
 
-A hand-drawn Mafia game for Steph's birthday cabin trip. No cards, no app store, no accounts:
+A Mafia game made for Steph's 26th birthday cabin weekend. No cards, no app store, no accounts:
 everyone scans one code and their phone tells them who they are.
 
 **Play:** https://throughnateseyes.github.io/mafia-night/
@@ -9,13 +9,17 @@ everyone scans one code and their phone tells them who they are.
 ## How a game runs
 
 1. Open the site on a laptop or TV and tap **Host a game**. A big join code appears.
-2. Everyone scans it, types a name and picks a doodle. They show up on the big screen.
-3. Nate taps **Get your secret code** and scans that second code with his phone. His phone
+2. Everyone scans it, types a name and picks a camp badge. They show up on the big screen.
+3. Nate taps **Nate, scan your narrator code** and scans that second code with his phone. His phone
    becomes the narrator: it runs the game and reads him the script. The big screen just shows scenes.
 4. Nate taps **Deal**. Every phone gets a role. Hold your thumb on the card to peek; let go and it hides.
 5. Night, morning, talk, vote, repeat. Each step Nate taps changes the scene on every phone and
    the big screen: night falls, someone didn't wake up, everyone woke up, the vote, the reveal.
 6. **Play again** re-deals new roles to the same people.
+
+The roles, cabin style: **Mafia** (one or two, they pick someone each night), **Medic** (saves
+one camper each night), **Ranger** (shines a flashlight on one camper to learn if they're Mafia)
+and **Campers** (everyone else: talk it out and vote).
 
 Anyone can tap the book button on their phone to read their role's rules any time.
 
@@ -29,15 +33,15 @@ Anyone can tap the book button on their phone to read their role's rules any tim
   sealed to one phone's own key, and the narrator's code carries a key nobody else has.
 - **The game runs on the narrator's phone** (a pure reducer in `src/game/engine.js`), and is saved
   on that phone, so a refresh or a dropped connection picks up where it left off.
-- **The art is code:** every drawing is a data file in `src/art/` drawn by a brush-ink engine
-  (`src/art/ink.js`, `render.js`): tapered strokes, cut paper, a draw-on animation and a little
-  line boil so everything feels alive.
+- **The art is code:** every drawing is a data file in `src/art/`, built from flat shapes with
+  no outlines (`style: 'clean'` in `render.js`), plus quiet motion: a candle flicker, blinking eyes,
+  drifting smoke. Type is Instrument Serif for headlines and Instrument Sans for everything else.
 
 ## Change things
 
-- Words, roles, role counts, scenes, the honoree: `src/config/game.js`.
+- Words, roles, role counts, scenes, the honoree (`EVENT`): `src/config/game.js`.
 - Colors and type: `src/styles/tokens.css`.
-- A drawing: its file in `src/art/scenes`, `src/art/roles`, `avatars.js` or `icons.js`.
+- A drawing (see `docs/ART_BRIEF_CLEAN.md` for the style rules): its file in `src/art/scenes`, `src/art/roles`, `avatars.js` or `icons.js`.
   Preview with `node scripts/render-art.mjs <file>` or at `#/gallery`.
 
 ## Develop

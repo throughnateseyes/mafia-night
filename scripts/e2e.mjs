@@ -322,7 +322,7 @@ try {
   await sleep(3000);
   await table.shot('25-table-eliminated');
   await narr.click('[data-cmd="finish"]');
-  await table.waitFor(`document.querySelector('.stage-caption')?.textContent.toLowerCase().includes('town wins')`, 15000);
+  await table.waitFor(`document.querySelector('.stage-caption')?.textContent.toLowerCase().includes('campers win')`, 15000);
   await sleep(3500);
   await table.shot('26-table-town-wins');
   await phones[0].has('#whowas');

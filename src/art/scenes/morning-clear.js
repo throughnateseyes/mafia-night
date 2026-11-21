@@ -1,73 +1,42 @@
-// "Everyone woke up. Nobody died."
-// Relief: a big yellow sun, a pajama arm stretching up with every finger wide,
-// coffee steaming, two birds. Lettered: ALL ALIVE.
-
-const r1 = (v) => Math.round(v * 10) / 10;
-
-function place(d, { s = 1, flip = false, rot = 0, x = 0, y = 0 }) {
-  const a = (rot * Math.PI) / 180;
-  const c = Math.cos(a);
-  const n = Math.sin(a);
-  return d.replace(/(-?\d+\.?\d*) (-?\d+\.?\d*)/g, (_, px, py) => {
-    const X = (flip ? -px : +px) * s;
-    const Y = +py * s;
-    return `${r1(x + X * c - Y * n)} ${r1(y + X * n + Y * c)}`;
-  });
-}
-
-// an open hand stretching, palm toward us, fingers spread; origin = heel of the palm
-const HAND_PAPER =
-  'M-34 120 L-36 -10 C -50 -28, -62 -48, -70 -62 C -74 -72, -64 -78, -58 -70 C -48 -58, -38 -52, -30 -54 C -30 -80, -32 -104, -34 -118 C -34 -130, -24 -132, -22 -124 C -18 -110, -12 -90, -8 -70 C -8 -100, -8 -124, -6 -136 C -4 -144, 6 -144, 7 -136 C 9 -122, 10 -96, 10 -70 C 13 -90, 16 -110, 18 -124 C 19 -132, 29 -130, 29 -122 C 28 -104, 26 -84, 26 -62 C 32 -76, 38 -90, 42 -102 C 46 -110, 54 -106, 51 -98 C 46 -84, 40 -68, 36 -50 L36 120 Z';
-const HAND_INK = [
-  'M-36 42 L-36 -10',
-  'M-36 -10 C -50 -26, -62 -46, -70 -60 C -76 -70, -66 -76, -60 -68 C -50 -56, -40 -50, -28 -48',
-  'M-28 -50 C -29 -76, -32 -100, -34 -114 C -35 -124, -25 -127, -23 -119 C -19 -104, -14 -86, -10 -66',
-  'M-9 -66 C -9 -96, -8 -120, -6 -132 C -4 -140, 5 -140, 6 -132 C 8 -120, 9 -96, 9 -66',
-  'M9 -66 C 12 -88, 16 -106, 19 -118 C 21 -126, 30 -124, 28 -116 C 27 -100, 25 -82, 24 -62',
-  'M24 -62 C 30 -76, 36 -90, 41 -100 C 45 -107, 53 -103, 50 -95 C 45 -80, 39 -66, 36 -50 L36 42',
-].join(' ');
-const ARM = { s: 1.18, rot: 10, x: 124, y: 318 };
-
-const bird = (x, y, s) =>
-  `M${x - 14 * s} ${y - 4 * s} C ${x - 9 * s} ${y - 9 * s}, ${x - 4 * s} ${y - 7 * s}, ${x} ${y} C ${x + 4 * s} ${y - 8 * s}, ${x + 10 * s} ${y - 11 * s}, ${x + 16 * s} ${y - 7 * s}`;
-
+/*
+ * Everyone woke up. The sun clears the far hills over a still lake;
+ * a canoe waits at the dock, and someone's cocoa is still steaming.
+ */
 export default {
   id: 'morning-clear',
-  title: 'A clear morning: a big yellow sun, a pajama arm stretching up with every finger wide, coffee steaming, two birds. All alive.',
+  title: 'Everyone made it',
+  style: 'clean',
   viewBox: '0 0 400 500',
-  tile: 'stone',
+  tile: 'cream',
   layers: [
-    // the sun, up and out
+    // sun lifting over the hills
+    { circle: [196, 262, 74], fill: 'candle', at: 0.1, anim: 'rise' },
+    // far hills, then the near treeline
+    { shape: 'M-1200 300 L0 300 C 70 278, 130 282, 186 300 C 250 280, 330 268, 400 288 C 450 280, 520 294, 600 300 L1600 300 L1600 330 L-1200 330 Z', fill: 'moss', at: 0, anim: 'fade' },
     { group: [
-      { paper: 'M262 132 C 318 130, 362 174, 360 230 C 358 286, 314 328, 258 326 C 202 324, 160 280, 162 226 C 164 172, 206 134, 262 132 Z', fill: 'candle' },
-    ], anim: 'rise', at: 0.1, loop: 'breathe', origin: '260 230', loopAt: 3 },
-    { ink: 'M160 196 C 172 150, 214 118, 264 120 C 316 122, 358 158, 368 206', w: 4, at: 0.3, taper: 0.8 },
-
-    // the stretch
+        { shape: 'M-14 324 L30 210 L74 324 Z', fill: 'pine' },
+        { shape: 'M36 324 L84 176 L132 324 Z', fill: 'pine' },
+        { shape: 'M340 324 L370 242 L400 324 Z', fill: 'pine' },
+      ], at: 0.3, anim: 'rise' },
+    // the lake
+    { rect: [-1200, 318, 2800, 1382], fill: 'lake', at: 0, anim: 'fade' },
+    // sun on the water
+    { line: 'M156 342 L236 342 M172 358 L220 358 M186 374 L206 374', w: 3, color: 'paper', at: 0.7, opacity: 0.9 },
+    // dock and posts
     { group: [
-      { paper: place(HAND_PAPER, { ...ARM, x: ARM.x - 5, y: ARM.y + 4 }), fill: 'bone' },
-      { paper: place('M-44 40 L46 40 L52 140 L-52 140 Z', ARM), fill: 'sky', rough: 1.2 },
-      { paper: place('M-44 58 L46 58 L47 70 L-45 70 Z M-46 88 L48 88 L49 100 L-47 100 Z', ARM), fill: 'periwinkle', rough: 0.8 },
-      { ink: place(HAND_INK, ARM), w: 4.5 },
-      { ink: place('M-44 40 C -14 46, 18 46, 46 40', ARM), w: 4.5 },
-    ], anim: 'rise', at: 0.5, loop: 'sway', origin: '134 470', loopAt: 2.6 },
-
-    // coffee
+        { rect: [262, 360, 1400, 10, 2], fill: 'clay' },
+        // posts every 82, continuing past the edge with the planks
+        { shape: 'M280 370 L288 370 L288 400 L280 400 Z M362 370 L370 370 L370 400 L362 400 Z M444 370 L452 370 L452 400 L444 400 Z M526 370 L534 370 L534 400 L526 400 Z M608 370 L616 370 L616 400 L608 400 Z M690 370 L698 370 L698 400 L690 400 Z M772 370 L780 370 L780 400 L772 400 Z M854 370 L862 370 L862 400 L854 400 Z M936 370 L944 370 L944 400 L936 400 Z M1018 370 L1026 370 L1026 400 L1018 400 Z M1100 370 L1108 370 L1108 400 L1100 400 Z M1182 370 L1190 370 L1190 400 L1182 400 Z M1264 370 L1272 370 L1272 400 L1264 400 Z M1346 370 L1354 370 L1354 400 L1346 400 Z M1428 370 L1436 370 L1436 400 L1428 400 Z M1510 370 L1518 370 L1518 400 L1510 400 Z M1592 370 L1600 370 L1600 400 L1592 400 Z', fill: '#B98462' },
+      ], at: 0.5, anim: 'slide-r' },
+    // canoe tied up
+    { shape: 'M120 378 C 160 386, 236 386, 280 376 C 268 400, 134 400, 120 378 Z', fill: 'pine', at: 0.8, anim: 'slide-l' },
+    // the cocoa mug at the end of the dock
     { group: [
-      { paper: 'M264 338 L334 336 C 334 368, 330 392, 316 404 L280 404 C 266 392, 262 368, 262 336 Z', fill: 'terracotta' },
-      { ink: 'M258 332 L330 332 C 330 364, 326 390, 312 402 L276 402 C 262 390, 258 364, 258 332', w: 4.5 },
-      { ink: 'M330 346 C 352 342, 356 372, 326 378', w: 4.5 },
-      { ink: 'M252 408 C 280 414, 314 414, 340 406', w: 4 },
-    ], anim: 'pop', at: 1.3 },
+        { rect: [326, 338, 20, 22, 3], fill: 'paper' },
+        { line: 'M346 343 C 354 343, 354 354, 346 354', w: 3, color: 'paper', draw: false },
+      ], at: 1.1, anim: 'rise' },
     { group: [
-      { ink: 'M280 320 C 270 306, 290 296, 280 280 M304 322 C 294 304, 316 294, 306 274', w: 3.2, taper: 0.9 },
-    ], anim: 'fade', at: 1.7, loop: 'drift', origin: '292 320' },
-
-    // birds
-    { group: [
-      { ink: bird(70, 150, 1.5) + ' ' + bird(118, 120, 1.1), w: 4 },
-    ], anim: 'fade', at: 2.0, loop: 'float', origin: '94 136' },
-
-    { text: 'ALL ALIVE', x: 200, y: 30, size: 50, maxWidth: 330, w: 6, color: 'ink', at: 2.2 },
+        { line: 'M332 330 C 326 320, 338 314, 332 302 M341 328 C 337 320, 345 314, 341 306', w: 2.5, color: 'smoke', at: 1.4 },
+      ], loop: 'float', origin: '336 316', loopAt: 2 },
   ],
 };

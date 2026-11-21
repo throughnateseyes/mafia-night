@@ -1,434 +1,142 @@
-// Player avatars: a cut-paper disc with one witty object on it.
-// Shown in the lobby list, the narrator's roster and on the TV, so each one
-// has to read at ~44 px. ≤ 10 ink subpaths each, entrance ≤ 1 s, one small loop.
+// Player avatars: a flat colored disc with one cabin-weekend object on it.
+// Shown in the lobby, the narrator's roster and on the TV at ~30–46 px,
+// so each symbol is 1–4 flat shapes, no outlines, and almost no motion.
 
-/* ---------- helpers (return plain path strings) ---------- */
-
-const r1 = (n) => Math.round(n * 10) / 10;
-
-/** Wobbly 4-point blob (a hand-cut disc). radii = [r0..r3], rot in degrees. */
-function blob(cx, cy, radii, rot = 0) {
-  const k = 0.5523;
-  const pts = radii.map((r, i) => {
-    const a = ((rot + i * 90) * Math.PI) / 180;
-    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a), tx: -Math.sin(a), ty: Math.cos(a), r };
+// rotate a path written as "x y" pairs (M L C Z only) by deg around (cx, cy)
+const rot = (d, deg, cx = 60, cy = 60) => {
+  const c = Math.cos((deg * Math.PI) / 180);
+  const s = Math.sin((deg * Math.PI) / 180);
+  return d.replace(/(-?\d*\.?\d+) (-?\d*\.?\d+)/g, (_, x, y) => {
+    const X = +x - cx;
+    const Y = +y - cy;
+    return `${(X * c - Y * s + cx).toFixed(1)} ${(X * s + Y * c + cy).toFixed(1)}`;
   });
-  let d = `M${r1(pts[0].x)} ${r1(pts[0].y)}`;
-  for (let i = 0; i < 4; i++) {
-    const p = pts[i];
-    const q = pts[(i + 1) % 4];
-    d += ` C ${r1(p.x + p.tx * k * p.r)} ${r1(p.y + p.ty * k * p.r)}, ${r1(q.x - q.tx * k * q.r)} ${r1(q.y - q.ty * k * q.r)}, ${r1(q.x)} ${r1(q.y)}`;
-  }
-  return `${d} Z`;
-}
-const circle = (cx, cy, r) => blob(cx, cy, [r, r, r, r]);
-
-/** Move / rotate every coordinate pair of a path (M L C Q S T Z only). */
-function tf(d, { dx = 0, dy = 0, rot = 0, cx = 60, cy = 60 } = {}) {
-  const a = (rot * Math.PI) / 180;
-  const cos = Math.cos(a);
-  const sin = Math.sin(a);
-  const tokens = d.match(/[MLCQSTZ]|-?\d*\.?\d+/g);
-  let out = '';
-  let x = null;
-  for (const t of tokens) {
-    if (/[A-Z]/.test(t)) { out += ` ${t}`; x = null; continue; }
-    if (x === null) { x = Number(t); continue; }
-    const y = Number(t);
-    const px = cx + (x - cx) * cos - (y - cy) * sin + dx;
-    const py = cy + (x - cx) * sin + (y - cy) * cos + dy;
-    out += ` ${r1(px)} ${r1(py)}`;
-    x = null;
-  }
-  return out.trim();
-}
-/** Misregistered print: paper sits a little off its ink line. */
-const off = (d, dx = 2.5, dy = 2) => tf(d, { dx, dy });
-
-const disc = (fill, radii, rot) => ({ paper: blob(60, 60, radii, rot), fill, rough: 0.8, anim: 'grow', at: 0 });
-
-/* ---------- the doodles ---------- */
-
-// Fedora, tipped low; two eyes watch from under the brim.
-const fedora = (() => {
-  const R = { rot: -9, cx: 60, cy: 58 };
-  const crown = 'M38 64 C 37 50, 40 38, 46 33 C 52 30, 55 37, 60 37 C 65 37, 69 30, 75 33 C 81 38, 83 50, 82 64';
-  const brim = 'M18 67 C 30 59, 46 62, 60 62 C 74 62, 90 59, 102 67 C 94 76, 76 75, 60 75 C 44 75, 26 76, 18 67';
-  return {
-    id: 'av-fedora',
-    title: 'Fedora',
-    viewBox: '0 0 120 120',
-    tile: null,
-    layers: [
-      disc('terracotta', [51, 48, 52, 49], 10),
-      { paper: off(tf(`${crown} Z`, R)), fill: 'bone', anim: 'pop', at: 0.15 },
-      { paper: off(tf(`${brim} Z`, R)), fill: 'bone', anim: 'pop', at: 0.2 },
-      { paper: tf('M38 55 C 50 58, 70 58, 82 55 L82 63 C 70 66, 50 66, 38 63 Z', R), fill: 'ink', anim: 'fade', at: 0.55 },
-      { ink: `${tf(crown, R)} ${tf(brim, R)} ${tf('M55 37 C 57 42, 62 42, 65 37', R)}`, w: 4, at: 0.25, dur: 0.5 },
-      {
-        group: [
-          { paper: 'M38 89 C 42 82, 52 82, 56 89 C 52 95, 42 95, 38 89 Z', fill: 'bone' },
-          { paper: 'M63 89 C 67 82, 77 82, 81 89 C 77 95, 67 95, 63 89 Z', fill: 'bone' },
-          { paper: circle(50.5, 89, 3.4), fill: 'ink' },
-          { paper: circle(75.5, 89, 3.4), fill: 'ink' },
-        ],
-        loop: 'blink', origin: '59 89', anim: 'fade', at: 0.75, loopAt: 1.2,
-      },
-    ],
-  };
-})();
-
-// Party hat, jaunty, with confetti.
-const partyHat = (() => {
-  const R = { rot: 12, cx: 60, cy: 70 };
-  const cone = 'M38 88 C 46 68, 54 48, 62 28 C 68 48, 76 68, 84 88';
-  return {
-    id: 'av-party-hat',
-    title: 'Party hat',
-    viewBox: '0 0 120 120',
-    tile: null,
-    layers: [
-      disc('periwinkle', [49, 52, 48, 51], 30),
-      { paper: 'M22 42 L31 36 L34 45 Z', fill: 'candle', anim: 'pop', at: 0.7 },
-      { paper: 'M86 28 L96 31 L91 40 Z', fill: 'bone', anim: 'pop', at: 0.75 },
-      { paper: 'M96 64 L102 60 L104 67 L98 69 Z', fill: 'terracotta', anim: 'pop', at: 0.8 },
-      { paper: 'M18 70 L26 65 L29 74 Z', fill: 'bone', anim: 'pop', at: 0.85 },
-      {
-        group: [
-          { paper: off(tf(`${cone} C 70 94, 50 94, 38 88 Z`, R)), fill: 'candle' },
-          { paper: off(tf('M47 66 C 56 71, 68 71, 76 66 L79 74 C 68 80, 54 80, 44 74 Z', R)), fill: 'terracotta' },
-          { paper: off(tf(circle(62, 24, 7), R)), fill: 'bone' },
-          { ink: `${tf(cone, R)} ${tf('M36 88 C 50 95, 72 95, 86 88', R)} ${tf('M52 50 C 57 54, 66 54, 71 49', R)} ${tf(circle(62, 23, 6.5), R)}`, w: 4, at: 0.25, dur: 0.55 },
-        ],
-        loop: 'sway', origin: '60 92', anim: 'pop', at: 0.15, loopAt: 1,
-      },
-    ],
-  };
-})();
-
-// A slice of birthday cake, one candle.
-const cake = {
-  id: 'av-cake',
-  title: 'Slice of cake',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('sage', [50, 49, 52, 48], 60),
-    { paper: off('M22 66 L74 47 L98 59 Z'), fill: 'bone', anim: 'pop', at: 0.15 },
-    { paper: off('M22 66 L98 59 L98 89 L22 91 Z'), fill: 'bone', anim: 'pop', at: 0.18 },
-    { paper: off('M22 75 L98 70 L98 77 L22 82 Z'), fill: 'terracotta', anim: 'fade', at: 0.4 },
-    { ink: 'M22 66 L74 47 L98 59 M22 66 L98 59 L98 89 M22 65 L22 91 L98 89', w: 4, at: 0.25, dur: 0.5 },
-    { ink: 'M26 68 C 30 74, 35 74, 38 67 C 42 74, 48 74, 52 66 C 56 72, 62 72, 66 65', w: 3, at: 0.6, dur: 0.2 },
-    { ink: 'M67 55 L67 34', w: 4.5, at: 0.7, dur: 0.12 },
-    { group: [{ paper: 'M67 18 C 61 25, 61 31, 67 31 C 73 31, 73 25, 67 18 Z', fill: 'candle' }], loop: 'flicker', origin: '67 31', anim: 'pop', at: 0.85 },
-  ],
 };
 
-// Pine tree in a party hat: even the woods came to the birthday.
-const pine = (() => {
-  const left = 'M60 32 C 56 40, 50 47, 41 52 C 46 54, 51 54, 53 53 C 49 61, 42 68, 33 73 C 39 75, 45 75, 47 74 C 43 82, 36 89, 27 94 L60 94';
-  const right = 'M60 32 C 64 40, 70 47, 79 52 C 74 54, 70 54, 67 53 C 71 61, 78 68, 87 73 C 81 75, 76 75, 73 74 C 77 82, 84 89, 93 94 L60 94';
-  const hat = 'M50 35 L63 10 L69 31';
-  return {
-    id: 'av-pine',
-    title: 'Pine tree in a party hat',
-    viewBox: '0 0 120 120',
-    tile: null,
-    layers: [
-      disc('stone', [52, 49, 50, 48], 20),
-      { paper: 'M22 46 L30 41 L32 49 Z', fill: 'terracotta', anim: 'pop', at: 0.8 },
-      { paper: 'M90 38 L99 41 L94 48 Z', fill: 'periwinkle', anim: 'pop', at: 0.85 },
-      { paper: 'M94 62 L101 60 L101 67 Z', fill: 'candle', anim: 'pop', at: 0.9 },
-      {
-        group: [
-          { paper: off(`${left} L93 94 C 84 89, 77 82, 73 74 C 76 75, 81 75, 87 73 C 78 68, 71 61, 67 53 C 70 54, 74 54, 79 52 C 70 47, 64 40, 60 32 Z`), fill: 'sage' },
-          { ink: `${left} ${right} M60 94 L60 105`, w: 4, at: 0.25, dur: 0.5 },
-          {
-            group: [
-              { paper: off('M50 35 L63 10 L69 31 C 63 35, 56 36, 50 35 Z', 2, 1.5), fill: 'periwinkle' },
-              { paper: off('M54.5 26 L66 22 L67.5 26.5 C 63 28.5, 57 29.5, 52.5 30 Z', 2, 1.5), fill: 'candle' },
-              { paper: circle(63.5, 9, 4.5), fill: 'candle' },
-              { ink: hat, w: 3.5, at: 0.75, dur: 0.15 },
-            ],
-            anim: 'drop', at: 0.7,
-          },
-        ],
-        loop: 'sway', origin: '60 105', anim: 'rise', at: 0.15, loopAt: 1,
-      },
-    ],
-  };
-})();
-
-// Crescent moon with one eye open: who's awake?
-const moon = {
-  id: 'av-moon',
-  title: 'Moon with one eye open',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('sky', [50, 52, 48, 51], 45),
-    { paper: off('M74 26 C 46 20, 24 40, 24 62 C 24 85, 46 101, 74 94 C 56 88, 48 76, 48 60 C 48 46, 56 33, 74 26 Z'), fill: 'bone', anim: 'pop', at: 0.15 },
-    { ink: 'M74 26 C 46 20, 24 40, 24 62 C 24 85, 46 101, 74 94 M74 94 C 56 88, 48 76, 48 60 C 48 46, 56 33, 74 26', w: 4, at: 0.25, dur: 0.5 },
-    { paper: 'M86 36 L88 42 L94 44 L88 46 L86 52 L84 46 L78 44 L84 42 Z', fill: 'candle', anim: 'pop', at: 0.8 },
-    { paper: 'M92 70 L93.5 74 L97 75.5 L93.5 77 L92 81 L90.5 77 L87 75.5 L90.5 74 Z', fill: 'candle', anim: 'pop', at: 0.88 },
-    {
-      group: [
-        { paper: 'M27 60 C 31 53, 41 53, 45 60 C 41 66, 31 66, 27 60 Z', fill: 'bone' },
-        { ink: 'M27 60 C 31 53, 41 53, 45 60 C 41 66, 31 66, 27 60', w: 3, at: 0.7, dur: 0.2 },
-        { paper: circle(39.5, 60, 3.3), fill: 'ink' },
-      ],
-      loop: 'blink', origin: '36 59', anim: 'fade', at: 0.7, loopAt: 1.4,
-    },
-    { ink: 'M28 50 C 33 48, 39 47.5, 44 49', w: 3, at: 0.9, dur: 0.1 },
-  ],
+// a rounded bar from (x1, y1) to (x2, y2), thickness t (a log, a stick)
+const bar = (x1, y1, x2, y2, t) => {
+  const L = Math.hypot(x2 - x1, y2 - y1);
+  const nx = (-(y2 - y1) / L) * (t / 2);
+  const ny = ((x2 - x1) / L) * (t / 2);
+  const f = (n) => n.toFixed(1);
+  const r = t / 2;
+  return `M${f(x1 + nx)} ${f(y1 + ny)} L${f(x2 + nx)} ${f(y2 + ny)} A${r} ${r} 0 0 0 ${f(x2 - nx)} ${f(y2 - ny)} L${f(x1 - nx)} ${f(y1 - ny)} A${r} ${r} 0 0 0 ${f(x1 + nx)} ${f(y1 + ny)} Z`;
 };
 
-// Teacup whose steam asks a question.
-const teacup = {
-  id: 'av-teacup',
-  title: 'Teacup with question-mark steam',
+const av = (id, title, disc, layers) => ({
+  id,
+  title,
+  style: 'clean',
   viewBox: '0 0 120 120',
   tile: null,
-  layers: [
-    disc('sand', [51, 48, 50, 52], 70),
-    { paper: off('M32 64 C 32 80, 42 90, 55 90 C 68 90, 78 80, 78 64 C 78 58, 32 58, 32 64 Z'), fill: 'periwinkle', anim: 'pop', at: 0.15 },
-    { paper: 'M37 64 C 37 61, 73 61, 73 64 C 73 67, 37 67, 37 64 Z', fill: 'bone', anim: 'fade', at: 0.45 },
-    { paper: off('M24 91 C 40 98, 72 98, 88 91 C 80 87, 32 87, 24 91 Z'), fill: 'sage', anim: 'pop', at: 0.2 },
-    { ink: 'M32 64 C 32 58, 78 58, 78 64 C 78 70, 32 70, 32 64 M32 65 C 32 80, 42 90, 55 90 C 68 90, 78 80, 78 65 M78 68 C 91 65, 91 82, 73 82 M22 91 C 40 99, 72 99, 90 91', w: 4, at: 0.25, dur: 0.55 },
-    {
-      group: [{ ink: 'M47 31 C 46 20, 66 18, 66 28 C 66 35, 56 36, 57 44 M57 50.5 L57.5 52', w: 3.5, at: 0.75, dur: 0.25 }],
-      loop: 'drift', origin: '57 50', anim: 'fade', at: 0.75,
-    },
-  ],
-};
+  layers: [{ circle: [60, 60, 56], fill: disc, at: 0, anim: 'grow' }, { group: layers, at: 0.15, anim: 'fade' }],
+});
 
-// Old cabin key; the hole in the bow is a heart.
-const key = (() => {
-  const R = { rot: 30, cx: 60, cy: 60 };
-  const bow = circle(30, 60, 17);
-  const heart = 'M30 69 C 20 62, 20.5 52, 25.5 52 C 28 52, 30 54.5, 30 56.5 C 30 54.5, 32 52, 34.5 52 C 39.5 52, 40 62, 30 69 Z';
-  const blade = 'M46 56 L102 56 L102 64 L99 64 L99 73 L93 73 L93 79 L86 79 L86 64 L46 64 Z';
-  return {
-    id: 'av-key',
-    title: 'Old key with a heart',
-    viewBox: '0 0 120 120',
-    tile: null,
-    layers: [
-      disc('candle', [49, 51, 50, 48], 15),
-      {
-        group: [
-          { paper: off(tf(bow, R)), fill: 'bone' },
-          { paper: off(tf(blade, R)), fill: 'bone' },
-          { paper: tf(heart, R), fill: 'terracotta' },
-          { ink: `${tf(bow, R)} ${tf('M46 56 L102 56 L102 64', R)} ${tf('M46 64 L86 64 L86 79 L93 79 L93 73 L99 73 L99 64.5', R)} ${tf('M53 51 L53 69', R)}`, w: 4, at: 0.25, dur: 0.55 },
-          { ink: tf(heart, R), w: 3, at: 0.8, dur: 0.15 },
-        ],
-        loop: 'sway', origin: '60 60', anim: 'pop', at: 0.15, loopAt: 1,
-      },
-    ],
-  };
-})();
+const fedora = av('av-fedora', 'Fedora', 'candle', [
+  { shape: 'M38 68 C 37 53, 41 41, 48 36 C 53 33, 56 39, 60 39 C 64 39, 67 33, 72 36 C 79 41, 83 53, 82 68 Z', fill: 'ink' },
+  { shape: 'M38 60 C 50 57, 70 57, 82 60 L82 66 C 70 63, 50 63, 38 66 Z', fill: 'berry' },
+  { shape: 'M18 70 C 30 63, 46 62, 60 62 C 74 62, 90 63, 102 70 C 94 77, 76 79, 60 79 C 44 79, 26 77, 18 70 Z', fill: 'ink' },
+]);
 
-// Quill signing in red.
-const quill = {
-  id: 'av-quill',
-  title: 'Quill signing in red',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('sand', [48, 51, 50, 49], 50),
-    { ink: 'M18 96 C 26 88, 30 100, 38 94 C 44 89, 46 98, 52 95 C 58 92, 62 98, 72 94', w: 3, color: 'blood', at: 0.75, dur: 0.25 },
-    {
-      group: [
-        { paper: off('M42 82 C 38 60, 58 30, 92 18 C 88 44, 70 70, 46 86 Z'), fill: 'terracotta' },
-        { ink: 'M42 82 C 38 60, 58 30, 92 18 C 88 44, 70 70, 46 86 M30 98 C 48 74, 66 48, 90 20 M49 54 L56 60 M70 50 L74 57', w: 3.5, at: 0.2, dur: 0.55 },
-      ],
-      loop: 'sway', origin: '30 98', anim: 'pop', at: 0.15, loopAt: 1,
-    },
-  ],
-};
+const tent = av('av-tent', 'Tent', 'pine', [
+  { shape: 'M22 88 L60 26 L98 88 Z', fill: 'cream' },
+  { shape: 'M49 88 L60 62 L71 88 Z', fill: 'candle' },
+]);
 
-// Spotted mushroom with a cabin door. (Edible? Who's to say.)
-const mushroom = {
-  id: 'av-mushroom',
-  title: 'Mushroom house',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('candle', [50, 48, 51, 49], 80),
-    { paper: off('M46 66 C 44 80, 42 90, 40 97 L80 97 C 78 90, 76 80, 74 66 Z'), fill: 'bone', anim: 'rise', at: 0.15 },
-    {
-      group: [
-        { paper: off('M22 64 C 22 36, 42 22, 60 22 C 78 22, 98 36, 98 64 C 80 71, 40 71, 22 64 Z'), fill: 'terracotta' },
-        { paper: blob(44, 42, [6.5, 5.5, 6, 6], 20), fill: 'bone' },
-        { paper: blob(68, 34, [5, 4.5, 5, 4], 0), fill: 'bone' },
-        { paper: blob(82, 52, [4, 4.5, 3.5, 4], 40), fill: 'bone' },
-        { paper: blob(34, 58, [3, 3, 3.5, 3], 0), fill: 'bone' },
-        { ink: 'M22 64 C 22 36, 42 22, 60 22 C 78 22, 98 36, 98 64 M22 64 C 40 71, 80 71, 98 64', w: 4, at: 0.25, dur: 0.4 },
-      ],
-      loop: 'breathe', origin: '60 68', anim: 'drop', at: 0.2, loopAt: 1,
-    },
-    { ink: 'M46 69 C 44 80, 42 90, 40 97 M74 69 C 76 80, 78 90, 80 97 M28 98 C 50 101, 70 101, 92 98', w: 4, at: 0.55, dur: 0.3 },
-    { ink: 'M54 98 L54 87 C 54 80, 66 80, 66 87 L66 98', w: 3, at: 0.85, dur: 0.15 },
-  ],
-};
+const mug = av('av-mug', 'Mug of cocoa', 'ember', [
+  { shape: 'M70 52 C 92 52, 92 82, 70 82 L70 73 C 81 73, 81 61, 70 61 Z', fill: 'cream' },
+  { shape: 'M33 46 L73 46 L73 82 C 73 88, 69 92, 63 92 L43 92 C 37 92, 33 88, 33 82 Z', fill: 'cream' },
+  { line: 'M47 38 C 43 32, 51 28, 47 21 M59 38 C 55 32, 63 28, 59 21', w: 3, color: 'cream', opacity: 0.8, draw: false },
+]);
 
-// Lantern, candle inside.
-const lantern = {
-  id: 'av-lantern',
-  title: 'Lantern',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('periwinkle', [51, 49, 52, 48], 5),
-    { paper: circle(60, 62, 33), fill: 'bone', opacity: 0.3, anim: 'grow', at: 0.5 },
-    { paper: off('M48 38 C 44 52, 44 70, 48 84 L72 84 C 76 70, 76 52, 72 38 Z'), fill: 'candle', anim: 'pop', at: 0.15 },
-    { paper: off('M40 37 C 46 27, 74 27, 80 37 Z'), fill: 'ink', anim: 'pop', at: 0.2 },
-    { ink: 'M51 28 C 50 12, 70 12, 69 28 M48 38 C 44 52, 44 70, 48 84 M72 38 C 76 52, 76 70, 72 84 M40 87 L80 87 M40 37 L80 37 M60 74 L60 68', w: 4, at: 0.25, dur: 0.55 },
-    {
-      group: [
-        { paper: 'M60 46 C 52 56, 52 68, 60 68 C 68 68, 68 56, 60 46 Z', fill: 'terracotta' },
-        { paper: 'M60 56 C 56 61, 56 67, 60 67 C 64 67, 64 61, 60 56 Z', fill: 'bone' },
-      ],
-      loop: 'flicker', origin: '60 68', anim: 'pop', at: 0.8,
-    },
-  ],
-};
+const pine = av('av-pine', 'Pine tree', 'lake', [
+  { shape: 'M60 18 L80 48 L70 48 L88 76 L66 76 L66 94 L54 94 L54 76 L32 76 L50 48 L40 48 Z', fill: 'pine' },
+]);
 
-// Owl giving a sideways look.
-const owl = {
-  id: 'av-owl',
-  title: 'Suspicious owl',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('clay', [50, 52, 49, 50], 35),
-    { paper: off('M36 28 L45 39 C 53 35, 67 35, 75 39 L84 28 C 89 44, 91 56, 89 70 C 87 88, 75 98, 60 98 C 45 98, 33 88, 31 70 C 29 56, 31 44, 36 28 Z'), fill: 'bone', anim: 'pop', at: 0.15 },
-    { ink: 'M36 28 L45 39 C 53 35, 67 35, 75 39 L84 28 C 89 44, 91 56, 89 70 C 87 88, 75 98, 60 98 C 45 98, 33 88, 31 70 C 29 56, 31 44, 36 28', w: 4, at: 0.25, dur: 0.45 },
-    {
-      group: [
-        { paper: circle(47, 57, 10.5), fill: 'candle' },
-        { paper: circle(73, 57, 10.5), fill: 'candle' },
-        { ink: `${circle(47, 56, 10)} ${circle(73, 56, 10)}`, w: 3.5, at: 0.55, dur: 0.25 },
-        { paper: 'M38 47 L56 50 L56 54 L38 52 Z', fill: 'ink' },
-        { paper: circle(52, 58, 3.6), fill: 'ink' },
-        { paper: circle(78, 58, 3.6), fill: 'ink' },
-      ],
-      loop: 'blink', origin: '60 57', anim: 'fade', at: 0.55, loopAt: 1.3,
-    },
-    { paper: 'M56 68 L64 68 L60 76 Z', fill: 'terracotta', anim: 'pop', at: 0.8 },
-    { ink: 'M50 83 L54 87 L58 83 M62 83 L66 87 L70 83', w: 3, at: 0.85, dur: 0.15 },
-  ],
-};
+const mallow = av('av-marshmallow', 'Marshmallow on a stick', 'ember', [
+  { shape: bar(22, 100, 66, 56, 4), fill: '#8A5F43' },
+  { shape: rot('M64 30 L88 30 C 93 30, 96 33, 96 38 L96 52 C 96 57, 93 60, 88 60 L64 60 C 59 60, 56 57, 56 52 L56 38 C 56 33, 59 30, 64 30 Z', -45, 76, 45), fill: 'paper' },
+  { shape: rot('M84 30 L88 30 C 93 30, 96 33, 96 38 L96 52 C 96 57, 93 60, 88 60 L84 60 Z', -45, 76, 45), fill: 'clay' },
+]);
 
-// Magnifying glass over a fingerprint.
-const magnifier = {
-  id: 'av-magnifier',
-  title: 'Magnifying glass over a fingerprint',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('stone', [49, 50, 52, 48], 65),
-    {
-      group: [
-        { paper: 'M65 71 L71 65 L96 90 C 98 94, 94 98, 90 96 Z', fill: 'ink' },
-        { paper: off(circle(50, 50, 24)), fill: 'bone' },
-        { ink: `${circle(50, 50, 24)} M67 67 L72 72`, w: 4.5, at: 0.2, dur: 0.4 },
-        { ink: 'M37 62 C 34 44, 46 36, 54 38 C 62 40, 66 48, 64 60 M43 64 C 41 52, 46 45, 52 45 C 58 45, 60 52, 59 62 M49 64 C 48 56, 50 52, 52 52 C 54 52, 55 56, 54 62', w: 3, at: 0.6, dur: 0.3 },
-      ],
-      loop: 'float', origin: '60 60', anim: 'pop', at: 0.15, loopAt: 1,
-    },
-  ],
-};
+const partyHat = av('av-party-hat', 'Party hat', 'moss', [
+  { shape: rot('M60 26 L84 92 L36 92 Z', 10), fill: 'ember' },
+  { circle: [65.9, 26.5, 8], fill: 'candle' },
+  { circle: [58, 68, 3.5], fill: 'cream' },
+  { circle: [68, 52, 3], fill: 'cream' },
+]);
 
-// Rubber duck, bobbing.
-const duck = {
-  id: 'av-duck',
-  title: 'Rubber duck',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('sky', [52, 49, 50, 50], 85),
-    {
-      group: [
-        { paper: off('M33 45 C 26 42, 20 44, 16 49 C 22 54, 30 53, 35 51 Z', 1.5, 1.5), fill: 'terracotta' },
-        { paper: off('M57 58 C 66 52, 63 31, 47 31 C 35 31, 30 44, 34 52 C 35 55, 36 57, 36 58 C 26 62, 26 84, 46 86 L76 86 C 88 86, 96 76, 94 60 C 88 66, 80 66, 72 62 C 66 60, 61 60, 57 58 Z'), fill: 'candle' },
-        { ink: 'M57 58 C 66 52, 63 31, 47 31 C 35 31, 30 44, 34 52 C 35 55, 36 57, 36 58 C 26 62, 26 84, 46 86 L76 86 C 88 86, 96 76, 94 60 C 88 66, 80 66, 72 62 C 66 60, 61 60, 57 58 M33 45 C 26 42, 20 44, 16 49 C 22 54, 30 53, 35 51 M57 70 C 63 78, 75 78, 82 68 M44 42 L45 43.5', w: 4, at: 0.2, dur: 0.6 },
-      ],
-      loop: 'bob', origin: '60 86', anim: 'rise', at: 0.15, loopAt: 1,
-    },
-    { ink: 'M14 91 C 24 86, 34 95, 44 91 C 54 87, 64 95, 74 91 C 84 87, 94 95, 106 91', w: 3, color: 'bone', at: 0.75, dur: 0.2 },
-  ],
-};
+const canoe = av('av-canoe', 'Canoe', '#4F6B7A', [
+  { shape: 'M14 50 C 20 70, 36 80, 60 80 C 84 80, 100 70, 106 50 C 86 60, 34 60, 14 50 Z', fill: 'ember' },
+  { shape: 'M20 54 C 38 62, 82 62, 100 54 C 82 66, 38 66, 20 54 Z', fill: '#B4532B' },
+  { line: 'M28 90 C 38 87, 48 93, 60 90 C 72 87, 82 93, 92 90', w: 3, color: 'lake', draw: false },
+]);
 
-// Pocket watch stopped just before midnight.
-const watch = {
-  id: 'av-watch',
-  title: 'Pocket watch at midnight',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('terracotta', [50, 51, 48, 52], 25),
-    { ink: 'M55 25 C 40 16, 24 22, 18 38', w: 3, at: 0.8, dur: 0.15 },
-    {
-      group: [
-        { paper: off(circle(60, 66, 26)), fill: 'bone' },
-        { ink: `${circle(60, 66, 26)} M60 40 L60 34 M54 29 C 54 21, 66 21, 66 29 C 66 33, 54 33, 54 29`, w: 4, at: 0.2, dur: 0.45 },
-        { paper: circle(60, 46, 2), fill: 'ink' },
-        { paper: circle(80, 66, 2), fill: 'ink' },
-        { paper: circle(60, 86, 2), fill: 'ink' },
-        { paper: circle(40, 66, 2), fill: 'ink' },
-        { ink: 'M60 66 L54 54 M60 66 L58.5 49', w: 3.5, at: 0.6, dur: 0.15 },
-      ],
-      loop: 'sway', origin: '60 25', anim: 'drop', at: 0.15, loopAt: 1,
-    },
-  ],
-};
+const cake = av('av-cake', 'Slice of birthday cake', 'clay', [
+  { shape: 'M24 70 L94 54 L94 88 L24 88 Z', fill: 'paper' },
+  { shape: 'M24 78 L94 68 L94 75 L24 83 Z', fill: 'berry' },
+  { rect: [80, 32, 7, 20, 2], fill: 'cream' },
+  { shape: 'M83.5 14 C 90 22, 91 27, 83.5 30 C 76 27, 77 22, 83.5 14 Z', fill: 'paper' },
+]);
 
-// Ace of spades.
-const card = (() => {
-  const R = { rot: 9, cx: 60, cy: 62 };
-  const back = 'M42 30 L82 30 C 85 30, 86 31, 86 34 L86 88 C 86 91, 85 92, 82 92 L42 92 C 39 92, 38 91, 38 88 L38 34 C 38 31, 39 30, 42 30 Z';
-  return {
-    id: 'av-card',
-    title: 'Ace of spades',
-    viewBox: '0 0 120 120',
-    tile: null,
-    layers: [
-      disc('sage', [50, 48, 51, 50], 40),
-      { paper: off(tf(back, { rot: -14, cx: 60, cy: 62, dx: -6 })), fill: 'terracotta', anim: 'pop', at: 0.1 },
-      { ink: tf(back, { rot: -14, cx: 60, cy: 62, dx: -6 }), w: 3, at: 0.2, dur: 0.25 },
-      {
-        group: [
-          { paper: off(tf(back, R)), fill: 'bone' },
-          { ink: tf(back, R), w: 3.5, at: 0.4, dur: 0.35 },
-          { paper: tf('M62 44 C 54 54, 46 60, 50 68 C 53 73, 58 72, 60 68 L57 78 L67 78 L64 68 C 66 72, 71 73, 74 68 C 78 60, 70 54, 62 44 Z', R), fill: 'ink' },
-          { ink: `${tf('M44 46 L47.5 37 L51 46', R)} ${tf('M45.5 42.5 L49.5 42.5', R)}`, w: 3, at: 0.75, dur: 0.15 },
-        ],
-        loop: 'float', origin: '60 62', anim: 'slide-r', at: 0.35, loopAt: 1,
-      },
-    ],
-  };
-})();
+const campfire = av('av-campfire', 'Campfire', '#2A3542', [
+  { shape: bar(30, 90, 90, 76, 9), fill: '#8A5F43' },
+  { shape: bar(30, 76, 90, 90, 9), fill: 'clay' },
+  { shape: 'M60 22 C 72 40, 82 52, 82 66 C 82 79, 72 86, 60 86 C 48 86, 38 79, 38 66 C 38 55, 45 48, 49 38 C 53 46, 56 50, 58 54 C 61 44, 61 33, 60 22 Z', fill: 'ember' },
+  { shape: 'M61 50 C 67 60, 72 66, 72 73 C 72 80, 67 84, 60 84 C 53 84, 48 80, 48 73 C 48 66, 54 62, 57 55 C 58 59, 60 61, 61 63 C 62 58, 62 54, 61 50 Z', fill: 'candle' },
+]);
 
-// Wine glass with one drip down the side.
-const wine = {
-  id: 'av-wine',
-  title: 'Glass of red wine',
-  viewBox: '0 0 120 120',
-  tile: null,
-  layers: [
-    disc('clay', [48, 50, 51, 50], 55),
-    {
-      group: [
-        { paper: off('M42 30 C 40 50, 46 66, 60 68 C 74 66, 80 50, 78 30 Z'), fill: 'bone' },
-        { paper: off('M43 45 C 52 49, 68 41, 77 45 C 76 58, 70 66, 60 67 C 50 66, 44 58, 43 45 Z', 1.5, 1.5), fill: 'blood' },
-        { paper: 'M79 30 C 83 33, 85 39, 85 46 C 88 49, 87.5 55, 84 55.5 C 80.5 56, 79.5 50, 82.5 46.5 C 82.5 40, 81.5 35, 79 30 Z', fill: 'blood' },
-        { ink: 'M42 30 C 40 50, 46 66, 60 68 C 74 66, 80 50, 78 30 M42 30 C 42 26, 78 26, 78 30 C 78 34, 42 34, 42 30 M60 68 L60 93 M45 95 C 54 90, 66 90, 75 95 M44 45 C 52 49, 68 41, 76 45', w: 4, at: 0.2, dur: 0.55 },
-      ],
-      loop: 'sway', origin: '60 95', anim: 'pop', at: 0.15, loopAt: 1,
-    },
-  ],
-};
+const balloon = av('av-balloon', 'Balloon', 'candle', [
+  { line: 'M60 80 C 54 88, 66 94, 58 104', w: 2.5, color: 'ink', opacity: 0.7, draw: false },
+  { shape: 'M60 18 C 76 18, 86 32, 86 46 C 86 64, 72 78, 60 78 C 48 78, 34 64, 34 46 C 34 32, 44 18, 60 18 Z', fill: 'berry' },
+  { shape: 'M55 83 L65 83 L60 76 Z', fill: 'berry' },
+  { shape: 'M44 40 C 44 32, 50 27, 55 27 C 50 31, 48 36, 48 42 Z', fill: 'cream', opacity: 0.55 },
+]);
 
-export default [fedora, cake, partyHat, owl, moon, key, teacup, pine, lantern, quill, mushroom, magnifier, watch, card, duck, wine];
+const fish = av('av-fish', 'Fish', 'pine', [
+  { shape: 'M78 60 L98 44 C 93 53, 93 67, 98 76 Z', fill: 'lake' },
+  { shape: 'M24 60 C 36 42, 66 40, 82 60 C 66 80, 36 78, 24 60 Z', fill: 'lake' },
+  { circle: [38, 57, 3.5], fill: 'pine' },
+]);
+
+const lantern = av('av-lantern', 'Lantern', '#3B4F66', [
+  { circle: [60, 62, 34], fill: 'candle', opacity: 0.16 },
+  { line: 'M50 34 C 50 22, 70 22, 70 34', w: 3, color: 'smoke', draw: false },
+  { shape: 'M44 42 L76 42 L70 33 L50 33 Z', fill: 'smoke' },
+  { rect: [47, 42, 26, 34, 5], fill: 'candle' },
+  { rect: [42, 76, 36, 9, 3], fill: 'smoke' },
+]);
+
+const smore = av('av-smore', "S'more", 'lake', [
+  { rect: [28, 72, 64, 16, 4], fill: 'clay' },
+  { rect: [32, 54, 56, 14, 7], fill: 'paper' },
+  { rect: [34, 66, 52, 7, 1], fill: '#5A3A2A' },
+  { rect: [28, 36, 64, 16, 4], fill: 'clay' },
+  { group: [
+      { circle: [44, 44, 2.2], fill: '#B07E5C' },
+      { circle: [60, 44, 2.2], fill: '#B07E5C' },
+      { circle: [76, 44, 2.2], fill: '#B07E5C' },
+    ] },
+]);
+
+const moon = av('av-moon', 'Moon', 'dusk', [
+  { circle: [56, 62, 30], fill: 'cream' },
+  { circle: [72, 50, 26], fill: 'dusk' },
+  { circle: [84, 36, 3.5], fill: 'candle' },
+]);
+
+const candles = av('av-26', 'Number candles 2 and 6', 'berry', [
+  { line: 'M32 54 C 32 44, 52 43, 52 54 C 52 64, 32 72, 32 86 L54 86', w: 8, color: 'cream', draw: false },
+  { line: 'M84 48 C 72 48, 66 60, 66 72 C 66 81, 70 86, 76 86 C 82 86, 87 81, 87 74 C 87 67, 82 63, 76 63 C 71 63, 67 66, 66 70', w: 8, color: 'cream', draw: false },
+  { shape: 'M42 24 C 47 30, 48 35, 42 37 C 36 35, 37 30, 42 24 Z', fill: 'candle' },
+  { shape: 'M78 24 C 83 30, 84 35, 78 37 C 72 35, 73 30, 78 24 Z', fill: 'candle' },
+]);
+
+const cabin = av('av-cabin', 'Cabin with a lit window', 'moss', [
+  { rect: [70, 30, 9, 20, 1], fill: 'ink' },
+  { shape: 'M24 62 L60 30 L96 62 Z', fill: 'ink' },
+  { rect: [32, 58, 56, 34, 2], fill: 'ink' },
+  { rect: [51, 66, 18, 16, 2], fill: 'candle' },
+]);
+
+export default [fedora, tent, mug, pine, campfire, partyHat, cake, canoe, candles, fish, balloon, mallow, smore, moon, lantern, cabin];

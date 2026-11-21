@@ -8,7 +8,7 @@ export function renderGallery(root) {
   root.innerHTML = `
   <main class="view gallery">
     <h1>Art</h1>
-    <p class="say soft">Tap any piece to replay it. ${all.length} pieces, ${AVATARS.length} doodles, ${Object.keys(ICONS).length} icons.</p>
+    <p class="soft">Tap any piece to replay it. ${all.length} pieces, ${AVATARS.length} badges, ${Object.keys(ICONS).length} icons.</p>
     <div class="g-grid">${all.map((a) => `<figure class="g-item" data-id="${esc(a.id)}"><div class="g-art">${artHTML(a, { slots: { name: 'STEPH' } })}</div><figcaption class="small">${esc(a.id)}</figcaption></figure>`).join('')}</div>
     <h2>Doodles</h2>
     <div class="g-row">${AVATARS.map((a) => `<span class="g-av">${renderArt(a)}</span>`).join('')}</div>
