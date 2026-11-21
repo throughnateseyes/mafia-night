@@ -33,3 +33,21 @@
 @media (max-height: 620px) {
   .home { padding-top: calc(var(--s6) + env(safe-area-inset-top)); padding-bottom: calc(var(--s3) + env(safe-area-inset-bottom)); gap: var(--s4); }
 }
+
+/* the photo has no caption on the cover: an even white border all round */
+.home-photo { width: 46%; }
+
+/*
+ * Laptops and tablets: the folder opens out wider, like a real file folder, so the blurb
+ * can breathe beside the photo. The contents keep their size; only the folder gets more room.
+ * The unit also follows the screen height here, so the whole cover still fits without scrolling.
+ */
+@media (min-width: 760px) {
+  .frame:has(> .home) { max-width: min(92vw, 80dvh); }
+  .home { --u: min(1cqw, 0.54dvh); }
+  .home-card { max-width: calc(var(--u) * 92); }
+  .home-row { gap: var(--s6); padding: 0 var(--s2); }
+  .home-photo { width: calc(var(--u) * 44); }
+  .home-blurb { font-size: var(--t-lg); line-height: 1.55; max-width: 24ch; }
+  .home-actions { align-self: center; width: calc(var(--u) * 92); }
+}

@@ -9,8 +9,8 @@ import { $, buzz } from '../ui/kit.js';
 import { clip, crimeTape, folder, polaroid, titleCard } from '../ui/props.js';
 import { openHowToPlay } from '../ui/rules.js';
 
-/** "Case no. 26 · a weekend in Pioneer": the line that says this was made for this trip. Plain text. */
-export const eventLine = () => `Case no. ${EVENT.caseNo} · ${EVENT.titleSmall.toLowerCase()} ${EVENT.town}`;
+/** "Case no. 26 · Steph’s birthday weekend in Pioneer": the line that says this was made for this trip. Plain text. */
+export const eventLine = () => `Case no. ${EVENT.caseNo} · ${[EVENT.titleSmall].flat().join(' ')} ${EVENT.town}`;
 
 export function renderHome(root) {
   const last = lastRoom();
@@ -28,7 +28,6 @@ export function renderHome(root) {
     <div class="home-card drop" style="--at:280ms;--r0:5deg">${titleCard({ small: EVENT.titleSmall, big: EVENT.town, caseNo: EVENT.caseNo })}</div>
     <div class="home-row">
       <div class="home-photo drop" style="--at:520ms;--r0:-9deg">${polaroid('cabin-watching', {
-        cap: 'the cabin, 9 pm',
         rot: -3,
         alt: 'The cabin at night, seen through the trees',
         extra: clip('top:calc(var(--u) * -5);left:calc(var(--u) * 5)'),

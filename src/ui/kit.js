@@ -139,3 +139,40 @@ export function countdown(el, timer) {
   tick();
   el._t = setInterval(tick, 250);
 }
+
+/* ---------- full screen (laptop / TV) ---------- */
+
+/**
+ * A quiet "full screen" link for the big-screen views. Returns null where the browser
+ * cannot do it (iPhone Safari), so callers can just skip it. Pressing F toggles it too.
+ */
+export function fullscreenLink() {
+  const root = document.documentElement;
+  const request = root.requestFullscreen ?? root.webkitRequestFullscreen;
+  if (!request || document.fullscreenEnabled === false) return null;
+  const current = () => document.fullscreenElement ?? document.webkitFullscreenElement;
+  const toggle = () => {
+    try {
+      const p = current() ? (document.exitFullscreen ?? document.webkitExitFullscreen).call(document) : request.call(root, { navigationUI: 'hide' });
+      p?.catch?.(() => {});
+    } catch {
+      /* not allowed right now; ignore */
+    }
+  };
+  const b = h('<button class="corner-link fs-link" type="button" title="Press F"></button>');
+  const sync = () => {
+    b.textContent = current() ? 'exit full screen' : 'full screen';
+  };
+  b.addEventListener('click', toggle);
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach((ev) => document.addEventListener(ev, sync));
+  if (!window.__fsKey) {
+    window.__fsKey = true;
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() !== 'f' || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.target.closest?.('input, textarea, [contenteditable]')) return;
+      if (document.querySelector('.fs-link')) toggle();
+    });
+  }
+  sync();
+  return b;
+}

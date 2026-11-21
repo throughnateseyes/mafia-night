@@ -5,8 +5,9 @@
 
 /** Who this edition is for. */
 export const EVENT = {
-  /** The trip: "A weekend in Pioneer". */
-  titleSmall: 'A weekend in',
+  /** The trip: "Steph’s birthday weekend in Pioneer". titleSmall is the typed lines above the town on the title card. */
+  honoree: 'Steph',
+  titleSmall: ['Steph’s birthday', 'weekend in'],
   town: 'Pioneer',
   /** It's a 26th birthday, so everything is case no. 26. */
   age: 26,

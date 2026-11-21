@@ -348,7 +348,7 @@ export function renderPlayer(root, arg) {
               `<li class="leader who-row ${mafia(p) ? 'red' : ''}"><span class="who-who">${face(p.avatar, { out: !p.alive, rot: tilt(i) })}<span class="who-name">${esc(p.name)}${p.alive ? '' : ' <span class="who-out">(out)</span>'}${p.id === player.me?.id ? ' <span class="note pen who-you">you</span>' : ''}</span></span><span class="chip-role" data-role="${esc(p.role ?? '')}">${esc(ROLES[p.role]?.name ?? '')}</span></li>`,
           )
           .join('')}</ul>
-        <p class="note red who-foot">stay put. ${esc(EVENT.narrator)} can deal new files.</p>
+        <p class="note red who-foot">stay put. new files may be coming.</p>
       </article>`,
       { className: 'who-sheet', onClose: () => (whoSheet = null) },
     );

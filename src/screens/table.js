@@ -6,7 +6,7 @@ import { EVENT } from '../config/game.js';
 import { Host, links, savedHost, watch } from '../game/session.js';
 import { publicView } from '../game/engine.js';
 import { navigate } from '../router.js';
-import { $, buzz, esc, h, keepAwake, sheet, statusBadge, toast } from '../ui/kit.js';
+import { $, buzz, esc, fullscreenLink, h, keepAwake, sheet, statusBadge, toast } from '../ui/kit.js';
 import { kraft, tapeStrip } from '../ui/props.js';
 import { qrCard, renderDisplayInto, renderLobbyInto } from './display.js';
 import { eventLine } from './home.js';
@@ -39,7 +39,6 @@ export function renderTable(root, roomId) {
   const narratorButton = () => `
     <section class="narrator-card slide" style="--at:500ms">
       <button class="btn paper" id="narrator" type="button">I’m the narrator</button>
-      ${EVENT.narrator ? `<p class="narrator-note note gold">${esc(EVENT.narrator)}, that’s you</p>` : ''}
     </section>`;
 
   function renderLobby(st) {
@@ -73,7 +72,7 @@ export function renderTable(root, roomId) {
     host?.relay.close();
     host = null;
     watcher = watch(room, { onState: render });
-    $('.corner', root).replaceChildren(statusBadge(watcher.relay), tvButton());
+    $('.corner', root).replaceChildren(...[statusBadge(watcher.relay), tvButton(), fullscreenLink()].filter(Boolean));
   }
 
   const tvButton = () => {
@@ -106,7 +105,7 @@ export function renderTable(root, roomId) {
         becomeDisplay();
       },
     });
-    $('.corner', root).append(statusBadge(host.relay), tvButton());
+    $('.corner', root).append(...[statusBadge(host.relay), tvButton(), fullscreenLink()].filter(Boolean));
     render(publicView(saved.game, { narrator: false }));
     host.start().then((ok) => {
       if (!ok) return;

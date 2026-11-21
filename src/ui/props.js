@@ -90,8 +90,8 @@ export const folder = (inner, { tab = '', rot = -1, cls = '', style = '' } = {})
   `<div class="folder ${cls}" style="${rotStyle(rot)}${style}">${tab ? `<span class="folder-tab">${esc(tab)}</span>` : ''}${inner}</div>`;
 
 /** The title card: "A weekend in / Pioneer" typed on a ruled index card with the case stamp. */
-export const titleCard = ({ small = 'A weekend in', big = 'Pioneer', caseNo = 26, rot = 1.4 } = {}) =>
-  `<div class="icard" style="${rotStyle(rot)}"><p class="icard-small">${jitter(small)}</p><p class="icard-big">${jitter(big)}</p>
+export const titleCard = ({ small = ['Steph’s birthday', 'weekend in'], big = 'Pioneer', caseNo = 26, rot = 1.4 } = {}) =>
+  `<div class="icard" style="${rotStyle(rot)}"><p class="icard-small">${[small].flat().map(jitter).join('<br>')}</p><p class="icard-big">${jitter(big)}</p>
     <svg class="icard-rule" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 12 C 40 5, 90 16, 130 9 S 180 8, 197 11" fill="none" stroke="#B3261E" stroke-width="3" stroke-linecap="round"/></svg>
     <span style="position:absolute;right:calc(var(--u) * 4);top:calc(var(--u) * 3)">${roundStamp('case', `no. ${caseNo}`)}</span></div>`;
 

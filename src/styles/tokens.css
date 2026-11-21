@@ -45,7 +45,10 @@
 
   /* desk unit */
   --u: min(1cqw, 4.8px);
+}
 
+/* Sizes derived from the desk unit. Re-declared on every layout scope so a screen can set its own --u and have type, spacing and shadows follow. */
+:root, .frame, .view, .cq, .sheet {
   /* type scale (typed faces). Hand-written text reads ~1.7x smaller, so size it up. */
   --t-xs: max(11px, calc(var(--u) * 3.3));
   --t-sm: max(12.5px, calc(var(--u) * 3.7));

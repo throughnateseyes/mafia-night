@@ -220,6 +220,23 @@ try {
   await narr.waitFor(`document.querySelectorAll('.narr-roster li').length >= 5`, 40000);
   await sleep(1500);
   await narr.shot('06-narrator-lobby');
+
+  // the tour: mark the birthday girl, then look at the narrator's other tabs and the how-to sheet
+  await narr.eval(`[...document.querySelectorAll('.narr-roster li')].find((li) => li.textContent.includes('Steph'))?.querySelector('.narr-cake')?.click()`);
+  await sleep(1200);
+  await narr.shot('06b-narrator-birthday');
+  await table.shot('04b-table-lobby-birthday');
+  for (const tab of ['briefing', 'suspects', 'scenes']) {
+    await narr.click(`[data-tab="${tab}"]`);
+    await sleep(900);
+    await narr.shot(`06c-narrator-${tab}`);
+  }
+  await narr.click('[data-tab="tonight"]');
+  await phones[1].click('#how');
+  await sleep(1500);
+  await phones[1].shot('05b-phone-how-to');
+  await phones[1].eval(`document.querySelector('dialog[open] .sheet-x')?.click()`);
+  await sleep(500);
   await table.waitFor(`!document.querySelector('#host') && !document.querySelector('.narrator-card')`, 15000).catch(() => {});
   check(!(await table.eval(`!!document.querySelector('.narrator-card')`)), 'table hands control to the narrator phone');
 
@@ -327,6 +344,8 @@ try {
   await narr.click('[data-cmd="vote"]');
   await sleep(2500);
   await table.shot('24-table-vote');
+  await phones[1].shot('24b-phone-vote');
+  await narr.shot('24c-narrator-vote');
   await narr.clickText('.pick', mafia);
   await narr.click('dialog[open] #yes');
   await narr.has('[data-cmd="finish"]');
@@ -334,9 +353,13 @@ try {
   await table.waitFor(`document.querySelector('.stage-caption')?.textContent.includes(${JSON.stringify(mafia)})`, 15000);
   await sleep(3000);
   await table.shot('25-table-eliminated');
+  await phones[1].shot('25b-phone-verdict');
+  await narr.shot('25c-narrator-after-vote');
   await narr.click('[data-cmd="finish"]');
   await table.waitFor(`document.querySelector('.stage-caption')?.textContent.toLowerCase().includes('campers got them')`, 15000);
-  await sleep(3500);
+  await sleep(1600);
+  await phones[2].shot('26b-phone-case-closed');
+  await sleep(1900);
   await table.shot('26-table-town-wins');
   await phones[0].has('#whowas');
   await phones[0].shot('27-phone-end');

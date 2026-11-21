@@ -37,7 +37,7 @@
     repeating-linear-gradient(180deg, transparent 0 calc(var(--u) * 7.2), rgba(60, 100, 170, 0.28) calc(var(--u) * 7.2) calc(var(--u) * 7.4)) 0 calc(var(--u) * 9),
     #f6f1e5;
 }
-.icard-small { font: calc(var(--u) * 5)/1.1 var(--f-type); }
+.icard-small { font: calc(var(--u) * 5)/1.44 var(--f-type); }
 .icard-big { font: calc(var(--u) * 14)/1 var(--f-type); margin-top: var(--s1); white-space: nowrap; text-shadow: calc(var(--u) * 0.35) calc(var(--u) * 0.1) 0 rgba(28, 25, 22, 0.32); filter: url(#ink); }
 .icard-rule { display: block; width: 92%; height: calc(var(--u) * 4); margin-top: calc(var(--u) * -1); }
 .jit { display: inline-block; }

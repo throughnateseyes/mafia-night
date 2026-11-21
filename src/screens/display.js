@@ -6,7 +6,7 @@
 import { PLAYER_LIMITS, ROLES } from '../config/game.js';
 import { links, watch } from '../game/session.js';
 import { roleCounts } from '../game/roles.js';
-import { $, countdown, esc, keepAwake, statusBadge } from '../ui/kit.js';
+import { $, countdown, esc, fullscreenLink, keepAwake, statusBadge } from '../ui/kit.js';
 import { face, kraft, tapeStrip } from '../ui/props.js';
 import { qrSvg } from '../ui/qr.js';
 import { renderStage, sceneIsDark } from '../ui/stage.js';
@@ -141,7 +141,7 @@ export function renderTV(root, arg) {
   root.innerHTML = `<div class="corner"></div><main class="frame wide display" data-mode=""><div class="big-waiting">${kraft(eventLine())}<p class="title">Finding the case</p><p class="note gold">one moment</p></div></main>`;
   const main = $('main', root);
   const w = watch(room, { onState: (st) => renderDisplayInto(main, room, st) });
-  $('.corner', root).append(statusBadge(w.relay));
+  $('.corner', root).append(...[statusBadge(w.relay), fullscreenLink()].filter(Boolean));
   keepAwake();
   return () => w.relay.close();
 }

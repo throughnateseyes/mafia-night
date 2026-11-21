@@ -1,4 +1,4 @@
-# A weekend in Pioneer · Case no. 26
+# Steph’s birthday weekend in Pioneer · Case no. 26
 
 A Mafia game made for Steph's 26th birthday cabin weekend, dressed as a murder case file.
 No cards, no app store, no accounts: everyone scans one code, gets booked as a suspect, and
