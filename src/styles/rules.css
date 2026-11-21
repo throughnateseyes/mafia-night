@@ -1,1 +1,43 @@
-/* rules screen styles. Compose from props (props.css); put only layout and screen-specific rules here. */
+/*
+ * The briefing and the role files (src/ui/rules.js): typed sheets slid up from the bottom of the desk.
+ * Compose from props (props.css); only layout and sheet-specific rules live here.
+ */
+.rules { display: flex; flex-direction: column; }
+.rules .kicker { padding-right: 44px; } /* clear of the close button */
+.rules .title { margin-top: var(--s1); }
+.rules-head { margin-top: var(--s6); font: var(--t-lg)/1.2 var(--f-type); }
+
+/* the briefing: five typed lines, numbered in red pen */
+.brief { display: flex; flex-direction: column; gap: var(--s3); margin-top: var(--s5); font: var(--t-body)/1.4 var(--f-type); }
+.brief li { display: flex; align-items: baseline; gap: var(--s3); }
+.brief-num { flex: none; width: 0.6em; font-size: var(--t-hand-lg); line-height: 0.6; text-align: center; }
+.brief-rule { align-self: flex-start; margin-top: var(--s5); font-size: var(--t-hand-lg); transform: rotate(-2deg); }
+
+/* who you might be: one row per role, tap to pull the file */
+.role-rows { display: flex; flex-direction: column; margin-top: var(--s2); }
+.role-row { display: flex; align-items: center; gap: var(--s4); width: 100%; min-height: 44px; padding: var(--s3) 0; border: 0; border-bottom: 1px dotted var(--ink-faint); background: none; text-align: left; }
+.role-row:last-child { border-bottom: 0; }
+.role-row:active { opacity: 0.7; }
+/* the thumbnail is its own container, so the print inside is a true miniature */
+.role-thumb { flex: none; width: calc(var(--u) * 17); container-type: inline-size; }
+.role-row-text { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--s1); }
+.role-row-name { font: var(--t-lg)/1.1 var(--f-type); }
+.role-row-name.red { color: var(--red); }
+.role-row-line { font-size: var(--t-sm); line-height: 1.35; color: var(--ink-soft); }
+
+/* typed facts: a label, then what it says */
+.role-facts { display: flex; flex-direction: column; gap: var(--s4); margin-top: var(--s5); }
+.role-facts dt { font: var(--t-sm)/1.2 var(--f-type); color: var(--ink-faint); }
+.role-facts dd { margin-top: var(--s1); font-size: var(--t-body); line-height: 1.4; }
+.role-facts .red dt { color: var(--red); }
+.role-facts.wins { margin-top: var(--s3); }
+.off-record dd.note { margin-top: var(--s2); font-size: var(--t-hand); line-height: 0.95; transform: rotate(-1deg); transform-origin: 0 50%; }
+
+/* one role's file */
+.role-head { display: flex; align-items: flex-start; gap: var(--s4); margin-top: var(--s5); }
+.role-photo { flex: none; width: 42%; }
+.role-id { flex: 1 1 0; min-width: 0; }
+.role-stamp { margin: var(--s1) 0 0 calc(var(--s1) * -1); font-size: inherit; line-height: 1; }
+.role-line { margin-top: var(--s4); font: var(--t-sm)/1.45 var(--f-type); }
+.role-crew { margin-top: var(--s4); font: var(--t-body)/1.3 var(--f-type); }
+.role-crew strong { font-weight: 400; color: var(--red); }

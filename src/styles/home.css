@@ -1,1 +1,35 @@
-/* home screen styles. Compose from props (props.css); put only layout and screen-specific rules here. */
+/*
+ * Home: the cover of the case file (src/screens/home.js).
+ * One folder fills the screen; the button and the pen link sit on the desk under it.
+ * Everything is in desk units, so the column is narrowed on short screens and the whole
+ * cover scales down with it instead of scrolling.
+ */
+.frame:has(> .home) { max-width: min(480px, max(56dvh, 300px)); }
+/* the crime tape runs off both edges of a phone; on a laptop its ends lie on the desk */
+#app:has(.home) { overflow-x: clip; }
+
+.home { gap: var(--s5); justify-content: center; }
+
+.home-desk { position: relative; flex: 1 1 auto; display: flex; min-height: 0; max-height: calc(var(--u) * 178); }
+.home-folder { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: var(--s5); padding-bottom: calc(var(--u) * 17); }
+
+/* the photo clipped beside the blurb, floating between the title card and the tape */
+.home-row { display: flex; align-items: center; gap: var(--s4); margin: auto 0; }
+.home-photo { flex: none; width: 52%; }
+.home-photo .pol-cap { font-size: calc(var(--u) * 5.4); }
+.home-blurb { flex: 1 1 0; min-width: 0; font: var(--t-body)/1.45 var(--f-body); }
+
+/* the tape is pulled across the corner, left to right */
+.home-desk .ctape { animation: home-tape 0.55s var(--ease-out) 820ms both; }
+@keyframes home-tape { from { clip-path: inset(calc(var(--u) * -4) 100% calc(var(--u) * -4) 0); } to { clip-path: inset(calc(var(--u) * -4) 0 calc(var(--u) * -4) 0); } }
+
+.home-actions { display: flex; flex-direction: column; }
+.home-links { display: flex; justify-content: center; gap: var(--s4); }
+/* two links share the row when there is a game to go back to; on the narrowest phones the pen writes a little smaller */
+.home-links .link { width: auto; min-height: 44px; padding: var(--s2) 0 0; font-size: min(var(--t-hand), 5.4cqw); white-space: nowrap; }
+.home-links .link:only-child { padding-inline: var(--s4); font-size: var(--t-hand); }
+
+/* short phones: give the top margin back to the folder */
+@media (max-height: 620px) {
+  .home { padding-top: calc(var(--s6) + env(safe-area-inset-top)); padding-bottom: calc(var(--s3) + env(safe-area-inset-bottom)); gap: var(--s4); }
+}

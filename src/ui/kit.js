@@ -51,7 +51,7 @@ export function toast(msg, { tone = '' } = {}) {
 /* ---------- bottom sheet ---------- */
 
 export function sheet(html, { className = '', onClose } = {}) {
-  const d = h(`<dialog class="sheet ${className}"><div class="sheet-card" tabindex="-1" autofocus><button class="sheet-x" type="button" aria-label="Close">${icon('close', { size: 20 })}</button>${html}</div></dialog>`);
+  const d = h(`<dialog class="sheet ${className}"><div class="sheet-card on-paper" tabindex="-1" autofocus><button class="sheet-x" type="button" aria-label="Close">${icon('close', { size: 20 })}</button>${html}</div></dialog>`);
   document.body.append(d);
   const close = () => {
     if (d.classList.contains('closing')) return;

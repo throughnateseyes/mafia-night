@@ -63,10 +63,9 @@ const COMPOSE = {
 
   closed: (scene, ctx, el, d, t) => {
     const rows = ctx.players.map((p) => `<div class="leader ${ROLES[p.role]?.team === 'mafia' ? 'red' : ''}"><span>${esc(p.name)}</span><span>${esc(ROLES[p.role]?.name ?? '?')}</span></div>`).join('');
-    const bday = scene.key === 'town' ? birthdayName(ctx.players) : null;
-    const cap = scene.key === 'town' ? (bday ? `happy ${EVENT.age}th, ${bday}` : `happy ${EVENT.age}th!`) : t.cap;
+    const cap = scene.key === 'town' ? `happy ${EVENT.age}th!` : t.cap;
     return `<div class="stage-prop is-closed">${folder(
-      `<div class="stage-closed-list">${rows}</div><div class="stage-closed-row">${polaroid(d.photo, { cap, rot: -4, colour: d.colour, extra: pin('top:calc(var(--u) * -1.6);left:44%'), style: 'width:44%;flex:none' })}<div class="stage-closed-stamp">${stamp(d.stamp, { sm: true, thud: true, rot: -8, at: '0.9s' })}</div></div>`,
+      `<div class="stage-closed-list ${ctx.players.length > 8 ? 'many' : ''}">${rows}</div><div class="stage-closed-row">${polaroid(d.photo, { cap, rot: -4, colour: d.colour, extra: pin('top:calc(var(--u) * -1.6);left:44%'), style: 'width:44%;flex:none' })}<div class="stage-closed-stamp">${stamp(d.stamp, { sm: true, thud: true, rot: -8, at: '0.9s' })}</div></div>`,
       { tab: `Case no. ${EVENT.caseNo}`, rot: 1 },
     )}</div>`;
   },
@@ -75,7 +74,7 @@ const COMPOSE = {
 /** A small picture that stands for a scene (narrator's preview, scene picker). */
 export function sceneThumb(scene) {
   const d = def(scene);
-  const id = d.photo ?? (d.kind === 'gazette' ? (scene.key === 'clear' ? 'morning-clear' : 'morning-dead') : d.kind === 'cabin' || d.kind === 'files' ? 'cabin-map' : d.kind === 'board' || d.kind === 'verdict' ? 'talk' : 'cabin-watching');
+  const id = d.photo ?? { lobby: 'cabin-map', dealt: 'role-villager', dead: 'morning-dead', clear: 'morning-clear', vote: 'cabin-watching', out: 'out' }[scene.key] ?? 'cabin-watching';
   return photoSrc(id);
 }
 
@@ -94,6 +93,8 @@ export function renderStage(el, scene, opts = {}) {
   el.dataset.scene = `${scene.key}|${scene.at}`;
   const t = sceneText(scene, ctx);
   const dark = sceneIsDark(scene);
+  // the campers' win is also a birthday card, if the narrator marked who it's for
+  if (scene.key === 'town' && birthdayName(ctx.players)) t.note = `happy birthday, ${birthdayName(ctx.players)}`;
 
   if (opts.compact) {
     el.className = 'stage compact';

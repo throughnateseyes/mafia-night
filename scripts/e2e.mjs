@@ -294,6 +294,19 @@ try {
   await phones[names.indexOf(mafia)].shot('19-phone-mafia-morning');
   await narr.shot('20-narrator-morning');
 
+  /* ---------- a refresh in the middle of the game ---------- */
+  log('refresh mid-game');
+  await narr.eval('location.reload()');
+  await sleep(800);
+  await narr.has('[data-talk="2"]');
+  check(true, 'narrator phone picks the game back up after a refresh');
+  const refreshed = phones[names.indexOf(doctor)];
+  await refreshed.eval('location.reload()');
+  await sleep(800);
+  await refreshed.has('.mode-play');
+  await refreshed.waitFor(`document.querySelector('.stage-caption')?.textContent.includes(${JSON.stringify(victim)})`, 20000);
+  check(true, 'a player phone keeps its role and the scene after a refresh');
+
   await narr.click('[data-talk="2"]');
   await narr.has('.timer.big:not([hidden])');
   await sleep(2500);

@@ -26,22 +26,27 @@
 .stage-files-line { font-size: var(--t-body); line-height: 1.5; text-align: left; }
 .stage-files-stamp { margin-top: var(--s4); text-align: right; }
 
-.is-verdict { padding-bottom: calc(var(--u) * 8); }
-.stage-verdict-stamp { position: absolute; right: -18%; bottom: 0; }
+/* the stamp lands on the photo itself (red ink only shows on paper, not on the dark desk) */
+.stage-verdict-stamp { position: absolute; left: 0; right: 0; bottom: 13%; text-align: center; z-index: 5; }
+.stage-verdict-stamp .stamp { font-size: calc(var(--u) * 9); background: #f4efe2; mix-blend-mode: normal; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35); }
 
 .stage-closed-list { text-align: left; }
 .stage-closed-row { display: flex; align-items: center; gap: var(--s4); margin-top: var(--s4); }
 .stage-closed-stamp { flex: 1; text-align: center; }
+.stage-closed-stamp .stamp { white-space: normal; line-height: 1; }
+.stage-closed-list.many { columns: 2; column-gap: var(--s4); }
+.stage-closed-list.many .leader { break-inside: avoid; }
 
 /* lights out */
 .stage.is-dark .stage-caption { color: #f7eedf; }
 
 /* narrator's one-line summary of what everyone is looking at */
-.stage.compact { flex: none; flex-direction: row; align-items: center; gap: var(--s3); text-align: left; padding: var(--s2); background: rgba(0, 0, 0, 0.35); border-radius: calc(var(--u) * 2); }
+.stage.compact { flex: none; flex-direction: row; align-items: center; gap: var(--s3); text-align: left; }
 .stage-thumb { width: calc(var(--u) * 14); aspect-ratio: 1; object-fit: cover; border: calc(var(--u) * 0.8) solid var(--photo); transform: rotate(-3deg); flex: none; filter: sepia(0.2); }
 .stage-compact-caption { font-size: var(--t-body); line-height: 1.2; color: var(--desk-text); }
 
 /* on the big screen the stage sits beside the suspect list and can use the height */
+/* big screens: no cap on the unit inside a prop, it simply fills its column */
 .frame.wide .is-cabin { max-width: min(100%, 70dvh); }
 .frame.wide .is-photo { max-width: min(60%, 52dvh); }
 .frame.wide .is-gazette { max-width: min(70%, 50dvh); }

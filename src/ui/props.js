@@ -95,15 +95,15 @@ export const titleCard = ({ small = 'A weekend in', big = 'Pioneer', caseNo = 26
     <svg class="icard-rule" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 12 C 40 5, 90 16, 130 9 S 180 8, 197 11" fill="none" stroke="#B3261E" stroke-width="3" stroke-linecap="round"/></svg>
     <span style="position:absolute;right:calc(var(--u) * 4);top:calc(var(--u) * 3)">${roundStamp('case', `no. ${caseNo}`)}</span></div>`;
 
-/** A photo print. `id` is a file in src/assets/photo. opts: cap (escaped), rot, glow, colour (skip the b&w wash), extra (trusted HTML, e.g. clip()). */
-export const polaroid = (id, { cap = '', rot = 0, glow = false, colour = false, extra = '', style = '', alt = '' } = {}) =>
-  `<span class="pol ${cap ? '' : 'no-cap'} ${glow ? 'glow' : ''}" style="${rotStyle(rot)}${style}">${extra}<img class="pol-img" src="${photoSrc(id)}" alt="${esc(alt)}" style="${colour ? '' : 'filter:contrast(1.05) brightness(1.15) sepia(.18)'}" loading="lazy">${cap ? `<span class="pol-cap">${esc(cap)}</span>` : ''}</span>`;
+/** A photo print. `id` is a file in src/assets/photo (or pass opts.src, a URL). opts: cap (escaped), rot, glow, colour (skip the b&w wash), extra (trusted HTML, e.g. clip()). */
+export const polaroid = (id, { cap = '', rot = 0, glow = false, colour = false, extra = '', style = '', alt = '', src = '' } = {}) =>
+  `<span class="pol ${cap ? '' : 'no-cap'} ${glow ? 'glow' : ''}" style="${rotStyle(rot)}${style}">${extra}<img class="pol-img" src="${src || photoSrc(id)}" alt="${esc(alt)}" style="${colour ? '' : 'filter:contrast(1.05) brightness(1.15) sepia(.18)'}" loading="lazy">${cap ? `<span class="pol-cap">${esc(cap)}</span>` : ''}</span>`;
 
 /* ---------- suspects ---------- */
 
 /** Booking photo with the name typed under it. opts: out (crossed off), rot, extra (trusted HTML). Escapes name. */
 export const mug = (avatar, { name = '', out = false, rot = 0, extra = '', style = '' } = {}) =>
-  `<span class="mug ${out ? 'out' : ''}" style="${rotStyle(rot)}${style}">${extra}<img src="${mugSrc(avatar)}" alt="" loading="lazy">${name !== null ? `<span class="mug-name">${esc(name)}</span>` : ''}${
+  `<span class="mug ${out ? 'out' : ''} ${name === null ? 'no-name' : ''}" style="${rotStyle(rot)}${style}">${extra}<img class="mug-img" src="${mugSrc(avatar)}" alt="" loading="lazy">${name !== null ? `<span class="mug-name">${esc(name)}</span>` : ''}${
     out ? '<svg class="mug-x" viewBox="0 0 100 100" aria-hidden="true"><path d="M12 14 L88 86 M86 12 L14 88" stroke="#B3261E" stroke-width="5" stroke-linecap="round" fill="none"/></svg>' : ''
   }</span>`;
 
@@ -158,8 +158,9 @@ function boardSlots(n) {
     const inRow = Math.min(cols, n - r * cols);
     const c = i % cols;
     const span = 100 - w;
-    const x = inRow === 1 ? span / 2 : (c / (cols - 1)) * span * (inRow / cols) + (span * (1 - inRow / cols)) / 2;
-    const y = rows === 1 ? 8 : (r / rows) * 100;
+    const step = span / (cols - 1);
+    const x = (span - (inRow - 1) * step) / 2 + c * step;
+    const y = rows === 1 ? 8 : (r / rows) * 88; // leave room at the bottom for the tape
     return { x: x + (r % 2 ? 2 : -2), y: y + (c % 2 ? 3 : 0), w };
   });
 }
@@ -174,7 +175,7 @@ export function pinboard(players) {
   const order = pts.map((_, i) => i).sort((a, b) => ((a * 7 + 3) % pts.length) - ((b * 7 + 3) % pts.length));
   const d = order.map((i, k) => `${k ? 'L' : 'M'}${pts[i][0].toFixed(1)} ${pts[i][1].toFixed(1)}`).join(' ');
   return `<div class="board" style="width:100%;height:100%">
-    <svg class="board-string" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="${d}"/></svg>
+    <svg class="board-string" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="${d}"/></svg>
     ${players.map((p, i) => `<div class="board-item drop" data-id="${esc(p.id)}" style="left:${slots[i].x.toFixed(1)}%;top:${slots[i].y.toFixed(1)}%;width:${slots[i].w}%;--i:${i};--r0:${tilt(i + 3)}deg">${mug(p.avatar, { name: p.name, out: p.alive === false, rot: tilt(i), extra: pin('top:calc(var(--u) * -1.6);left:44%') })}</div>`).join('')}
   </div>`;
 }

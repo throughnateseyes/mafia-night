@@ -11,7 +11,7 @@ import { renderStage } from '../ui/stage.js';
 const NAMES = ['Ava', 'Steph', 'Cleo', 'Ben', 'Dev', 'Mia', 'Jo', 'Kai', 'Rae', 'Sam', 'Lee', 'Mo', 'Priya', 'Alex'];
 const people = (n) => NAMES.slice(0, n).map((name, i) => ({ id: `p${i}`, name, avatar: i, alive: i !== 4, honoree: i === 1, role: ['detective', 'villager', 'doctor', 'mafia', 'villager', 'villager', 'mafia'][i % 7] }));
 
-export function renderGallery(root) {
+export function renderGallery(root, only = '') {
   const sample = { victim: 'p4', name: 'Dev', role: 'villager', avatar: 4 };
   root.innerHTML = `<main class="frame wide"><div class="view" style="gap:var(--s6);max-width:1200px;margin:0 auto">
     <header><p class="kicker">Case no. ${EVENT.caseNo} · style guide</p><h1 class="title">Everything on the desk</h1></header>
@@ -36,6 +36,7 @@ export function renderGallery(root) {
     cell('small props', `<div style="display:flex;flex-direction:column;gap:var(--s4);align-items:flex-start">${kraft('Who did it?')}${stamp('Case closed', { sm: true })}<div style="position:relative;height:calc(var(--u) * 14);width:100%;overflow:hidden">${crimeTape('top:calc(var(--u) * 4);transform:rotate(-3deg)')}</div><div style="position:relative;height:calc(var(--u) * 12);width:100%">${pin('left:10%')}${clip('left:30%')}${tapeStrip('left:50%')}</div></div>`),
     cell('controls', `<div style="display:flex;flex-direction:column;gap:var(--s3)"><button class="btn red">Open the case</button><button class="btn paper">See who was who</button><button class="btn manila">Hand out the files</button><button class="link">how does this work?</button><div class="tabs"><button class="tab" aria-selected="true">Tonight</button><button class="tab">Suspects</button><button class="tab">Scenes</button></div><div class="paper" style="padding:var(--s4)"><button class="btn">Book me in</button><label class="field" style="margin-top:var(--s4)"><span class="field-label">Name of suspect</span><input value="Ava"></label><button class="chipbtn" style="margin-top:var(--s3)">2 min</button> <button class="chipbtn on">3 min</button></div></div>`),
   ].join('');
+  if (only === 'scenes') $('#props', root).remove();
   const scenes = $('#scenes', root);
   const ctx = { players: people(7), round: 1 };
   for (const key of Object.keys(SCENES)) {

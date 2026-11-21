@@ -18,30 +18,32 @@ body {
 }
 
 /* the desk itself: wood, one lamp top-left, darkness pooling at the bottom */
-#app {
-  position: relative;
-  min-height: 100dvh;
-  isolation: isolate;
+#app { position: relative; min-height: 100dvh; isolation: isolate; }
+/* the wood stays put behind the page (a fixed layer, so long pages don't stretch it) */
+#app::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -1;
   background:
-    radial-gradient(110% 55% at 16% -6%, rgba(255, 206, 140, 0.2), transparent 62%),
+    radial-gradient(110% 55% at 16% -6%, rgba(255, 206, 140, 0.22), transparent 62%),
     radial-gradient(130% 80% at 50% 125%, rgba(0, 0, 0, 0.6), transparent 60%),
+    linear-gradient(rgba(22, 14, 9, 0.74), rgba(22, 14, 9, 0.74)),
     var(--tex-desk, linear-gradient(180deg, #261a13, #150f0b)) center / cover,
     var(--desk);
-  transition: filter var(--slow) var(--ease-in-out);
+  transition: opacity var(--slow) var(--ease-in-out);
 }
 /* film grain over everything, drifting slowly like firelight */
 #app::after {
   content: "";
   position: fixed; inset: -40px;
   background: var(--grain);
-  mix-blend-mode: overlay; opacity: 0.45;
+  opacity: 0.3;
   pointer-events: none; z-index: 50;
   animation: boil 1.2s steps(1) infinite;
 }
 @keyframes boil { 0% { transform: translate(0, 0); } 25% { transform: translate(-22px, 13px); } 50% { transform: translate(15px, -19px); } 75% { transform: translate(-9px, 24px); } }
 
 /* lights out: night scenes */
-body.lights-out #app { background: radial-gradient(90% 50% at 50% 42%, rgba(255, 176, 96, 0.24), rgba(4, 3, 6, 0.94) 78%), #050406; }
+body.lights-out #app::before { background: radial-gradient(90% 50% at 50% 42%, rgba(255, 176, 96, 0.24), rgba(4, 3, 6, 0.94) 78%), #050406; }
 
 h1, h2, h3, p, ol, ul, dl, dd, figure { margin: 0; }
 ol, ul { padding: 0; list-style: none; }
@@ -67,6 +69,7 @@ p { text-wrap: pretty; }
   display: flex; flex-direction: column;
   padding: calc(var(--s7) + env(safe-area-inset-top)) var(--gutter) calc(var(--s5) + env(safe-area-inset-bottom));
   animation: view-in 0.5s var(--ease-out) both;
+  overflow-x: clip;
 }
 .grow { flex: 1 1 0; min-height: 0; }
 .center { display: grid; place-items: center; }
