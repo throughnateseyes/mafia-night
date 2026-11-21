@@ -5,11 +5,29 @@
 
 /** Who this edition is for. */
 export const EVENT = {
-  honoree: 'Steph',
+  /** The trip: "A weekend in Pioneer". */
+  titleSmall: 'A weekend in',
+  town: 'Pioneer',
+  /** It's a 26th birthday, so everything is case no. 26. */
   age: 26,
-  place: 'the cabin',
-  occasion: 'birthday cabin weekend',
+  caseNo: 26,
+  /** How the birthday person is described once the narrator marks them (any typed name works). */
+  birthdayNoun: 'birthday girl',
+  birthdayPossessive: 'her',
   narrator: 'Nate',
+};
+
+/** What the narrator says out loud to explain the game. Lives one tab away on the narrator phone. */
+export const BRIEFING = {
+  intro: 'Say this before the first night',
+  lines: [
+    'A few of you are the Mafia. Everyone else is trying to catch them.',
+    'Your phone has your secret role. Hold to peek. Show no one.',
+    'Each night, all eyes closed. I wake the Mafia, the Medic and the Ranger, one at a time.',
+    'Each morning we learn who didn’t make it. Then you argue, and on three, everyone points. Most fingers is out.',
+    'Campers win when every Mafia is out. Mafia win when they’re half the room.',
+  ],
+  rule: 'dead? no talking, no hints.',
 };
 
 /** Players, not counting the narrator (the narrator runs the game and does not play). */
@@ -39,8 +57,7 @@ export const ROLES = {
   mafia: {
     name: 'Mafia',
     team: 'mafia',
-    art: 'role-mafia',
-    tile: 'night',
+    photo: 'role-mafia',
     line: 'You’re hiding among the campers. Each night, you and your crew pick someone to take out.',
     night: 'When the narrator says "Mafia, open your eyes," find your crew. Silently agree on one person by pointing at them. Then close your eyes.',
     day: 'Blend in. Accuse, defend, act shocked. Vote like an innocent person would.',
@@ -49,8 +66,7 @@ export const ROLES = {
   doctor: {
     name: 'Medic',
     team: 'town',
-    art: 'role-doctor',
-    tile: 'moss',
+    photo: 'role-doctor',
     line: 'You keep the first-aid kit. Each night, pick one camper to save.',
     night: 'When called, point at one person to protect. If the Mafia chose them, they live. You can save yourself, but never the same person two nights in a row.',
     day: 'Help the campers find the Mafia, but keep your job to yourself.',
@@ -59,8 +75,7 @@ export const ROLES = {
   detective: {
     name: 'Ranger',
     team: 'town',
-    art: 'role-detective',
-    tile: 'ember',
+    photo: 'role-detective',
     line: 'You know these woods. Each night, shine your flashlight on one suspect.',
     night: 'When called, point at one person. The narrator gives you a silent thumbs up if they are Mafia, thumbs down if not.',
     day: 'Steer the vote without blowing your cover. Timing is everything.',
@@ -69,8 +84,7 @@ export const ROLES = {
   villager: {
     name: 'Camper',
     team: 'town',
-    art: 'role-villager',
-    tile: 'birch',
+    photo: 'role-villager',
     line: 'Just here for the s’mores. No night moves: read the room, then vote.',
     night: 'Keep your eyes closed and sleep tight. Hopefully.',
     day: 'Argue, question, notice who goes quiet. Then vote someone out.',
@@ -90,27 +104,28 @@ export const ROUND = [
  * Steps for a role whose players are all dead still run (so nobody can tell), with no pick.
  */
 export const NIGHT_STEPS = [
-  { id: 'sleep', art: 'night-falls', say: 'Everyone, close your eyes. Night falls on the cabin.' },
-  { id: 'mafia', art: 'mafia-wake', role: 'mafia', pick: 'target', say: 'Mafia, open your eyes. Silently choose who to take out tonight.', ask: 'Who did the Mafia choose?' },
-  { id: 'doctor', art: 'doctor-wake', role: 'doctor', pick: 'save', say: 'Mafia, close your eyes. Medic, open your eyes. Who will you save tonight?', ask: 'Who did the Medic save?' },
-  { id: 'detective', art: 'detective-wake', role: 'detective', pick: 'check', say: 'Medic, close your eyes. Ranger, open your eyes. Point at someone you suspect.', ask: 'Who did the Ranger point at?' },
-  { id: 'dawn', art: 'morning-clear', say: 'Ranger, close your eyes. … Everyone, wake up.' },
+  { id: 'sleep', photo: 'cabin-dusk', say: 'Everyone, close your eyes. Night falls on the cabin.' },
+  { id: 'mafia', photo: 'role-mafia', role: 'mafia', pick: 'target', say: 'Mafia, open your eyes. Silently choose who to take out tonight.', ask: 'Who did the Mafia choose?' },
+  { id: 'doctor', photo: 'role-doctor', role: 'doctor', pick: 'save', say: 'Mafia, close your eyes. Medic, open your eyes. Who will you save tonight?', ask: 'Who did the Medic save?' },
+  { id: 'detective', photo: 'role-detective', role: 'detective', pick: 'check', say: 'Medic, close your eyes. Ranger, open your eyes. Point at someone you suspect.', ask: 'Who did the Ranger point at?' },
+  { id: 'dawn', photo: 'morning-clear', say: 'Ranger, close your eyes. … Everyone, wake up.' },
 ];
 
 /**
- * Scenes the narrator can put on every screen. `art` is the scene id.
- * {name} and {role} are filled in from the game.
+ * Scenes the narrator can put on every screen. `kind` picks the composition in src/ui/stage.js:
+ * cabin (floor plan), files, photo, gazette (morning paper), board (pinboard), verdict, closed.
+ * {name}, {role}, {round} and {n} are filled in from the game.
  */
 export const SCENES = {
-  lobby: { art: 'lobby', caption: 'Pull up a chair', sub: 'Waiting for everyone to get to the fire.' },
-  dealt: { art: 'lobby', caption: 'Roles are out', sub: 'Hold the button at the bottom to peek. Tell no one.' },
-  night: { art: 'night-falls', caption: 'Night falls on the cabin', sub: 'Everyone, close your eyes.', dark: true },
-  dead: { art: 'morning-dead', caption: '{name} didn’t wake up', sub: 'They were the {role}.', subHidden: 'Who did this?' },
-  clear: { art: 'morning-clear', caption: 'Everyone woke up', sub: 'Nobody died last night. Suspicious.' },
-  talk: { art: 'discussion', caption: 'Talk it out', sub: 'Who’s lying? Make your case by the fire.' },
-  vote: { art: 'vote', caption: 'Time to vote', sub: 'On three, point at who you think is Mafia.' },
-  out: { art: 'eliminated', caption: '{name} is out', sub: 'The campers have spoken. They were the {role}.', subHidden: 'The campers have spoken.' },
-  hung: { art: 'no-elimination', caption: 'No one is out', sub: 'The campers couldn’t decide.' },
-  town: { art: 'town-wins', caption: 'The campers win', sub: 'Every member of the Mafia is caught. Happy 26th, Steph.' },
-  mafia: { art: 'mafia-wins', caption: 'The Mafia wins', sub: 'They took over the cabin.', dark: true },
+  lobby: { kind: 'cabin', kicker: 'Exhibit B · the cabin', caption: '{n} suspects, so far', captionOne: 'One suspect, so far', sub: 'Everyone’s still alive. Waiting for the files to be handed out.' },
+  dealt: { kind: 'files', kicker: 'For your eyes only', caption: 'The files are out', sub: 'Hold the button at the bottom to open yours. Tell no one.' },
+  night: { kind: 'photo', photo: 'cabin-dusk', colour: true, dark: true, kicker: 'Night {round}', caption: 'The cabin goes quiet.', note: 'everyone, close your eyes', cap: 'night {round}' },
+  dead: { kind: 'gazette', kicker: 'This morning’s paper', caption: '{name} didn’t wake up', sub: 'They were the {role}.', subHidden: 'Who did this?', note: 'so who’s lying?' },
+  clear: { kind: 'gazette', kicker: 'This morning’s paper', caption: 'Everyone woke up', sub: 'Nobody died last night. Suspicious.', note: 'somebody got lucky.' },
+  talk: { kind: 'photo', photo: 'talk', kicker: 'By the fire', caption: 'Talk it out', sub: 'Who’s lying? Make your case.', cap: 'exhibit C' },
+  vote: { kind: 'board', kicker: 'The suspects', caption: 'Who did it?', sub: 'On three, point at who you think is Mafia.' },
+  out: { kind: 'verdict', kicker: 'The cabin has spoken', caption: '{name} is out', sub: 'They were the {role}.', subHidden: 'We may never know what they were.' },
+  hung: { kind: 'photo', photo: 'hung', kicker: 'The vote', caption: 'No one is out', sub: 'The cabin couldn’t decide.', cap: 'no verdict' },
+  town: { kind: 'closed', photo: 'town-wins', colour: true, kicker: 'Case no. 26', caption: 'The campers got them', sub: 'Every member of the Mafia is caught.', stamp: 'Case closed', cap: 'happy 26th!' },
+  mafia: { kind: 'closed', photo: 'mafia-wins', dark: true, kicker: 'Case no. 26', caption: 'The Mafia got away with it', sub: 'The cabin is theirs now.', stamp: 'Unsolved', cap: 'last seen leaving' },
 };

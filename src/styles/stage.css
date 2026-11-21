@@ -1,0 +1,58 @@
+/*
+ * The stage: one composition per scene (see src/ui/stage.js).
+ * It fills whatever column it is put in. Props scale with the column width, and are
+ * capped by the screen height so the caption never falls off a short phone.
+ */
+.stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--s4); width: 100%; min-height: 0; flex: 1 1 auto; text-align: center; }
+.stage-kicker { align-self: stretch; text-align: center; }
+.stage-text { display: flex; flex-direction: column; gap: var(--s2); align-items: center; animation: slide-in 0.6s var(--ease-out) 0.35s both; }
+.stage-caption { font: var(--t-h2)/1.1 var(--f-type); }
+.stage-sub { max-width: 30ch; }
+.stage-note { margin-top: var(--s1); transform: rotate(-2deg); }
+.stage-prop { position: relative; width: 100%; margin: auto 0; }
+
+/* each composition: how wide it may get, given the height of the screen */
+.is-cabin { max-width: min(100%, 54dvh); }
+.is-photo { max-width: min(74%, 42dvh); }
+.is-gazette { max-width: min(92%, 44dvh); }
+.is-verdict { max-width: min(62%, 36dvh); }
+.is-files { max-width: min(86%, 46dvh); }
+.is-closed { max-width: min(100%, 52dvh); }
+.is-board { align-self: stretch; flex: 1 1 0; min-height: calc(var(--u) * 80); max-height: 62dvh; margin: 0 calc(var(--gutter) * -0.6); padding: var(--s4) var(--s4) var(--s6); border-radius: calc(var(--u) * 2); box-shadow: inset 0 0 calc(var(--u) * 10) rgba(60, 35, 10, 0.55), var(--lift-2); display: flex; flex-direction: column; align-items: center; gap: var(--s4); overflow: hidden; }
+.stage-board-label { font-size: var(--t-lg); }
+.stage-board-pins { position: relative; flex: 1 1 0; width: 100%; min-height: 0; }
+.stage-board .stage-text { margin-top: var(--s2); }
+
+.stage-files-line { font-size: var(--t-body); line-height: 1.5; text-align: left; }
+.stage-files-stamp { margin-top: var(--s4); text-align: right; }
+
+.is-verdict { padding-bottom: calc(var(--u) * 8); }
+.stage-verdict-stamp { position: absolute; right: -18%; bottom: 0; }
+
+.stage-closed-list { text-align: left; }
+.stage-closed-row { display: flex; align-items: center; gap: var(--s4); margin-top: var(--s4); }
+.stage-closed-stamp { flex: 1; text-align: center; }
+
+/* lights out */
+.stage.is-dark .stage-caption { color: #f7eedf; }
+
+/* narrator's one-line summary of what everyone is looking at */
+.stage.compact { flex: none; flex-direction: row; align-items: center; gap: var(--s3); text-align: left; padding: var(--s2); background: rgba(0, 0, 0, 0.35); border-radius: calc(var(--u) * 2); }
+.stage-thumb { width: calc(var(--u) * 14); aspect-ratio: 1; object-fit: cover; border: calc(var(--u) * 0.8) solid var(--photo); transform: rotate(-3deg); flex: none; filter: sepia(0.2); }
+.stage-compact-caption { font-size: var(--t-body); line-height: 1.2; color: var(--desk-text); }
+
+/* on the big screen the stage sits beside the suspect list and can use the height */
+.frame.wide .is-cabin { max-width: min(100%, 70dvh); }
+.frame.wide .is-photo { max-width: min(60%, 52dvh); }
+.frame.wide .is-gazette { max-width: min(70%, 50dvh); }
+.frame.wide .is-verdict { max-width: min(46%, 44dvh); }
+.frame.wide .is-closed { max-width: min(80%, 60dvh); }
+.frame.wide .is-board { max-height: 70dvh; margin: 0; }
+
+/* style guide (#/gallery) */
+.g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px 22px; align-items: start; }
+.g-cell { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.g-box { position: relative; padding: 0; }
+.g-box.pad { padding: var(--s4); }
+.g-phone { height: 640px; overflow: hidden; border-radius: 26px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 20px 40px -20px #000; background: #1e1611; }
+.g-phone .view { min-height: 640px; height: 640px; }

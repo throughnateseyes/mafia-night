@@ -2,7 +2,7 @@
  * The game, as a pure reducer: reduce(state, command) → new state.
  * No network, no crypto, no DOM. The host runs it; tests run it directly.
  */
-import { EVENT, PLAYER_LIMITS, REVEAL_ROLE_ON_DEATH, ROLES } from '../config/game.js';
+import { PLAYER_LIMITS, REVEAL_ROLE_ON_DEATH, ROLES } from '../config/game.js';
 import { roleList, shuffle } from './roles.js';
 
 export const PHASES = ['lobby', 'dealt', 'night', 'morning', 'day', 'vote', 'end'];
@@ -28,10 +28,6 @@ const clone = (s) => structuredClone(s);
 const alive = (s) => s.players.filter((p) => p.alive);
 export const playerById = (s, id) => s.players.find((p) => p.id === id);
 
-export function isHonoree(name = '') {
-  return name.trim().toLowerCase() === EVENT.honoree.toLowerCase();
-}
-
 export function checkWinner(s) {
   if (!s.players.some((p) => p.role)) return null;
   const living = alive(s);
@@ -55,7 +51,7 @@ function kill(s, id, cause, now) {
 }
 
 function deathScene(s, key, p, now) {
-  setScene(s, key, { name: p.name, role: s.reveal ? p.role : null, victim: p.id }, now);
+  setScene(s, key, { name: p.name, role: s.reveal ? p.role : null, victim: p.id, avatar: p.avatar, bday: Boolean(p.bday) }, now);
 }
 
 /**
@@ -232,6 +228,16 @@ export function reduce(state, cmd, now = Date.now()) {
       return s;
     }
 
+    case 'birthday': {
+      // the narrator marks who the party is for (tap again to clear). Only one at a time.
+      const p = playerById(s, cmd.id);
+      if (!p) return fail('Unknown player.');
+      const on = !p.bday;
+      s.players.forEach((q) => delete q.bday);
+      if (on) p.bday = true;
+      return s;
+    }
+
     default:
       return fail(`Unknown command ${cmd.type}`);
   }
@@ -253,7 +259,7 @@ export function publicView(s, extra = {}) {
       name: p.name,
       avatar: p.avatar,
       alive: p.alive,
-      honoree: isHonoree(p.name),
+      honoree: Boolean(p.bday),
       role: showAll || (!p.alive && s.reveal) ? p.role : null,
     })),
     ...extra,

@@ -1,102 +1,82 @@
 /*
- * Mafia Night design tokens: "Cabin weekend".
- * Quiet and flat: cream paper, pine, ember. No outlines, no shadows doing the work.
- * Screens use the semantic tokens (--bg, --surface, --text…); night mode swaps those.
- * Art colors mirror src/art/palette.js.
+ * Case no. 26 — design tokens.
+ *
+ * The whole app is a detective's desk. Everything on it is a real material
+ * (manila, typing paper, newsprint, cork, tape) lit by a lamp by day and a fire by night.
+ *
+ * Sizing: components are drawn in "desk units". 1u is 1% of the width of the nearest
+ * container (see .frame / .cq in base.css), capped so things stop growing on big screens.
+ * Use calc(var(--u) * n) for prop geometry and the --t-* / --s-* tokens for type and spacing.
  */
 :root {
-  /* palette */
-  --cream: #F4EFE6;
-  --paper: #FBF8F3;
-  --birch: #E9E2D5;
-  --smoke: #BDB5A8;
-  --ink: #1F1E1C;
-  --pine: #2E4A3B;
-  --pine-press: #243C30;
-  --moss: #7F9672;
-  --lake: #9CB7C7;
-  --ember: #DE6F3E;
-  --clay: #D7A27F;
-  --candle: #F1C24F;
-  --berry: #B03A2E;
-  --night: #121820;
-  --dusk: #1F2833;
+  /* ink and paper */
+  --ink: #1c1916;
+  --ink-soft: #4a4136;
+  --ink-faint: #6b5c48;
+  --paper: #e6dcc6;
+  --paper-hi: #f4efe2;
+  --photo: #fbf8f1;
+  --manila: #d2ae72;
+  --manila-lo: #b99a63;
+  --kraft: #b38b5e;
+  --news: #e9e1cd;
+  --cork: #a27c52;
 
-  /* semantic: day */
-  --bg: var(--cream);
-  --surface: var(--paper);
-  --surface-2: var(--birch);
-  --text: var(--ink);
-  --text-2: #5F5950;       /* 6.6:1 on cream */
-  --text-3: #8A8377;       /* labels, 3.4:1: large/uppercase only */
-  --line: rgba(31, 30, 28, 0.09);
-  --primary: var(--pine);
-  --primary-press: var(--pine-press);
-  --on-primary: var(--paper);
-  --accent: var(--ember);
-  --highlight: #FBEBC2;    /* candle, softened: "this is you" */
+  /* the desk */
+  --desk: #1e1611;
+  --desk-hi: #2a1d15;
+  --desk-text: #ede3d0;
+  --desk-soft: #bdb09c;
 
-  /* roles (card colors) */
-  --role-mafia: var(--night);
-  --role-doctor: var(--moss);
-  --role-detective: var(--ember);
-  --role-villager: var(--birch);
+  /* accents: red ink, crime tape, pen */
+  --red: #b3261e;
+  --tape: #e9b824;
+  --pen: #1d2a5a;
+  --fire: #ffbe6e;
 
-  /* type */
-  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
-  --sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --t-display: clamp(52px, 15vw, 72px);
-  --t-h1: 40px;
-  --t-h2: 30px;
-  --t-h3: 20px;
-  --t-body: 17px;
-  --t-small: 14px;
-  --t-label: 12px;
+  /* type families */
+  --f-type: "Special Elite", "Courier Prime", ui-monospace, monospace; /* typed headings, labels */
+  --f-body: "Courier Prime", ui-monospace, monospace; /* reading text */
+  --f-hand: "Reenie Beanie", "Bradley Hand", cursive; /* pen scrawl */
+  --f-head: "Playfair Display", Georgia, serif; /* newspaper headlines (900) */
+  --f-mast: "Pirata One", Georgia, serif; /* newspaper masthead */
+  --f-news: "IM Fell English", Georgia, serif; /* newspaper body */
+  --f-stamp: "Bevan", Georgia, serif; /* rubber stamps */
 
-  /* space: one scale, used everywhere */
-  --s1: 4px;
-  --s2: 8px;
-  --s3: 12px;
-  --s4: 16px;
-  --s5: 20px;
-  --s6: 24px;
-  --s7: 32px;
-  --s8: 40px;
-  --s9: 56px;
-  --gutter: 20px;
+  /* desk unit */
+  --u: min(1cqw, 4.8px);
 
-  /* shape */
-  --r-sm: 10px;
-  --r-md: 14px;
-  --r-lg: 20px;
-  --r-xl: 28px;
-  --tap: 52px;
+  /* type scale (typed faces). Hand-written text reads ~1.7x smaller, so size it up. */
+  --t-xs: max(11px, calc(var(--u) * 3.3));
+  --t-sm: max(12.5px, calc(var(--u) * 3.7));
+  --t-body: max(14px, calc(var(--u) * 4.1));
+  --t-lg: max(16px, calc(var(--u) * 4.8));
+  --t-h3: max(18px, calc(var(--u) * 6.2));
+  --t-h2: max(22px, calc(var(--u) * 7.6));
+  --t-h1: max(26px, calc(var(--u) * 9.6));
+  --t-hand: max(20px, calc(var(--u) * 7.2));
+  --t-hand-lg: max(24px, calc(var(--u) * 9));
+
+  /* spacing scale */
+  --s1: calc(var(--u) * 1);
+  --s2: calc(var(--u) * 2);
+  --s3: calc(var(--u) * 3);
+  --s4: calc(var(--u) * 4);
+  --s5: calc(var(--u) * 6);
+  --s6: calc(var(--u) * 8);
+  --s7: calc(var(--u) * 12);
+  --s8: calc(var(--u) * 16);
+  --gutter: calc(var(--u) * 7);
 
   /* motion */
-  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-spring: cubic-bezier(0.3, 1.3, 0.5, 1);
-  --ease-draw: cubic-bezier(0.6, 0.05, 0.4, 1);
-  --fast: 150ms;
-  --med: 300ms;
-  --slow: 600ms;
-}
+  --ease-thud: cubic-bezier(0.2, 1.4, 0.4, 1);
+  --fast: 140ms;
+  --med: 320ms;
+  --slow: 700ms;
 
-/* night mode: same components, darker room */
-body.dark {
-  --bg: var(--night);
-  --surface: #19212B;
-  --surface-2: #232D39;
-  --text: #F2EDE4;
-  --text-2: #AEB4BB;
-  --text-3: #7D858F;
-  --line: rgba(242, 237, 228, 0.1);
-  --primary: #F2EDE4;
-  --primary-press: #DCD6CC;
-  --on-primary: var(--night);
-  --highlight: #3A3524;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root { --fast: 0ms; --med: 0ms; --slow: 0ms; }
+  /* shadows: things lie on a desk under one lamp, top-left */
+  --lift-1: 0 1px 1px rgba(0, 0, 0, 0.18), 0 calc(var(--u) * 1) calc(var(--u) * 1.6) rgba(20, 10, 0, 0.28);
+  --lift-2: 0 1px 2px rgba(0, 0, 0, 0.2), 0 calc(var(--u) * 2.4) calc(var(--u) * 4) calc(var(--u) * -1) rgba(0, 0, 0, 0.6);
 }

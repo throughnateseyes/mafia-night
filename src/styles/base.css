@@ -2,70 +2,98 @@
 *::before,
 *::after { box-sizing: border-box; }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  background: var(--cream);
-  height: 100%;
-}
+html { -webkit-text-size-adjust: 100%; background: var(--desk); height: 100%; }
 
 body {
   margin: 0;
   min-height: 100%;
-  color: var(--text);
-  background: var(--bg);
-  font-family: var(--sans);
-  font-size: var(--t-body);
+  color: var(--desk-text);
+  background: var(--desk);
+  font-family: var(--f-body);
+  font-size: 16px;
   line-height: 1.45;
-  font-weight: 420;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
-  transition: background-color var(--slow) var(--ease-in-out), color var(--slow) var(--ease-in-out);
 }
+
+/* the desk itself: wood, one lamp top-left, darkness pooling at the bottom */
+#app {
+  position: relative;
+  min-height: 100dvh;
+  isolation: isolate;
+  background:
+    radial-gradient(110% 55% at 16% -6%, rgba(255, 206, 140, 0.2), transparent 62%),
+    radial-gradient(130% 80% at 50% 125%, rgba(0, 0, 0, 0.6), transparent 60%),
+    var(--tex-desk, linear-gradient(180deg, #261a13, #150f0b)) center / cover,
+    var(--desk);
+  transition: filter var(--slow) var(--ease-in-out);
+}
+/* film grain over everything, drifting slowly like firelight */
+#app::after {
+  content: "";
+  position: fixed; inset: -40px;
+  background: var(--grain);
+  mix-blend-mode: overlay; opacity: 0.45;
+  pointer-events: none; z-index: 50;
+  animation: boil 1.2s steps(1) infinite;
+}
+@keyframes boil { 0% { transform: translate(0, 0); } 25% { transform: translate(-22px, 13px); } 50% { transform: translate(15px, -19px); } 75% { transform: translate(-9px, 24px); } }
+
+/* lights out: night scenes */
+body.lights-out #app { background: radial-gradient(90% 50% at 50% 42%, rgba(255, 176, 96, 0.24), rgba(4, 3, 6, 0.94) 78%), #050406; }
 
 h1, h2, h3, p, ol, ul, dl, dd, figure { margin: 0; }
 ol, ul { padding: 0; list-style: none; }
-
-/* headlines are serif, set large and light; UI text is sans */
-h1, h2, .serif {
-  font-family: var(--serif);
-  font-weight: 400;
-  line-height: 1.02;
-  letter-spacing: -0.01em;
-}
-h1 { font-size: var(--t-h1); }
-h2 { font-size: var(--t-h2); }
-h3 { font-size: var(--t-h3); font-weight: 600; line-height: 1.2; letter-spacing: -0.005em; }
-em { font-style: italic; }
-h1 em, h2 em { color: var(--accent); }
-
-.label {
-  font-size: var(--t-label);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-3);
-}
-.soft { color: var(--text-2); }
-.small { font-size: var(--t-small); }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-user-select: none; user-select: none; }
+img { display: block; max-width: 100%; }
 [hidden] { display: none !important; }
-h1, h2, h3 { text-wrap: balance; }
+:focus-visible { outline: 2px solid var(--tape); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+h1, h2, h3 { text-wrap: balance; font-weight: 400; }
 p { text-wrap: pretty; }
 
-button, input { font: inherit; color: inherit; }
-button { cursor: pointer; }
-
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-#app { min-height: 100dvh; }
-
-.sr-only {
-  position: absolute; width: 1px; height: 1px; overflow: hidden;
-  clip: rect(0 0 0 0); white-space: nowrap;
+/*
+ * Layout frames.
+ * .frame  — a phone-width column, centred on the desk. Everything inside is sized in desk units.
+ * .frame.wide — the laptop/TV table. Inside it, wrap each column in .cq so its props scale to that column.
+ */
+.frame { width: 100%; max-width: 480px; margin: 0 auto; container-type: inline-size; }
+.frame.wide { max-width: none; }
+.cq { container-type: inline-size; min-width: 0; }
+.view {
+  min-height: 100dvh;
+  display: flex; flex-direction: column;
+  padding: calc(var(--s7) + env(safe-area-inset-top)) var(--gutter) calc(var(--s5) + env(safe-area-inset-bottom));
+  animation: view-in 0.5s var(--ease-out) both;
 }
+.grow { flex: 1 1 0; min-height: 0; }
+.center { display: grid; place-items: center; }
 
-/* page transitions */
-.view { animation: view-in 0.5s var(--ease-out) both; }
-@keyframes view-in { from { opacity: 0; transform: translateY(8px); } }
-@keyframes rise-in { from { opacity: 0; transform: translateY(10px); } }
-@keyframes fade-in { from { opacity: 0; } }
+/* type voices */
+.typed { font-family: var(--f-type); }
+.hand { font-family: var(--f-hand); line-height: 1; }
+.kicker { font: var(--t-xs)/1.2 var(--f-type); color: var(--tape); }
+.on-paper .kicker, .paper .kicker { color: var(--ink-faint); }
+.title { font: var(--t-h2)/1.1 var(--f-type); }
+.lede { font-size: var(--t-body); color: var(--desk-soft); }
+.note { font: var(--t-hand)/1 var(--f-hand); }
+.note.red { color: var(--red); }
+.note.gold { color: var(--tape); }
+.note.pen { color: var(--pen); }
+.soft { opacity: 0.75; }
+
+/* motion vocabulary: things are placed on the desk, never faded up from nowhere */
+@keyframes view-in { from { opacity: 0; } }
+@keyframes drop-in { from { opacity: 0; transform: translateY(calc(var(--u) * -6)) rotate(var(--r0, -4deg)) scale(1.06); } }
+@keyframes slide-in { from { opacity: 0; transform: translateY(calc(var(--u) * 5)); } }
+@keyframes thud { 0% { opacity: 0; transform: scale(2.2) rotate(var(--r, -7deg)); } 60% { opacity: 1; transform: scale(0.94) rotate(var(--r, -7deg)); } 100% { transform: scale(1) rotate(var(--r, -7deg)); } }
+@keyframes spin-in { from { opacity: 0; transform: rotate(-540deg) scale(0.1); } }
+.drop { animation: drop-in 0.6s var(--ease-out) calc(var(--i, 0) * 70ms + var(--at, 0ms)) both; }
+.slide { animation: slide-in 0.5s var(--ease-out) calc(var(--i, 0) * 60ms + var(--at, 0ms)) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  #app::after { animation: none; }
+}

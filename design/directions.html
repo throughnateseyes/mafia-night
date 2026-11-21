@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Mafia Night · Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Reenie+Beanie&family=Karla:wght@400;500;700&family=Bevan:ital@0;1&family=Public+Sans:wght@400;600;800&family=Cabin+Sketch:wght@400;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #ECE7DF; color: #1F1E1C; font: 16px/1.5 Karla, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, p { margin: 0; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 48px 20px 96px; }
+  .intro { max-width: 640px; margin-bottom: 56px; }
+  .intro h1 { font: 700 34px/1.1 Karla, sans-serif; letter-spacing: -0.02em; }
+  .intro p { margin-top: 12px; color: #5d5a54; font-size: 17px; }
+
+  .dir { margin-bottom: 88px; }
+  .dir-head { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; align-items: baseline; margin-bottom: 24px; max-width: 760px; }
+  .dir-letter { grid-row: span 2; font: 700 44px/1 Karla, sans-serif; color: #b6ada0; }
+  .dir-head h2 { font: 700 24px/1.2 Karla, sans-serif; }
+  .dir-head p { color: #5d5a54; }
+  .rec { display: inline-block; margin-left: 8px; padding: 2px 10px; border-radius: 999px; background: #2E4A3B; color: #F4EFE6; font-size: 13px; font-weight: 500; vertical-align: 3px; }
+  .phones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .phones figure { margin: 0; }
+  .phones figcaption { margin-top: 10px; font-size: 14px; color: #7a766f; text-align: center; }
+  .notes { margin-top: 20px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; font-size: 15px; color: #45423d; }
+  .notes b { display: block; color: #1F1E1C; margin-bottom: 2px; }
+  @media (max-width: 860px) {
+    .phones { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 82%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; margin: 0 -20px; padding-left: 20px; padding-right: 20px; }
+    .phones figure { scroll-snap-align: center; }
+    .notes { grid-template-columns: none; }
+  }
+
+  /* ---------- the phone ---------- */
+  .phone { position: relative; aspect-ratio: 9 / 18.5; border-radius: 34px; overflow: hidden; box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 20px 50px -20px rgba(40,30,20,.35); isolation: isolate; container-type: inline-size; }
+  .screen { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 13cqw 7cqw 7cqw; }
+  .art-box svg { display: block; width: 100%; height: 100%; }
+  .grow { flex: 1; min-height: 0; }
+  .av-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3.5cqw; }
+  .av-row span { aspect-ratio: 1; display: block; }
+  .av-row svg { width: 100%; height: 100%; display: block; }
+
+  /* ================= A · Camp journal ================= */
+  .A { background: #F3EDE1; color: #2A2622; font-family: Karla, sans-serif; }
+  .A::before { content: ""; position: absolute; inset: 0; background: var(--topo) center / 140% auto no-repeat; opacity: .5; z-index: -1; }
+  .A::after { content: ""; position: absolute; inset: 0; background: var(--grain); opacity: .5; mix-blend-mode: multiply; pointer-events: none; z-index: 5; }
+  .A .note { font: 400 7.6cqw/1 "Reenie Beanie", cursive; color: #8A6F55; transform: rotate(-2deg); transform-origin: left; }
+  .A .title { font: 700 17cqw/0.86 Kalam, cursive; letter-spacing: -0.02em; margin-top: 2cqw; }
+  .A .title span { color: #C8572B; }
+  .A h3 { font: 700 9cqw/1 Kalam, cursive; }
+  .A .body { font-size: 4.3cqw; color: #5A524A; }
+  .A .art-box, .A .av-row span { filter: url(#wobble); }
+  .A .polaroid { background: #FFFDF8; padding: 3cqw 3cqw 13cqw; transform: rotate(-2.2deg); box-shadow: 0 2px 6px rgba(60,40,20,.12), 0 14px 24px -14px rgba(60,40,20,.3); position: relative; }
+  .A .polaroid .art-box { aspect-ratio: 1 / 1.05; overflow: hidden; }
+  .A .polaroid .cap { position: absolute; left: 0; right: 0; bottom: 3cqw; text-align: center; white-space: nowrap; font: 8.4cqw/1 "Reenie Beanie", cursive; color: #3a332c; }
+  .A .tape { position: absolute; top: -3.5cqw; left: 50%; width: 26cqw; height: 7cqw; transform: translateX(-50%) rotate(3deg); background: rgba(222, 205, 160, .7); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .A .btn { display: flex; align-items: center; justify-content: center; gap: 2cqw; height: 13cqw; border-radius: 3cqw 2.4cqw 3.2cqw 2.2cqw; color: #F7F2E8; font: 700 6cqw/1 Kalam, cursive; position: relative; z-index: 0; }
+  .A .btn::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: #2E4A3B; filter: url(#wobble-sm); z-index: -1; }
+  .A .link { text-align: center; font: 7cqw/1 "Reenie Beanie", cursive; color: #5A524A; margin-top: 3cqw; }
+  .A .field { position: relative; padding: 1cqw 0 3cqw; font: 400 7.4cqw/1 Kalam, cursive; color: #2A2622; }
+  .A .field::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: #BFAE94; filter: url(#wobble-sm); }
+  .A .label { font: 6.4cqw/1 "Reenie Beanie", cursive; color: #8A6F55; }
+  .A .av-row .on { outline: 2px dashed #C8572B; outline-offset: 1.2cqw; border-radius: 50%; }
+  .A .ticket { position: relative; background: #FFFDF8; border-radius: 3cqw; padding: 5cqw; box-shadow: 0 2px 6px rgba(60,40,20,.12), 0 18px 30px -18px rgba(60,40,20,.35); transform: rotate(1.4deg); }
+  .A .ticket .art-box { aspect-ratio: 1; border-radius: 2cqw; overflow: hidden; }
+  .A .perf { position: relative; border-top: 2px dashed #D9CDB9; margin: 5cqw -5cqw 4cqw; }
+  .A .perf::before, .A .perf::after { content: ""; position: absolute; top: -3.5cqw; width: 7cqw; height: 7cqw; border-radius: 50%; background: #EFE8DA; }
+  .A .perf::before { left: -3.5cqw; } .A .perf::after { right: -3.5cqw; }
+  .A .stamp { position: absolute; right: 5cqw; bottom: 24cqw; padding: 1cqw 3cqw; border: 2px solid #C8572B; border-radius: 2cqw; color: #C8572B; font: 700 5cqw/1.1 Kalam, cursive; transform: rotate(-9deg); opacity: .85; }
+
+  /* ================= B · Park poster ================= */
+  .B { background: #EFE3CB; color: #1E3A2C; font-family: "Public Sans", sans-serif; }
+  .B::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 1px 1px, rgba(30,58,44,.16) 0.9px, transparent 1.2px) 0 0 / 2.4cqw 2.4cqw; z-index: -1; -webkit-mask-image: linear-gradient(transparent 30%, #000); mask-image: linear-gradient(transparent 30%, #000); }
+  .B::after { content: ""; position: absolute; inset: 0; background: var(--grain); opacity: .65; mix-blend-mode: multiply; pointer-events: none; z-index: 5; }
+  .B .note { font: 600 4cqw/1.2 "Public Sans", sans-serif; color: #B4532A; }
+  .B .title { font: 400 16cqw/0.9 Bevan, serif; letter-spacing: -0.01em; color: #1E3A2C; margin-top: 2cqw; text-shadow: 0.7cqw 0.5cqw 0 rgba(222,111,62,.55); }
+  .B h3 { font: 400 8.4cqw/1 Bevan, serif; text-shadow: 0.5cqw 0.4cqw 0 rgba(222,111,62,.5); }
+  .B .body { font-size: 4.2cqw; color: #3d5a4b; }
+  .B .frame { border-radius: 50% 50% 4cqw 4cqw / 30% 30% 4cqw 4cqw; overflow: hidden; border: 1.6cqw solid #1E3A2C; }
+  .B .frame .art-box { aspect-ratio: 1 / 1.1; }
+  .B .art-box svg { filter: url(#riso) drop-shadow(0.8cqw 0.6cqw 0 rgba(222,111,62,.35)); }
+  .B .btn { display: flex; align-items: center; justify-content: center; height: 13cqw; border-radius: 99px; background: #B4532A; color: #FFF6E6; font: 800 4.6cqw/1 "Public Sans", sans-serif; box-shadow: 0 1.2cqw 0 #1E3A2C; }
+  .B .link { text-align: center; font-weight: 600; font-size: 4.2cqw; margin-top: 4cqw; text-decoration: underline; text-underline-offset: 3px; }
+  .B .field { border: 2px solid #1E3A2C; border-radius: 99px; padding: 3cqw 5cqw; font: 600 5cqw/1 "Public Sans"; background: #F8EFDC; }
+  .B .label { font: 600 4cqw/1 "Public Sans"; color: #B4532A; }
+  .B .av-row .on { box-shadow: 0 0 0 1cqw #EFE3CB, 0 0 0 2cqw #1E3A2C; border-radius: 50%; }
+  .B .patch { position: relative; width: 82%; margin: 0 auto; aspect-ratio: 0.8; border-radius: 50% 50% 9cqw 9cqw / 32% 32% 9cqw 9cqw; background: #1E3A2C; padding: 3cqw; box-shadow: 0 0 0 1.4cqw #EFE3CB, 0 0 0 2.6cqw #B4532A; }
+  .B .patch-in { width: 100%; height: 100%; border-radius: inherit; overflow: hidden; border: 1cqw dashed rgba(239,227,203,.55); display: flex; flex-direction: column; }
+  .B .patch .art-box { flex: 1; }
+  .B .patch .pname { text-align: center; color: #EFE3CB; font: 400 10cqw/1 Bevan, serif; padding: 4cqw 0 5cqw; background: #1E3A2C; }
+
+  /* ================= C · Ghost story ================= */
+  .C { background: radial-gradient(120% 70% at 50% 108%, #5A2F1C 0%, #2A1D1D 38%, #12161F 72%); color: #F2E8D8; font-family: "Nunito Sans", sans-serif; }
+  .C::before { content: ""; position: absolute; inset: 0; background: var(--stars); z-index: -1; }
+  .C::after { content: ""; position: absolute; inset: 0; background: var(--grain); opacity: .35; mix-blend-mode: overlay; pointer-events: none; z-index: 5; }
+  .C .note { font: 7.4cqw/1 "Reenie Beanie", cursive; color: #F1C24F; }
+  .C .title { font: 700 18cqw/0.86 "Cabin Sketch", cursive; margin-top: 2cqw; color: #F7EEDF; text-shadow: 0 0 6cqw rgba(241, 160, 80, .45); }
+  .C h3 { font: 700 9.4cqw/1 "Cabin Sketch", cursive; color: #F7EEDF; }
+  .C .body { font-size: 4.3cqw; color: #C9BBA6; }
+  .C .glow { position: relative; }
+  .C .glow::before { content: ""; position: absolute; inset: -10%; background: radial-gradient(closest-side, rgba(241,180,90,.32), transparent); z-index: -1; animation: fire 3s ease-in-out infinite; }
+  @keyframes fire { 50% { opacity: .7; transform: scale(.97); } }
+  .C .art-box { -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent); mask-image: radial-gradient(closest-side, #000 62%, transparent); }
+  .C .btn { display: flex; align-items: center; justify-content: center; height: 13cqw; border-radius: 4cqw; background: #F1C24F; color: #1B1612; font: 700 5cqw/1 "Nunito Sans"; box-shadow: 0 0 8cqw rgba(241,194,79,.35); }
+  .C .link { text-align: center; font: 7cqw/1 "Reenie Beanie", cursive; color: #C9BBA6; margin-top: 3cqw; }
+  .C .field { border-radius: 4cqw; padding: 3.4cqw 4cqw; background: rgba(255,255,255,.07); font: 700 5cqw/1 "Nunito Sans"; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); }
+  .C .label { font: 6.6cqw/1 "Reenie Beanie", cursive; color: #F1C24F; }
+  .C .av-row .on { box-shadow: 0 0 0 1cqw #1A1A22, 0 0 0 1.8cqw #F1C24F, 0 0 6cqw rgba(241,194,79,.5); border-radius: 50%; }
+  .C .card { position: relative; border-radius: 5cqw; overflow: hidden; background: #F2E8D8; color: #1B1612; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 16cqw rgba(241,170,80,.35); }
+  .C .card .art-box { aspect-ratio: 1; -webkit-mask-image: none; mask-image: none; }
+  .C .card .beam { position: absolute; inset: 0; background: radial-gradient(70% 70% at 50% 45%, transparent 45%, rgba(10,10,20,.5)); pointer-events: none; }
+  .C .card .pname { font: 700 12cqw/1 "Cabin Sketch", cursive; text-align: center; padding: 3cqw 0 1cqw; }
+  .C .card .line { text-align: center; padding: 0 6cqw 6cqw; font-size: 4.2cqw; color: #4a4038; }
+
+  .gap1 { height: 2cqw; } .gap2 { height: 4cqw; } .gap3 { height: 7cqw; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" /><feDisplacementMap in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G" /></filter>
+  <filter id="wobble-sm"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="9" /><feDisplacementMap in="SourceGraphic" scale="3" xChannelSelector="R" yChannelSelector="G" /></filter>
+  <filter id="riso"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="2" result="n" /><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -7 5" result="speck" /><feComposite in="SourceGraphic" in2="speck" operator="in" /></filter>
+</svg>
+
+<div class="wrap">
+  <header class="intro">
+    <h1>Three ways Mafia Night could look</h1>
+    <p>Same game, same drawings, three different personalities. Each shows the home screen, joining, and your role reveal. Pick one (or mix: “A’s type with C’s night glow”) and I’ll carry it through every screen, the narrator phone and the TV.</p>
+  </header>
+
+  <section class="dir">
+    <div class="dir-head"><span class="dir-letter">A</span><h2>Camp journal <span class="rec">my pick</span></h2><p>Like a scrapbook someone kept all weekend. Handwritten titles, taped polaroids, a trail-map behind everything, and your role arrives as a stamped ticket. Warm, personal, clearly made by hand for Steph.</p></div>
+    <div class="phones" data-dir="A"></div>
+    <div class="notes"><p><b>Texture</b>Paper grain plus faint contour lines of the lake, like a hiking map.</p><p><b>Type</b>Kalam (hand lettering) for titles, Reenie Beanie for scribbled notes, Karla for reading.</p><p><b>Drawings</b>Same flat art, with gently wobbling hand-cut edges and no outlines.</p></div>
+  </section>
+
+  <section class="dir">
+    <div class="dir-head"><span class="dir-letter">B</span><h2>Park poster</h2><p>A vintage national-park print. Two inks, a slightly off-register orange shadow, halftone dots, an arched poster frame, and your role as an embroidered ranger patch. Bold and graphic, reads great on the TV.</p></div>
+    <div class="phones" data-dir="B"></div>
+    <div class="notes"><p><b>Texture</b>Print speckle in the art, halftone dots fading up from the bottom.</p><p><b>Type</b>Bevan (chunky slab, like park signage) with Public Sans.</p><p><b>Drawings</b>Riso-printed: speckled fills and an orange misprint shadow.</p></div>
+  </section>
+
+  <section class="dir">
+    <div class="dir-head"><span class="dir-letter">C</span><h2>Ghost story</h2><p>The whole game happens around the campfire at night. Dark sky with stars, a warm glow coming up from the bottom of the screen, sketchy chalk lettering, and your role lit up like a card under a flashlight. Most atmospheric, especially with the lights off.</p></div>
+    <div class="phones" data-dir="C"></div>
+    <div class="notes"><p><b>Texture</b>Star speckle, film grain and a flickering firelight glow.</p><p><b>Type</b>Cabin Sketch (literally) for titles, Reenie Beanie notes, Nunito Sans.</p><p><b>Drawings</b>Art fades softly into the dark, like it is lit by the fire.</p></div>
+  </section>
+</div>
+
+<script type="module">
+  import '../src/styles/tokens.css';
+  import '../src/styles/art.css';
+  import { artHTML, avatarHTML } from '../src/art/index.js';
+
+  // ---------- textures (generated, so they're crisp at any size) ----------
+  const svgUrl = (s) => `url("data:image/svg+xml,${encodeURIComponent(s)}")`;
+  const grain = `<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .25  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(#g)'/></svg>`;
+  // contour rings: a little lake on a trail map
+  let topo = '';
+  for (let k = 1; k <= 11; k++) {
+    let d = '';
+    for (let i = 0; i <= 96; i++) {
+      const t = (i / 96) * Math.PI * 2;
+      const r = k * 26 * (1 + 0.16 * Math.sin(3 * t + k * 0.35) + 0.07 * Math.sin(5 * t - k * 0.6) + 0.04 * Math.cos(9 * t + k));
+      d += `${i ? 'L' : 'M'}${(300 + r * Math.cos(t) * 1.15).toFixed(1)} ${(330 + r * Math.sin(t)).toFixed(1)}`;
+    }
+    topo += `<path d='${d}Z' fill='none' stroke='%23B9A88C' stroke-width='${k % 4 === 0 ? 1.4 : 0.8}'/>`;
+  }
+  const topoSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 700'>${topo.replaceAll('%23', '#')}</svg>`;
+  // stars
+  let stars = '';
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < 70; i++) stars += `<circle cx='${(rnd() * 400).toFixed(1)}' cy='${(rnd() * 520).toFixed(1)}' r='${(rnd() * 1.1 + 0.3).toFixed(2)}' fill='#F7EEDF' opacity='${(rnd() * 0.6 + 0.2).toFixed(2)}'/>`;
+  const starSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 820' preserveAspectRatio='xMidYMin slice'>${stars}</svg>`;
+  document.documentElement.style.setProperty('--grain', svgUrl(grain));
+  document.documentElement.style.setProperty('--topo', svgUrl(topoSvg));
+  document.documentElement.style.setProperty('--stars', svgUrl(starSvg));
+
+  const art = (id, o = {}) => `<div class="art-box">${artHTML(id, { animate: true, ...o })}</div>`;
+  const avs = (on = 0) => `<div class="av-row">${[0, 1, 2, 3, 4, 5, 6, 8].map((i, k) => `<span class="${k === on ? 'on' : ''}">${avatarHTML(i, { animate: false })}</span>`).join('')}</div>`;
+
+  const S = {
+    A: [
+      ['Home', `<p class="note">Steph’s 26th, up at the cabin</p><h1 class="title">Mafia <span>Night</span></h1>
+        <div class="grow" style="display:grid;place-items:center;padding:6cqw 6cqw 4cqw"><div class="polaroid" style="width:86%"><span class="tape"></span>${art('night-falls')}<span class="cap">someone here is lying…</span></div></div>
+        <div class="btn">Host a game →</div><p class="link">how do we play?</p>`],
+      ['Join', `<p class="note">You made it.</p><h3 style="margin-top:2cqw">Welcome to the cabin, who are you?</h3><div class="gap3"></div>
+        <p class="label">your name</p><div class="field">Steph</div><div class="gap3"></div>
+        <p class="label">pick a camp badge</p><div class="gap1"></div>${avs(0)}<div class="grow"></div><div class="btn">Join the game →</div>`],
+      ['Role reveal', `<p class="note">For Steph’s eyes only</p><h3 style="margin-top:2cqw">Happy 26th. Here’s who you are.</h3><div class="gap3"></div>
+        <div class="ticket">${art('role-detective')}<div class="perf"></div><p class="note" style="transform:none;font-size:6.4cqw">admit one</p><h3 style="font-size:12cqw">Ranger</h3><p class="body" style="margin-top:1cqw">Each night, shine your flashlight on one suspect.</p><span class="stamp">night 1</span></div>
+        <div class="grow"></div><p class="link">let go and it hides</p>`],
+    ],
+    B: [
+      ['Home', `<p class="note">Steph’s 26th · Cabin weekend</p><h1 class="title">Mafia Night</h1>
+        <div class="grow" style="display:grid;place-items:center;padding:6cqw 4cqw"><div class="frame" style="width:88%">${art('morning-clear')}</div></div>
+        <div class="btn">Host a game</div><p class="link">How to play</p>`],
+      ['Join', `<p class="note">Check in at the ranger station</p><h3 style="margin-top:2cqw">Welcome to the cabin</h3><div class="gap3"></div>
+        <p class="label">Your name</p><div class="gap1"></div><div class="field">Steph</div><div class="gap3"></div>
+        <p class="label">Pick a camp badge</p><div class="gap2"></div>${avs(0)}<div class="grow"></div><div class="btn">Join the game</div>`],
+      ['Role reveal', `<p class="note">For Steph only</p><h3 style="margin-top:2cqw">Happy 26th. Your patch:</h3>
+        <div class="grow" style="display:grid;place-items:center"><div class="patch"><div class="patch-in">${art('role-detective')}<p class="pname">Ranger</p></div></div></div>
+        <p class="body" style="text-align:center">Each night, shine your flashlight on one suspect.</p>`],
+    ],
+    C: [
+      ['Home', `<p class="note">Steph’s 26th, up at the cabin</p><h1 class="title">Mafia Night</h1>
+        <div class="grow glow" style="display:grid;place-items:center">${art('night-falls')}</div>
+        <p class="body" style="text-align:center;margin-bottom:5cqw">Someone around this fire isn’t who they say they are.</p><div class="btn">Host a game</div><p class="link">how do we play?</p>`],
+      ['Join', `<p class="note">pull up a log</p><h3 style="margin-top:2cqw">Welcome to the cabin. Who’s there?</h3><div class="gap3"></div>
+        <p class="label">your name</p><div class="gap1"></div><div class="field">Steph</div><div class="gap3"></div>
+        <p class="label">pick a camp badge</p><div class="gap2"></div>${avs(0)}<div class="grow"></div><div class="btn">Join the game</div>`],
+      ['Role reveal', `<p class="note">for Steph’s eyes only</p><h3 style="margin-top:2cqw">Happy 26th. Here’s who you are.</h3>
+        <div class="grow" style="display:grid;place-items:center;padding:4cqw 3cqw"><div class="card" style="width:100%"><div style="position:relative">${art('role-detective')}<span class="beam"></span></div><p class="pname">Ranger</p><p class="line">Each night, shine your flashlight on one suspect.</p></div></div>
+        <p class="link">let go and it hides</p>`],
+    ],
+  };
+  for (const el of document.querySelectorAll('.phones')) {
+    const d = el.dataset.dir;
+    el.innerHTML = S[d].map(([cap, html]) => `<figure><div class="phone ${d}"><div class="screen">${html}</div></div><figcaption>${cap}</figcaption></figure>`).join('');
+  }
+</script>
+</body>
+</html>

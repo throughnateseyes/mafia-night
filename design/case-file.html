@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Mafia Night · The cabin case file</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Covered+By+Your+Grace&family=Reenie+Beanie&family=Special+Elite&family=Bevan&family=Abril+Fatface&family=Kalam:wght@700&family=Pirata+One&family=IM+Fell+English:ital@0;1&family=Playfair+Display:wght@900&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #1B1512; color: #EFE6D6; font: 16px/1.5 "Courier Prime", ui-monospace, monospace; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, p { margin: 0; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 56px 20px 96px; }
+  .intro { max-width: 700px; margin-bottom: 48px; }
+  .intro .hand { font: 30px/1 "Reenie Beanie", cursive; color: #E9B824; }
+  .intro h1 { font: 400 clamp(34px, 6vw, 52px)/1.05 "Special Elite", "Courier Prime", monospace; margin-top: 6px; }
+  .intro p { margin-top: 14px; color: #BDB09C; font-size: 17px; }
+  .sec { font: 400 26px/1.1 "Special Elite", "Courier Prime", monospace; margin: 56px 0 6px; }
+  .sec + p { color: #BDB09C; max-width: 640px; margin-bottom: 22px; }
+  .phones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 22px; }
+  figure { margin: 0; }
+  figcaption { margin-top: 12px; font-size: 14px; color: #A89C89; }
+  figcaption b { display: block; color: #EFE6D6; font: 400 19px/1.2 "Special Elite", "Courier Prime", monospace; }
+  @media (max-width: 1000px) { .phones { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .phones { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 80%; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -20px; padding: 0 20px 12px; } .phones figure { scroll-snap-align: center; } }
+  .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px 28px; margin-top: 8px; }
+  .why p { color: #BDB09C; font-size: 15px; }
+  .why b { display: block; color: #EFE6D6; font: 400 20px/1.2 "Special Elite", "Courier Prime", monospace; margin-bottom: 2px; }
+
+  /* ---------- frames ---------- */
+  .phone, .wide { position: relative; overflow: hidden; isolation: isolate; container-type: inline-size; box-shadow: 0 30px 60px -30px #000, 0 0 0 1px rgba(255,255,255,.06); }
+  .phone { aspect-ratio: 9 / 18.6; border-radius: 30px; }
+  .wide { aspect-ratio: 16 / 9.4; border-radius: 18px; }
+  .screen { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 12cqw 7cqw 7cqw; }
+  .grow { flex: 1; min-height: 0; }
+  .ctr { display: grid; place-items: center; }
+  .art svg { display: block; width: 100%; height: 100%; }
+  .grainy::after { content: ""; position: absolute; inset: 0; background: var(--grain); mix-blend-mode: multiply; opacity: .55; pointer-events: none; z-index: 9; }
+
+  /* surfaces */
+  .paper { background: #E6DCC6 linear-gradient(180deg, rgba(120,90,50,.10), transparent 30%, rgba(120,90,50,.14)); color: #1C1916; }
+  .desk { background: #1E1611 repeating-linear-gradient(92deg, rgba(0,0,0,.0) 0 17cqw, rgba(0,0,0,.28) 17cqw 17.4cqw), linear-gradient(180deg, #261A13, #150F0B); color: #EDE3D0; }
+  .desk.grainy::after { mix-blend-mode: overlay; opacity: .5; inset: -40px; animation: boil 1.2s steps(1) infinite; }
+  @keyframes boil { 0% { transform: translate(0, 0); } 25% { transform: translate(-22px, 13px); } 50% { transform: translate(15px, -19px); } 75% { transform: translate(-9px, 24px); } }
+  @media (prefers-reduced-motion: reduce) { .desk.grainy::after { animation: none; } }
+  .cork { background: #A27C52; color: #25211D; }
+  .cork.grainy::after { opacity: .95; }
+
+  /* type */
+  .hand { font-family: "Special Elite", "Courier Prime", monospace; }
+  .scr { font-family: "Reenie Beanie", cursive; }
+  .typed { font-family: "Special Elite", monospace; }
+  .h { font: 400 7.6cqw/1.12 "Special Elite", "Courier Prime", monospace; }
+  .p { font-size: 3.9cqw; line-height: 1.45; }
+  .mark { font-family: "Reenie Beanie", cursive; color: #B3261E; line-height: 1; }
+  .redact { display: inline-block; height: 1em; vertical-align: -0.12em; background: #1C1916; }
+  .ctape { position: absolute; left: -20%; width: 140%; padding: 1.6cqw 0 1cqw; background: #E9B824; color: #1C1916; font: 3.6cqw/1 "Special Elite", monospace; white-space: nowrap; overflow: hidden; text-align: center; box-shadow: 0 1cqw 2cqw rgba(0,0,0,.35); z-index: 6; }
+  .clip { position: absolute; width: 5cqw; height: 13cqw; border: 0.8cqw solid #9AA0A6; border-radius: 3cqw; z-index: 5; box-shadow: 0 1px 1px rgba(0,0,0,.3); }
+  .clip::after { content: ""; position: absolute; left: 0.7cqw; right: 0.7cqw; top: 1.6cqw; bottom: -0.8cqw; border: 0.8cqw solid #9AA0A6; border-bottom: 0; border-radius: 2cqw 2cqw 0 0; }
+
+  /* props */
+  .kraft { position: relative; display: inline-block; padding: 1.6cqw 4cqw; color: #2A1E12; z-index: 0; }
+  .kraft::before { content: ""; position: absolute; inset: 0; background: #B38B5E; filter: url(#torn); z-index: -1; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+  .torn { position: relative; z-index: 0; }
+  .torn::before { content: ""; position: absolute; inset: 0; background: var(--bg, #FBF7EE); filter: url(#torn); z-index: -1; }
+  .lift { filter: drop-shadow(0 1cqw 1.6cqw rgba(40,25,10,.28)); }
+  .tape { position: absolute; width: 22cqw; height: 6.4cqw; background: rgba(226, 208, 160, .78); box-shadow: 0 1px 1px rgba(0,0,0,.08); z-index: 3; }
+  .pin { position: absolute; width: 3.6cqw; height: 3.6cqw; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F0705A, #A3261C 70%); box-shadow: 0 1cqw 1cqw rgba(0,0,0,.35); z-index: 4; }
+  .pol { position: relative; background: #FBF8F1; padding: 3cqw 3cqw 0; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+  .pol .art { aspect-ratio: 1; overflow: hidden; filter: grayscale(1) contrast(1.1) brightness(1.02) sepia(.25); }
+  .pol .cap { display: block; text-align: center; font: 7cqw/1 "Reenie Beanie", cursive; color: #2c2620; padding: 1.4cqw 0 2cqw; white-space: nowrap; }
+  .stk { display: block; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 1.1cqw #FBF8F1, 0 1cqw 1.4cqw rgba(40,25,10,.3); filter: grayscale(1) contrast(1.15) sepia(.3); }
+  .stk.live { filter: none; }
+  .stk svg { width: 100%; height: 100%; display: block; }
+  .stamp { display: inline-block; padding: 1cqw 4cqw 0.4cqw; border: 0.9cqw solid #B3261E; border-radius: 2cqw; color: #B3261E; font: 400 11cqw/1.1 Bevan, serif; transform: rotate(-7deg); mix-blend-mode: multiply; -webkit-mask-image: var(--worn); mask-image: var(--worn); }
+  .btn { position: relative; display: flex; align-items: center; justify-content: center; height: 13.5cqw; color: #F1E8D6; font: 400 5.2cqw/1 "Special Elite", "Courier Prime", monospace; z-index: 0; }
+  .btn::before { content: ""; position: absolute; inset: 0; background: #1C1916; border-radius: 2.4cqw; filter: url(#torn); z-index: -1; }
+  .btn.red::before { background: #B3261E; }
+  .desk .btn:not(.red)::before { background: #E6DCC6; }
+  .desk .btn:not(.red) { color: #1C1916; }
+  .desk .paper .btn::before { background: #1C1916; }
+  .desk .paper .btn { color: #F1E8D6; }
+  .link { text-align: center; font: 7cqw/1 "Reenie Beanie", cursive; margin-top: 3cqw; opacity: .8; }
+  .rule { border-bottom: 2px dotted #6b5c48; padding-bottom: 1cqw; font: 10cqw/1 "Reenie Beanie", cursive; color: #1d2a5a; }
+  .ransom { display: flex; flex-wrap: wrap; gap: 1cqw 0.6cqw; align-items: center; }
+  .ransom span { display: inline-grid; place-items: center; min-width: 9.5cqw; padding: 0.4cqw 1.4cqw 0; line-height: 1.12; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+  .ransom .sp { flex-basis: 100%; height: 0; padding: 0; min-width: 0; box-shadow: none; }
+
+  /* cabin floor plan: sized in --u so the same drawing works on a phone and a TV */
+  .cabin { position: relative; width: 100%; aspect-ratio: 1 / 1.08; --u: 1cqw; }
+  .cabin .floor { position: absolute; inset: 0; border: calc(var(--u) * 2.6) solid #1E130C; border-radius: calc(var(--u) * 3); box-shadow: 0 0 0 var(--u) #3A2618, 0 calc(var(--u) * 4) calc(var(--u) * 8) rgba(0,0,0,.6); filter: url(#sketch);
+    background: radial-gradient(closest-side at 50% 50%, transparent 34%, rgba(8,6,10,.8) 100%), repeating-linear-gradient(90deg, #5A3D29 0 calc(var(--u) * 6), #46301F calc(var(--u) * 6) calc(var(--u) * 6.3), #604230 calc(var(--u) * 6.3) calc(var(--u) * 14), #46301F calc(var(--u) * 14) calc(var(--u) * 14.3), #523624 calc(var(--u) * 14.3) calc(var(--u) * 19.4), #46301F calc(var(--u) * 19.4) calc(var(--u) * 19.7)); }
+  .cabin .dark { display: none; position: absolute; inset: calc(var(--u) * 2.6); border-radius: var(--u); background: radial-gradient(closest-side at 50% 50%, transparent 30%, rgba(8,6,10,.78) 100%); pointer-events: none; }
+  .cabin .glow { position: absolute; inset: calc(var(--u) * 2.6); border-radius: var(--u); background: radial-gradient(closest-side at 50% 50%, rgba(255,190,110,.62), rgba(255,150,70,.16) 46%, transparent 70%); animation: flick 2.9s linear infinite; pointer-events: none; mix-blend-mode: screen; }
+  @keyframes flick { 0% { opacity: .82; transform: scale(1); } 9% { opacity: 1; } 17% { opacity: .74; transform: scale(.97); } 31% { opacity: .95; } 44% { opacity: .8; transform: scale(1.02); } 58% { opacity: 1; } 66% { opacity: .7; transform: scale(.98); } 81% { opacity: .92; } 100% { opacity: .82; transform: scale(1); } }
+  .cabin .rug { position: absolute; left: 50%; top: 50%; width: 46%; aspect-ratio: 1; transform: translate(-50%, -50%) rotate(8deg); border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%; background: #742B22; box-shadow: inset 0 0 0 calc(var(--u) * 1.2) #742B22, inset 0 0 0 calc(var(--u) * 1.8) #B88A52, inset 0 0 0 calc(var(--u) * 4) #742B22, inset 0 0 0 calc(var(--u) * 4.4) rgba(184,138,82,.5); }
+  .cabin .furn { position: absolute; background: #2B1C12; border-radius: var(--u); opacity: .85; filter: url(#sketch); }
+  .cabin .door { position: absolute; bottom: 0; left: 43%; width: 14%; height: calc(var(--u) * 2.6); background: #B88A52; }
+  .cabin .fire { position: absolute; left: 50%; top: 50%; width: 17%; aspect-ratio: 1; transform: translate(-50%, -58%); z-index: 2; }
+  .cabin .fire svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  .cabin .fl { transform-box: fill-box; transform-origin: 50% 100%; animation: flame .9s ease-in-out infinite; }
+  .cabin .fl.b { animation-duration: .7s; animation-direction: reverse; }
+  .cabin .fl.c { animation-duration: 1.1s; animation-delay: -.4s; }
+  @keyframes flame { 0%, 100% { transform: scale(1, 1) skewX(0deg); } 25% { transform: scale(.9, 1.12) skewX(-5deg); } 50% { transform: scale(1.06, .94) skewX(4deg); } 75% { transform: scale(.95, 1.1) skewX(-2deg); } }
+  .cabin .ember { position: absolute; left: 50%; top: 46%; width: calc(var(--u) * 0.9); aspect-ratio: 1; border-radius: 50%; background: #FFC46B; box-shadow: 0 0 calc(var(--u) * 1.6) #FF9A3D; opacity: 0; z-index: 2; animation: ember var(--t, 3s) ease-out var(--d, 0s) infinite; }
+  @keyframes ember { 0% { opacity: 0; transform: translate(0, 0) scale(1); } 12% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--x, 0), calc(var(--u) * -22)) scale(.3); } }
+  .cabin .tok { position: absolute; left: var(--l); top: var(--t); width: 14%; transform: translate(-50%, -50%); z-index: 3; text-align: center; animation: mill var(--dur, 5s) ease-in-out var(--d, 0s) infinite; }
+  @keyframes mill { 0%, 100% { transform: translate(-50%, -50%) rotate(0deg); } 30% { transform: translate(calc(-50% + var(--ix)), calc(-50% + var(--iy))) rotate(var(--ir)); } 65% { transform: translate(calc(-50% - var(--iy)), calc(-50% + var(--ix))) rotate(calc(var(--ir) * -1)); } }
+  .cabin .tok .sh { position: absolute; left: 50%; top: 42%; width: 104%; aspect-ratio: 1; border-radius: 50%; background: rgba(0,0,0,.55); filter: blur(calc(var(--u) * 1.2)); transform: translate(calc(-50% + var(--sx)), calc(-50% + var(--sy))); z-index: -1; animation: shade 2.9s linear infinite; }
+  @keyframes shade { 0%, 100% { opacity: .8; } 17% { opacity: .55; } 44% { opacity: .9; } 66% { opacity: .5; } }
+  .cabin .tok i { display: block; font: normal calc(var(--u) * 5.4)/1 "Reenie Beanie", cursive; color: #F6EAD2; margin-top: var(--u); text-shadow: 0 1px 2px #000; }
+  .cabin .tok .stk { box-shadow: 0 0 0 calc(var(--u) * 1.1) #FBF8F1; }
+  .cabin .tok.enter { animation: mill var(--dur, 5s) ease-in-out infinite, walkin 9s ease-in-out infinite; }
+  @keyframes walkin { 0% { left: 50%; top: 104%; opacity: 0; } 5% { opacity: 1; } 16% { left: 47%; top: 86%; } 34%, 100% { left: var(--l); top: var(--t); opacity: 1; } }
+  .cabin.photo { aspect-ratio: 1; }
+  .cabin .map { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: calc(var(--u) * 2.4); box-shadow: 0 calc(var(--u) * 4) calc(var(--u) * 8) rgba(0,0,0,.65); }
+  .cabin.photo .glow { inset: 14%; }
+  .cabin.photo .fire { width: 9%; transform: translate(-50%, -62%); }
+  .cabin.photo .tok { width: 15%; }
+  .cabin.photo .tok.enter { animation-name: mill, walkin2; }
+  @keyframes walkin2 { 0% { left: 50%; top: 90%; opacity: 0; } 6% { opacity: 1; } 16% { left: 48%; top: 80%; } 34%, 100% { left: var(--l); top: var(--t); opacity: 1; } }
+  .stk { overflow: hidden; }
+  .stk img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.75); transform-origin: 50% 24%; }
+  .mugt { display: block; background: #FBF8F1; padding: 1cqw 1cqw 3.2cqw; box-shadow: 0 1cqw 1.6cqw rgba(40,25,10,.3); }
+  .mugt img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+  @media (prefers-reduced-motion: reduce) { .cabin * { animation: none !important; } }
+
+  /* newspaper */
+  .news { --bg: #E9E1CD; padding: 5cqw 5cqw 6cqw; color: #1F1B17; transform: rotate(-1.2deg); }
+  .news .mast { font: 400 10cqw/1 "Pirata One", serif; text-align: center; border-bottom: 1px solid #1F1B17; padding-bottom: 1.6cqw; }
+  .news .date { display: flex; justify-content: space-between; font: italic 3cqw/1 "IM Fell English", serif; padding: 1.2cqw 0; border-bottom: 3px double #1F1B17; }
+  .news .hl { font: 900 11.5cqw/0.95 "Playfair Display", serif; margin: 3.4cqw 0 2cqw; letter-spacing: -0.01em; }
+  .news .cols { columns: 2; column-gap: 3cqw; font: 3cqw/1.3 "IM Fell English", serif; text-align: justify; color: #3a332b; }
+  .news .ph { aspect-ratio: 1.5; overflow: hidden; filter: grayscale(1) contrast(1.15) sepia(.25); margin-bottom: 2.4cqw; }
+
+  /* folder */
+  .folder { position: relative; background: #D2AE72 linear-gradient(180deg, rgba(255,255,255,.12), transparent 40%, rgba(90,60,20,.12)); border-radius: 2cqw; padding: 6cqw 5cqw 5cqw; color: #2A1E12; box-shadow: 0 2cqw 5cqw rgba(0,0,0,.5); }
+  .folder .tab { position: absolute; top: -6.4cqw; left: 6cqw; padding: 1.6cqw 5cqw 1cqw; background: #D2AE72; border-radius: 2cqw 2cqw 0 0; font: 4cqw/1 "Special Elite", monospace; }
+  .tabs { display: flex; gap: 1cqw; padding: 0 2cqw; }
+  .tabs span { flex: 1; text-align: center; padding: 2.4cqw 0 1.6cqw; border-radius: 2cqw 2cqw 0 0; background: #B99A63; color: #4a3a22; font: 3.7cqw/1 "Special Elite", monospace; }
+  .tabs .on { background: #F1EADB; color: #25211D; }
+
+  .desk::before { content: ""; position: absolute; inset: 0; background: radial-gradient(110% 55% at 16% -6%, rgba(255,206,140,.2), transparent 62%), radial-gradient(130% 80% at 50% 125%, rgba(0,0,0,.55), transparent 60%); pointer-events: none; z-index: -1; }
+  .folder::after { content: ""; position: absolute; left: 3%; right: 2%; top: -1.2cqw; height: 3cqw; background: #EFE7D4; z-index: -1; transform: rotate(.8deg); box-shadow: 0 -0.6cqw 0 -0.1cqw #DDD3BC; }
+  .elabel { position: relative; background: #F4EFE2; padding: 0 4cqw 3cqw; box-shadow: 0 1px 1px rgba(0,0,0,.15), 0 2.4cqw 3cqw -1.6cqw rgba(60,35,10,.5); transform: rotate(-1.6deg); color: #1C1916; }
+  .elabel .band { display: flex; justify-content: space-between; margin: 0 -4cqw 3cqw; padding: 1.6cqw 4cqw 1cqw; background: #B3261E; color: #F4EFE2; font: 3cqw/1 "Special Elite", monospace; }
+  .marker { font-family: "Covered By Your Grace", cursive; color: #17182B; filter: url(#ink); line-height: .84; }
+  .elabel .line { display: flex; gap: 2cqw; align-items: baseline; margin-top: 3cqw; padding-top: 2.4cqw; border-top: 1px solid #C9BDA6; font: 3cqw/1 "Special Elite", monospace; color: #6b5c48; }
+  .elabel .line b { font: 400 6.4cqw/.5 "Reenie Beanie", cursive; color: #1d2a5a; }
+  .icard { position: relative; padding: 9cqw 6cqw 6cqw; color: #1C1916; transform: rotate(1.4deg); box-shadow: 0 1px 1px rgba(0,0,0,.2), 0 3cqw 4cqw -2cqw rgba(0,0,0,.6); background: linear-gradient(#C9483B, #C9483B) 0 6.4cqw / 100% 1.5px no-repeat, repeating-linear-gradient(180deg, transparent 0 7.2cqw, rgba(60,100,170,.28) 7.2cqw 7.4cqw) 0 9cqw, #F6F1E5; }
+  .strike { text-shadow: 0.35cqw 0.1cqw 0 rgba(28,25,22,.32); filter: url(#ink); }
+  .rstamp { position: absolute; right: 4cqw; top: 3cqw; width: 19cqw; aspect-ratio: 1; display: grid; place-items: center; text-align: center; border: 0.7cqw double #B3261E; outline: 0.5cqw solid #B3261E; outline-offset: 0.8cqw; border-radius: 50%; color: #B3261E; font: 3.6cqw/1.15 "Special Elite", monospace; transform: rotate(14deg); mix-blend-mode: multiply; -webkit-mask-image: var(--worn); mask-image: var(--worn); }
+  .sign { position: relative; padding: 9cqw 5cqw 8cqw; border-radius: 3cqw; transform: rotate(-1.5deg); overflow: hidden; background: repeating-linear-gradient(178deg, transparent 0 2.2cqw, rgba(0,0,0,.14) 2.2cqw 2.5cqw, transparent 2.5cqw 5.8cqw, rgba(0,0,0,.1) 5.8cqw 6cqw), linear-gradient(180deg, #7A5232, #55351E); box-shadow: inset 0 0.6cqw 0 rgba(255,220,170,.25), inset 0 -1cqw 0 rgba(0,0,0,.35), 0 4cqw 6cqw -2cqw rgba(0,0,0,.7); }
+  .carve { font: 400 14.5cqw/1.1 Bevan, serif; text-align: center; color: #2A180C; text-shadow: 0 0.4cqw 0 rgba(255,225,180,.3), 0 -0.3cqw 0 rgba(0,0,0,.55); filter: url(#ink); }
+  .nail { position: absolute; width: 2.4cqw; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #C9C2B5, #5c564c 70%); box-shadow: 0 0.4cqw 0.6cqw rgba(0,0,0,.5); }
+  .opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+  .opt { position: relative; aspect-ratio: 1 / 0.86; border-radius: 18px; overflow: hidden; isolation: isolate; container-type: inline-size; box-shadow: 0 30px 60px -30px #000, 0 0 0 1px rgba(255,255,255,.06); }
+  .rec { display: inline-block; margin-left: 6px; padding: 1px 9px; border-radius: 99px; background: #E9B824; color: #1C1916; font: 13px/1.5 "Courier Prime", monospace; vertical-align: 2px; }
+  .how { grid-column: span 1; align-self: center; padding: 8px 0 0 12px; color: #BDB09C; font-size: 15px; }
+  .how h3 { font: 400 22px/1.2 "Special Elite", monospace; color: #EFE6D6; margin-bottom: 10px; }
+  .how ol { margin: 0 0 12px; padding-left: 22px; display: grid; gap: 8px; }
+  @media (max-width: 760px) { .opts { grid-template-columns: none; } .how { grid-column: auto; padding-left: 0; min-width: 0; } }
+
+  /* wide */
+  .wide .screen { padding: 4cqw 5cqw; flex-direction: row; gap: 5cqw; align-items: center; }
+  .wide .h { font-size: 4.6cqw; }
+  .wide .cabin { --u: .4cqw; }
+  .wide .stk { box-shadow: 0 0 0 .4cqw #FBF8F1, 0 .4cqw .6cqw rgba(40,25,10,.3); }
+  .wide .tape { width: 9cqw; height: 2.4cqw; }
+  .qr { display: grid; grid-template-columns: repeat(21, 1fr); aspect-ratio: 1; }
+  .qr i { background: #1F1B17; }
+  .qr i.o { background: none; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" /><feDisplacementMap in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G" /></filter>
+  <filter id="sketch" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="3" /><feDisplacementMap in="SourceGraphic" scale="7" xChannelSelector="R" yChannelSelector="G" /></filter>
+  <filter id="ink"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="5" /><feDisplacementMap in="SourceGraphic" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter>
+  <filter id="torn" x="-5%" y="-10%" width="110%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="3" seed="11" /><feDisplacementMap in="SourceGraphic" scale="4.5" xChannelSelector="R" yChannelSelector="G" /></filter>
+</svg>
+
+<div class="wrap">
+  <header class="intro">
+    <p class="hand">case no. 26 · one direction, built from your references</p>
+    <h1>A weekend in Pioneer</h1>
+    <p>The game is a murder case file, and everyone at the cabin is a suspect. You don’t “join a game”, you get booked. Your role comes in a confidential folder. Deaths are reported in the local paper. The vote happens on a detective’s pinboard. When night falls the lights go out and all you can see is the cabin by firelight.</p>
+  </header>
+
+  <h2 class="sec">On everyone’s phone</h2>
+  <p>The eight moments of a game, in order.</p>
+  <div class="phones" id="phones"></div>
+
+  <h2 class="sec">Your phone, Nate: the remote</h2>
+  <p>You run the whole night from the lead detective’s folder. Nobody else can see it.</p>
+  <div class="phones" id="narr"></div>
+
+  <h2 class="sec">The morning paper has editions</h2>
+  <p>Same template, different story depending on what happened overnight. The birthday edition only runs if the person you marked as the birthday girl is the one who dies.</p>
+  <div class="opts" id="editions"></div>
+
+  <h2 class="sec">Three ways to letter the title</h2>
+  <p>No more cut-out letters. Each of these has real ink, wobble and depth.</p>
+  <div class="opts" id="titles"></div>
+
+  <h2 class="sec">On the laptop or TV</h2>
+  <p>Same desk, wider. The join code is a card taped to the table, and the cabin fills up as people scan in.</p>
+  <div class="wide desk grainy" id="wide"></div>
+
+  <h2 class="sec">Why each choice is there</h2>
+  <div class="why">
+    <p><b>Two moods, one desk</b>Day screens are paperwork under a lamp. Night screens are the same desk with the lights off and the fire going. The switch between them is the big moment of the game, so it gets the biggest visual change.</p>
+    <p><b>Type that sets the scene</b>Typewriter for the file and the title card, tabloid headlines for deaths, pen scrawl for the detective’s notes. No all-caps labels, no default app fonts.</p>
+    <p><b>Texture you can name</b>Manila folders, aged typing paper, torn newsprint, cork, tape, wood grain, black-and-white photos. Each is a real material from your references, used where it would be in real life.</p>
+    <p><b>The cabin is alive</b>The lobby is a floor plan lit by a fire that flickers and throws shadows. People walk in through the door when they join and shuffle around while they wait.</p>
+    <p><b>Made for Steph</b>It’s case no. 26 for her 26th. Her name is on the file, the Pioneer Gazette reports on her friends, and the cake shows up when the campers win.</p>
+    <p><b>Suspects you’ll fight over</b>Player icons are woodland animals in old police booking photos. Each holds a blank letter board, and the app prints your name on it.</p>
+    <p><b>Restraint</b>One prop per screen carries the idea. Everything else stays quiet so the game is still easy to read in a dark room.</p>
+  </div>
+</div>
+
+<script type="module">
+  import '../src/styles/tokens.css';
+  import '../src/styles/art.css';
+  import { artHTML, avatarHTML } from '../src/art/index.js';
+
+  const svgUrl = (s) => `url("data:image/svg+xml,${encodeURIComponent(s)}")`;
+  const root = document.documentElement.style;
+  root.setProperty('--grain', svgUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .24  0 0 0 0 .18  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(#g)'/></svg>`));
+  // worn-ink mask for rubber stamps
+  root.setProperty('--worn', svgUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='200' height='120'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3.2 2.6'/></filter><rect width='100%' height='100%' filter='url(#w)'/></svg>`));
+
+  const art = (id, style = '') => `<div class="art" style="${style}">${artHTML(id, { animate: true })}</div>`;
+  const MUG = ['raccoon', 'bear', 'moose', 'owl', 'fox', 'beaver', 'skunk', 'deer'];
+  const mugOf = (a) => MUG[Math.max(0, [3, 0, 9, 6, 12, 1, 13, 2].indexOf(a)) % MUG.length];
+  const stk = (a, style = '') => `<span class="stk live" style="${style}"><img src="assets/mug-${mugOf(a)}.jpg" alt=""></span>`;
+  const photo = (n, style = 'filter:contrast(1.05) brightness(1.25) sepia(.18)') => `<div class="art" style="${style}"><img src="assets/${n}.jpg" alt="" style="display:block;width:100%;height:100%;object-fit:cover"></div>`;
+  const rot = [-5, 3, -2, 6, 2, -6, 4, -3];
+
+  // ransom-note title: every letter cut from a different page
+  const CUT = [
+    ['Bevan', '#F6F1E4', '#1d1b18'], ['Abril Fatface', '#1d1b18', '#F6F1E4'], ['Special Elite', '#D9C7A3', '#1d1b18'],
+    ['Playfair Display', '#B4432E', '#F6F1E4'], ['Kalam', '#F6F1E4', '#B4432E'], ['Karla', '#2F4A3A', '#F6F1E4'],
+  ];
+  const ransom = (text, size = 14) => `<div class="ransom">${[...text].map((ch, i) => ch === ' ' ? '<span class="sp"></span>' : `<span style="font-family:'${CUT[(i * 5 + 2) % 6][0]}';background:${CUT[(i * 5 + 2) % 6][1]};color:${CUT[(i * 5 + 2) % 6][2]};font-size:${size + ((i * 7) % 3) - 1}cqw;transform:rotate(${rot[i % 8] * 0.8}deg);font-weight:700">${ch}</span>`).join('')}</div>`;
+
+  const people = [['Ava', 3], ['Steph', 0], ['Cleo', 9], ['Ben', 6], ['Dev', 12], ['Mia', 1], ['Jo', 13]];
+  const flame = `<svg viewBox="0 0 40 46"><path d="M6 38 L34 44 M34 38 L6 44" stroke="#2A1A10" stroke-width="5" stroke-linecap="round"/><path class="fl" d="M20 4 C 27 13, 33 20, 31 29 C 30 36, 25 40, 20 40 C 14 40, 9 36, 9 29 C 8 22, 15 17, 20 4Z" fill="#E4572E"/><path class="fl b" d="M20 14 C 24 20, 28 25, 27 31 C 26 36, 23 39, 20 39 C 16 39, 13 36, 13 31 C 13 26, 17 22, 20 14Z" fill="#F59E2D"/><path class="fl c" d="M20 24 C 22 28, 24 30, 23 34 C 23 37, 21 38, 20 38 C 18 38, 17 37, 17 34 C 16 31, 19 28, 20 24Z" fill="#FFE08A"/></svg>`;
+  const cabin = (n = 5, enter = true) => `<div class="cabin photo"><img class="map" src="assets/cabin-map.jpg" alt=""><span class="glow"></span>
+    <span class="fire">${flame}</span>${[[-3, 2.6, 0], [4, 3.4, 1.1], [-1, 2.9, 1.9], [6, 3.8, 0.5], [-5, 3.1, 2.4]].map(([x, t, d]) => `<span class="ember" style="--x:calc(var(--u) * ${x});--t:${t}s;--d:${d}s"></span>`).join('')}
+    ${people.slice(0, n).map(([name, av], i) => { const a = (i / n) * Math.PI * 2 - Math.PI / 2 + (i % 2 ? 0.09 : -0.06); const r = 30 + (i % 3) * 1.6; return `<span class="tok ${enter && i === n - 1 ? 'enter' : ''}" style="--l:${(50 + Math.cos(a) * r).toFixed(1)}%;--t:${(50 + Math.sin(a) * (r - 1)).toFixed(1)}%;--sx:${(Math.cos(a) * 26).toFixed(0)}%;--sy:${(Math.sin(a) * 26).toFixed(0)}%;--ix:${[3, -4, 2, -3, 4, -2, 3][i]}%;--iy:${[-3, 2, 4, -2, -3, 3, -4][i]}%;--ir:${[4, -5, 3, -4, 5, -3, 4][i]}deg;--dur:${[5.2, 6.4, 4.6, 7, 5.8, 6.1, 4.9][i]}s;--d:${-i * 0.9}s"><span class="sh"></span>${stk(av, `transform:rotate(${rot[i]}deg)`)}<i>${name}</i></span>`; }).join('')}
+    </div>`;
+
+  const tapeText = Array(8).fill('crime scene · do not cross').join(' · ');
+  const ctape = (style) => `<span class="ctape" style="${style}">${tapeText}</span>`;
+  const red = (w) => `<span class="redact" style="width:${w}cqw"></span>`;
+  // a thumbprint, drawn from wobbly rings
+  let rings = '';
+  for (let k = 1; k <= 9; k++) rings += `<ellipse cx="50" cy="${52 - k * 0.6}" rx="${k * 4.2}" ry="${k * 5.4}" fill="none" stroke="#B3261E" stroke-width="1.5" stroke-dasharray="${14 + k * 5} ${2 + (k % 3)}" transform="rotate(${k * 9} 50 50)"/>`;
+  const thumb = `<svg viewBox="0 0 100 110" style="width:100%;height:100%;opacity:.75"><defs><clipPath id="tp"><ellipse cx="50" cy="55" rx="36" ry="48"/></clipPath></defs><g clip-path="url(#tp)">${rings}</g></svg>`;
+
+  // three ways to letter the title
+  const titleA = () => `<div class="elabel"><p class="band"><span>Evidence</span><span>Pioneer sheriff’s office</span></p><p class="marker" style="font-size:17cqw">A weekend<br>in Pioneer</p><p class="line"><span>case no.</span><b>26</b><span style="margin-left:auto">status</span><b>unsolved</b></p></div>`;
+  const jit = (t) => [...t].map((ch, i) => ch === ' ' ? ' ' : `<span style="display:inline-block;transform:translateY(${(((i * 37) % 7) - 3) * 0.14}cqw) rotate(${(((i * 53) % 5) - 2) * 0.9}deg);opacity:${0.7 + ((i * 29) % 4) * 0.1}">${ch}</span>`).join('');
+  const titleB = () => `<div class="icard"><p class="typed" style="font-size:5cqw">${jit('A weekend in')}</p><p class="typed strike" style="font-size:14cqw;line-height:1;margin-top:1cqw;white-space:nowrap">${jit('Pioneer')}</p><svg viewBox="0 0 200 20" preserveAspectRatio="none" style="display:block;width:92%;height:4cqw;margin-top:-1cqw"><path d="M3 12 C 40 5, 90 16, 130 9 S 180 8, 197 11" fill="none" stroke="#B3261E" stroke-width="3" stroke-linecap="round"/></svg><span class="rstamp">case<br>no. 26</span></div>`;
+  const titleC = () => `<div class="sign"><i class="nail" style="left:4cqw;top:4cqw"></i><i class="nail" style="right:4cqw;top:4cqw"></i><i class="nail" style="left:4cqw;bottom:4cqw"></i><i class="nail" style="right:4cqw;bottom:4cqw"></i><p class="scr" style="font-size:9cqw;color:#EBDDBF;line-height:.8">a weekend in</p><p class="carve">Pioneer</p><p class="typed" style="font-size:3.6cqw;color:#D9C39A;opacity:.8;text-align:right;margin-right:6cqw">pop. 26</p>${ctape('bottom:-1cqw;left:35%;width:90%;transform:rotate(-24deg)')}</div>`;
+
+  // the morning paper: one template, many editions
+  const news = ({ hl, body, pic, tag = 'Saturday morning', wx = 'Cloudy, chance of betrayal' }) => `<div class="news torn lift"><p class="mast">The Pioneer Gazette</p><p class="date"><span>${tag}</span><span>${wx}</span></p>
+        <h3 class="hl">${hl}</h3><div class="ph">${art(pic, 'width:100%;height:150%;margin-top:-18%')}</div><p class="cols">${body}</p></div>`;
+  const EDITIONS = {
+    death: { hl: 'Dev didn’t make it to breakfast', pic: 'morning-dead', body: 'Dev, a Camper, was found at sunrise outside an open tent. Nobody saw a thing, which is strange for a cabin this small. Friends remember him as “loud” and “a terrible liar.” The Mafia is still out there, and is probably sitting next to you. Suspects will vote after coffee.' },
+    quiet: { hl: 'Everyone lived. Nobody trusts it.', pic: 'morning-clear', wx: 'Clear skies, for now', body: 'For the first time this weekend, every suspect woke up. Sources credit a Medic who was in the right place at the right time. The Mafia declined to comment and looked annoyed about it. Breakfast went ahead as planned. Accusations resume shortly.' },
+    bday: { hl: 'Who killed the birthday girl?', pic: 'town-wins', tag: 'Birthday extra', wx: 'Dark. Very dark.', body: 'Steph, 26 as of this weekend, was found at dawn next to an untouched slice of cake. “It’s my birthday” did not work as a defence. Every person in this cabin is now a suspect. To whoever did this: on her birthday? Really? The vote is going to be personal.' },
+  };
+
+  const screens = [
+    ['Home', 'The cover of the case file. The title is typed on an index card, with the cabin photo clipped beside it.', 'desk grainy', `
+      <div class="grow" style="position:relative;padding-top:7cqw"><div class="folder" style="height:100%;transform:rotate(-1deg);display:flex;flex-direction:column;padding:7cqw 5cqw 6cqw"><span class="tab">Case no. 26</span>
+        ${titleB()}
+        <div style="display:flex;gap:5cqw;align-items:center;margin:auto 0;padding-bottom:9cqw"><div class="pol" style="width:52%;flex:none;transform:rotate(-3deg)"><span class="clip" style="top:-5cqw;left:6cqw"></span>${photo('cabin-c-watching')}<span class="cap" style="font-size:5.4cqw">the cabin, 9 pm</span></div>
+          <p class="p" style="flex:1;font-size:4.1cqw">One cabin. One birthday. Everyone here is a suspect, and somebody is lying.</p></div></div>
+        ${ctape('bottom:4cqw;transform:rotate(-6deg)')}</div>
+      <div style="height:6cqw"></div><div class="btn red">Open the case</div><p class="link scr">how does this work?</p>`],
+    ['Join', 'You don’t join, you get booked. A suspect intake form with a line for your name and a thumbprint box.', 'paper grainy', `
+      <p class="typed" style="font-size:3.4cqw;opacity:.6">Pioneer sheriff’s office · form 26-B</p><h3 class="h" style="margin-top:1cqw">Suspect intake</h3><div style="height:6cqw"></div>
+      <p class="typed" style="font-size:3.8cqw">Name of suspect</p><div class="rule">Ava</div><div style="height:6cqw"></div>
+      <p class="typed" style="font-size:3.8cqw">Pick your mugshot</p><div style="height:4cqw"></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4cqw 3cqw">${MUG.map((m, i) => `<span style="position:relative"><span class="mugt" style="transform:rotate(${rot[i] * 0.5}deg)"><img src="assets/mug-${m}.jpg" alt=""></span>${i === 0 ? '<svg viewBox="0 0 100 100" style="position:absolute;inset:-12%;width:124%;height:124%;overflow:visible"><path d="M50 6 C 82 4, 97 30, 94 54 C 91 82, 66 97, 44 94 C 16 90, 3 68, 7 44 C 10 20, 30 5, 58 9" fill="none" stroke="#B3261E" stroke-width="3.4" stroke-linecap="round"/></svg>' : ''}</span>`).join('')}</div>
+      <div style="height:7cqw"></div>
+      <div style="display:flex;gap:4cqw;align-items:center"><div style="width:24cqw;height:28cqw;border:1px dashed #6b5c48;padding:1.6cqw">${thumb}</div><div style="flex:1"><p class="typed" style="font-size:3.6cqw">Right thumb</p><p class="p" style="margin-top:1cqw;opacity:.75">I swear I had nothing to do with it.</p><p class="scr" style="font-size:8cqw;color:#1d2a5a;margin-top:1cqw">x  Ava</p></div></div>
+      <div class="grow"></div><div class="btn">Book me in</div>`],
+    ['Lobby', 'The cabin from above, like a crime-scene diagram. Each suspect takes a seat by the fire.', 'desk grainy', `
+      <p class="typed" style="font-size:3.4cqw;color:#E9B824">Exhibit B · the cabin, 9:14 pm</p><h3 class="h" style="margin-top:1cqw">Five suspects, so far</h3>
+      <div class="grow ctr" style="padding:4cqw 2cqw">${cabin(5)}</div>
+      <p class="p" style="text-align:center;color:#BDB09C">Everyone’s still alive. Waiting for Nate to hand out the files.</p>`],
+    ['Your role', 'A confidential file with the name you typed on the tab. Hold to open it. The details are blacked out and the role is rubber-stamped.', 'desk grainy', `
+      <p class="typed" style="font-size:3.4cqw;color:#E9B824">For Ava’s eyes only</p><h3 class="h" style="margin-top:1cqw">This file is yours.</h3>
+      <div class="grow ctr" style="padding-top:8cqw"><div class="folder" style="width:100%;transform:rotate(-1.2deg)"><span class="tab">Ava · confidential</span><span class="clip" style="top:-4cqw;right:10cqw"></span>
+        <div style="display:flex;gap:4cqw;align-items:flex-start"><div class="pol" style="width:50%;transform:rotate(-3deg)">${art('role-detective')}<span class="cap" style="font-size:5.4cqw">exhibit A</span></div>
+        <div style="flex:1;padding-top:2cqw"><p class="typed" style="font-size:3.3cqw;line-height:1.6">Subject is ${red(16)} and knows these woods. Each night, shine your flashlight on one suspect to learn ${red(10)}.</p></div></div>
+        <div style="margin-top:5cqw;padding-left:3cqw"><span class="stamp">Ranger</span></div>
+        <p class="mark" style="font-size:8.4cqw;text-align:right;margin-top:4cqw;transform:rotate(-3deg)">tell no one.</p></div></div>
+      <p class="link scr">let go and it closes</p>`],
+    ['Night falls', 'Lights out. The desk goes black and only the fire and one photo are lit.', 'desk grainy', `
+      <div style="position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 40%, rgba(255,176,96,.26), rgba(4,3,6,.9) 78%);z-index:-1"></div>
+      <p class="typed" style="font-size:3.4cqw;color:#E9B824;text-align:center">11:42 pm</p>
+      <div class="grow ctr"><div class="pol lift" style="width:74%;transform:rotate(-2deg);box-shadow:0 0 14cqw rgba(255,170,90,.28)">${photo('cabin-a-dusk', 'filter:none')}<span class="cap">night one</span></div></div>
+      <h3 class="h" style="text-align:center;font-size:8.6cqw">The cabin goes quiet.</h3><p class="scr" style="text-align:center;font-size:8cqw;color:#E9B824;margin-top:1cqw">everyone, close your eyes</p>
+      <div style="height:7cqw"></div><div style="text-align:center"><span class="kraft typed" style="font-size:3.8cqw;opacity:.75">hold to check your file</span></div>`],
+    ['Morning', 'Deaths are front-page news in the town paper, torn out and dropped on the desk. The story is written from what happened.', 'desk grainy', `
+      <p class="typed" style="font-size:3.4cqw;color:#E9B824">7:05 am · this morning’s paper</p><div style="height:4cqw"></div>
+      ${news(EDITIONS.death)}
+      <div class="grow"></div><p class="mark" style="font-size:9cqw;text-align:center;transform:rotate(-2deg);color:#E9B824">so who’s lying?</p>`],
+    ['The vote', 'The detective’s pinboard. Mugshots, red string, and whoever is out gets crossed off.', 'cork grainy', `
+      <span class="kraft typed" style="font-size:5.4cqw;align-self:center;transform:rotate(-1.5deg)">Who did it?</span>
+      <div class="grow" style="position:relative;margin-top:5cqw">
+        <svg viewBox="0 0 100 130" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;overflow:visible"><path d="M22 7 L74 13 L48 52 L22 7 M48 52 L20 96 L78 92 L48 52" fill="none" stroke="#B3261E" stroke-width="0.9" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))"/></svg>
+        ${[['Ava', 3, 4, 2, -5], ['Steph', 0, 56, 6, 4], ['Cleo', 9, 30, 44, -2], ['Ben', 6, 2, 88, 5], ['Dev', 12, 60, 84, -4]].map(([n, a, x, y, r]) => `<div class="pol" style="position:absolute;left:${x}%;top:${y * 0.72}%;width:38%;transform:rotate(${r}deg);padding:2cqw 2cqw 0"><span class="pin" style="top:-1.6cqw;left:44%"></span><span style="display:block;aspect-ratio:1;${n === 'Dev' ? 'opacity:.55' : ''}"><img src="assets/mug-${mugOf(a)}.jpg" alt="" style="display:block;width:100%;height:100%;object-fit:cover"></span><span class="cap" style="font-size:6.4cqw">${n}</span>${n === 'Dev' ? '<svg viewBox="0 0 100 100" style="position:absolute;inset:6%;width:88%;height:80%"><path d="M12 14 L88 86 M86 12 L14 88" stroke="#B3261E" stroke-width="5" stroke-linecap="round" fill="none"/></svg>' : ''}</div>`).join('')}
+        ${ctape('bottom:-2cqw;transform:rotate(5deg)')}
+      </div>
+      <div class="btn red" style="margin-top:6cqw">On three, point</div>`],
+    ['Case closed', 'The ending. Every file opens, the stamp comes down, and the birthday cake shows up if the campers win.', 'desk grainy', `
+      <p class="typed" style="font-size:3.4cqw;color:#E9B824">Sunday, 1:10 am</p><h3 class="h" style="margin-top:1cqw">The campers got them.</h3>
+      <div class="grow ctr" style="padding-top:8cqw"><div class="folder" style="width:100%;transform:rotate(1deg);padding-bottom:7cqw"><span class="tab">Case no. 26</span>
+        <div style="font:3.6cqw/2.1 'Special Elite',monospace">${[['Ava', 'Ranger'], ['Cleo', 'Medic'], ['Dev', 'Camper'], ['Ben', 'Mafia'], ['Steph', 'Camper']].map(([n, r]) => `<div style="display:flex;gap:1.6cqw;${r === 'Mafia' ? 'color:#B3261E' : ''}"><span>${n}</span><span style="flex:1;border-bottom:1px dotted currentColor;opacity:.5;margin-bottom:2.4cqw"></span><span>${r}</span></div>`).join('')}</div>
+        <div style="display:flex;align-items:center;gap:4cqw;margin-top:5cqw"><div class="pol" style="width:38%;flex:none;transform:rotate(-4deg)"><span class="pin" style="top:-1.6cqw;left:44%"></span>${art('town-wins')}<span class="cap" style="font-size:5cqw">happy 26th!</span></div>
+          <div style="flex:1;text-align:center"><span class="stamp" style="font-size:8.6cqw;line-height:1">Case<br>closed</span></div></div></div></div>
+      <div class="btn" style="margin-top:6cqw">See who was who</div>`],
+  ];
+  const tabs = (on) => `<div class="tabs" style="margin:0 -3cqw">${['Briefing', 'Tonight', 'Suspects', 'Scenes'].map((t) => `<span class="${t === on ? 'on' : ''}">${t}</span>`).join('')}</div>`;
+  const sheet = (html) => `<div class="paper" style="flex:1;margin:0 -3cqw -3cqw;border-radius:0 0 2cqw 2cqw;padding:6cqw 5cqw;display:flex;flex-direction:column;position:relative">${html}</div>`;
+  const narr = [
+    ['Tonight', 'The script for the step you’re on, and the one thing to tap. “Next” moves every screen.', 'desk grainy', `${tabs('Tonight')}${sheet(`
+        <p class="typed" style="font-size:3.4cqw;opacity:.6">Night one · read this out loud</p>
+        <p class="typed" style="font-size:6.2cqw;line-height:1.2;margin-top:2cqw">“Mafia, wake up. Quietly pick who doesn’t make it to morning.”</p>
+        <p class="typed" style="font-size:3.4cqw;opacity:.6;margin-top:6cqw">Who did they point at?</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4cqw;margin-top:4cqw">${people.slice(0, 6).map(([n, a], i) => `<span style="text-align:center;position:relative"><span style="display:block;width:70%;margin:0 auto">${stk(a, `transform:rotate(${rot[i]}deg)`)}</span><span class="scr" style="font-size:6.4cqw">${n}</span>${i === 4 ? '<svg viewBox="0 0 100 100" style="position:absolute;inset:-8% 2% 14%;overflow:visible"><path d="M50 4 C 84 2, 99 30, 95 55 C 91 84, 64 98, 42 95 C 14 91, 2 66, 6 42 C 9 18, 30 3, 60 8" fill="none" stroke="#B3261E" stroke-width="3.4" stroke-linecap="round"/></svg>' : ''}</span>`).join('')}</div>
+        <div class="grow"></div><div class="btn">Next</div><p class="link scr" style="color:#6b5c48">undo · fix a mistake</p>`)}`],
+    ['Suspects', 'Everyone who’s in. Tap the cake next to the birthday girl, whatever name she typed. Hold to peek at roles.', 'desk grainy', `${tabs('Suspects')}${sheet(`
+        <p class="typed" style="font-size:3.4cqw;opacity:.6">Seven booked · tap the cake to mark the birthday girl</p>
+        <div style="margin-top:3cqw;display:flex;flex-direction:column">${people.map(([n, a], i) => `<div style="display:flex;align-items:center;gap:3.4cqw;padding:2.2cqw 0;border-bottom:1px dotted #9c8d75"><span style="width:10cqw;flex:none">${stk(a, `transform:rotate(${rot[i]}deg)`)}</span><span class="typed" style="font-size:4.4cqw;flex:1">${n}</span>${i === 1 ? '<span class="scr" style="font-size:6.4cqw;color:#B3261E;transform:rotate(-4deg)">birthday girl</span>' : ''}<span style="font-size:5.4cqw;${i === 1 ? '' : 'opacity:.22;filter:grayscale(1)'}">🎂</span></div>`).join('')}</div>
+        <div class="grow"></div><div class="btn">Hand out the files</div><p class="link scr" style="color:#6b5c48">hold to peek at roles</p>`)}`],
+    ['Briefing', 'What to say to explain the game, one tab away at any time. Five lines you can read out or riff on.', 'desk grainy', `${tabs('Briefing')}${sheet(`
+        <p class="typed" style="font-size:3.4cqw;opacity:.6">Say this before the first night</p>
+        <ol style="margin:3cqw 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3.4cqw;font:3.9cqw/1.35 'Special Elite',monospace">
+          ${['A few of you are the Mafia. Everyone else is trying to catch them.', 'Your phone has your secret role. Hold to peek. Show no one.', 'Each night, all eyes closed. I wake the Mafia, the Medic and the Ranger, one at a time.', 'Each morning we learn who didn’t make it. Then you argue, and on three, everyone points. Most fingers is out.', 'Campers win when every Mafia is out. Mafia win when they’re half the room.'].map((t, i) => `<li style="display:flex;gap:3cqw"><span class="scr" style="font-size:8cqw;line-height:.7;color:#B3261E">${i + 1}</span><span>${t}</span></li>`).join('')}</ol>
+        <p class="mark" style="font-size:7.4cqw;margin-top:5cqw;transform:rotate(-2deg)">dead? no talking, no hints.</p>
+        <div class="grow"></div><p class="link scr" style="color:#6b5c48">what each role does →</p>`)}`],
+  ];
+  document.getElementById('narr').innerHTML = narr.map(([name, note, cls, html]) => `<figure><div class="phone ${cls}"><div class="screen">${html}</div></div><figcaption><b>${name}</b>${note}</figcaption></figure>`).join('') + `<div class="how"><h3>How the remote works</h3><ol><li>Open the site on the laptop or TV and tap “Open the case”. That screen shows the join code.</li><li>On that same screen, tap “I’m the narrator”. A second code appears. Scan it with your phone.</li><li>Your phone becomes this folder and the laptop becomes the big screen. Every tap of Next changes every phone and the TV together, at your pace.</li></ol><p>Lost your place? Open the site on your phone again and tap “Back to my game”.</p></div>`;
+  document.getElementById('editions').innerHTML = [['Someone died', EDITIONS.death], ['Nobody died', EDITIONS.quiet], ['The birthday girl died', EDITIONS.bday]].map(([name, e]) => `<figure><div class="opt desk grainy" style="aspect-ratio:1/1.72"><div class="screen" style="padding:9cqw 8cqw;justify-content:center">${news(e)}</div></div><figcaption><b>${name}</b></figcaption></figure>`).join('');
+  document.getElementById('titles').innerHTML = [['Typewriter on an index card', 'your pick', titleB()], ['Marker on an evidence label', '', titleA()], ['The cabin’s own sign', '', titleC()]].map(([name, tag, html]) => `<figure><div class="opt desk grainy"><div class="screen" style="padding:9cqw 8cqw;justify-content:center">${html}</div></div><figcaption><b>${name}${tag ? ` <span class="rec">${tag}</span>` : ''}</b></figcaption></figure>`).join('');
+  document.getElementById('phones').innerHTML = screens.map(([name, note, cls, html]) => `<figure><div class="phone ${cls}"><div class="screen">${html}</div></div><figcaption><b>${name}</b>${note}</figcaption></figure>`).join('');
+
+  // fake QR for the mock
+  let s = 5; const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+  const eye = (x, y) => (x < 7 && y < 7) || (x > 13 && y < 7) || (x < 7 && y > 13);
+  const inEye = (x, y) => { const lx = x > 13 ? x - 14 : x, ly = y > 13 ? y - 14 : y; return lx === 0 || ly === 0 || lx === 6 || ly === 6 || (lx > 1 && lx < 5 && ly > 1 && ly < 5); };
+  let qr = ''; for (let y = 0; y < 21; y++) for (let x = 0; x < 21; x++) qr += `<i class="${(eye(x, y) ? inEye(x, y) : rnd() > 0.5) ? '' : 'o'}"></i>`;
+  document.getElementById('wide').innerHTML = `<div class="screen">
+    <div style="flex:0 0 34%;position:relative;transform:rotate(-2deg)"><span class="tape" style="top:-1.2cqw;left:50%;transform:translateX(-50%) rotate(3deg)"></span>
+      <div style="background:#FBF8F1;padding:2.4cqw 2.4cqw 1.6cqw;box-shadow:0 2cqw 4cqw rgba(0,0,0,.5)"><div class="qr">${qr}</div><p class="typed" style="color:#1C1916;font-size:2.5cqw;text-align:center;margin-top:1.4cqw;line-height:1;white-space:nowrap">Scan to get booked</p><p class="scr" style="color:#8A6B4A;font-size:2.2cqw;text-align:center;line-height:1;white-space:nowrap">your phone does the rest</p></div></div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:1.6cqw;align-items:flex-start"><span class="kraft typed" style="font-size:1.7cqw;padding:.6cqw 1.6cqw;transform:rotate(-1.5deg)">Case no. 26 · a weekend in Pioneer</span><h3 class="h" style="font-size:3.6cqw">Seven suspects, so far</h3>
+      <div style="width:62%;align-self:center">${cabin(7)}</div></div></div>`;
+</script>
+</body>
+</html>

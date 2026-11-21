@@ -15,9 +15,9 @@ import jsQR from 'jsqr';
 import { PNG } from 'pngjs';
 
 const BASE = process.argv[2] ?? 'http://localhost:5180/mafia-night/';
-const OUT = '.art-preview/e2e';
+const OUT = process.env.E2E_OUT ?? '.art-preview/e2e';
 const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const PORT = 9333;
+const PORT = Number(process.env.E2E_PORT ?? 9333);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (...a) => console.log('·', ...a);
 
@@ -322,7 +322,7 @@ try {
   await sleep(3000);
   await table.shot('25-table-eliminated');
   await narr.click('[data-cmd="finish"]');
-  await table.waitFor(`document.querySelector('.stage-caption')?.textContent.toLowerCase().includes('campers win')`, 15000);
+  await table.waitFor(`document.querySelector('.stage-caption')?.textContent.toLowerCase().includes('campers got them')`, 15000);
   await sleep(3500);
   await table.shot('26-table-town-wins');
   await phones[0].has('#whowas');

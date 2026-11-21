@@ -56,8 +56,23 @@ describe('dealing', () => {
     expect(privateView(s, byRole(s, 'doctor')[0].id).crew).toEqual([]);
   });
 
-  it('marks the birthday honoree', () => {
-    expect(publicView(lobby(5)).players[0].honoree).toBe(true);
+  it('lets the narrator mark one birthday person, whatever name they typed', () => {
+    let s = lobby(5);
+    expect(publicView(s).players.some((p) => p.honoree)).toBe(false);
+    s = reduce(s, { type: 'birthday', id: s.players[2].id });
+    expect(publicView(s).players.map((p) => p.honoree)).toEqual([false, false, true, false, false]);
+    s = reduce(s, { type: 'birthday', id: s.players[0].id });
+    expect(publicView(s).players.map((p) => p.honoree)).toEqual([true, false, false, false, false]);
+    s = reduce(s, { type: 'birthday', id: s.players[0].id });
+    expect(publicView(s).players.some((p) => p.honoree)).toBe(false);
+  });
+
+  it('flags the morning scene when the birthday person is the victim', () => {
+    let s = reduce(lobby(9), { type: 'birthday', id: 'p3' });
+    s = reduce(s, { type: 'deal' });
+    const victim = s.players.find((p) => p.bday);
+    s = run(s, { type: 'night' }, { type: 'pick', kind: 'target', id: victim.id }, { type: 'dawn' });
+    expect(s.scene).toMatchObject({ key: 'dead', name: victim.name, bday: true, avatar: victim.avatar });
   });
 });
 
