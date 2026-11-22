@@ -6,7 +6,7 @@ import { EVENT, ROLES, TEAMS } from '../config/game.js';
 import { Player, parseRoomArg } from '../game/session.js';
 import { $, $$, buzz, countdown, esc, holdToPeek, keepAwake, sheet, statusBadge } from '../ui/kit.js';
 import { circled, clip, face, folder, kraft, mug, photoSrc, polaroid, redact, stamp, SUSPECTS, SUSPECT_NAMES, tilt } from '../ui/props.js';
-import { openHowToPlay, openRole } from '../ui/rules.js';
+import { openHowToPlay } from '../ui/rules.js';
 import { renderStage, sceneIsDark } from '../ui/stage.js';
 
 const ackKey = (roomId) => `mn:ack:${roomId}`;
@@ -283,7 +283,7 @@ export function renderPlayer(root, arg) {
         <div class="peek-pop" aria-hidden="true"></div>
         <div class="dock-row">
           <button class="peek-hold" type="button">${kraft('hold to check your file', { rot: -1.5 })}</button>
-          <button class="link dock-rules" id="rules" type="button" aria-label="The rules for my role">the rules</button>
+          <button class="link dock-rules" id="rules" type="button" aria-label="The rules">the rules</button>
         </div>
       </nav>`;
     const pop = $('.peek-pop', main);
@@ -304,7 +304,8 @@ export function renderPlayer(root, arg) {
         }, 400);
       },
     });
-    $('#rules', main).addEventListener('click', () => openRole(role.role, { crew: role.crew }));
+    // always opens at page 1, so a glance at this phone never gives the role away
+    $('#rules', main).addEventListener('click', openHowToPlay);
     updatePlay();
   }
 

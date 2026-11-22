@@ -62,10 +62,11 @@
 .narrator-card .btn { flex: none; width: auto; padding: 0 var(--s5); }
 .narrator-note { transform: rotate(-3deg); white-space: nowrap; }
 
-/* right: the case label, how many suspects so far, the cabin, and who is in it */
-.big-cabin { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s4); }
-.big-label { font-size: var(--t-body); }
-.big-lobby .stage { flex: none; align-items: stretch; gap: var(--s4); text-align: left; }
+/* right: the case label, how many suspects so far, the cabin, and who is in it.
+   Everything in this column hangs on one centre line, the cabin's. */
+.big-cabin { display: flex; flex-direction: column; align-items: center; gap: var(--s4); text-align: center; }
+.big-label { max-width: 100%; font-size: min(var(--t-body), 3.1cqw); white-space: nowrap; }
+.big-lobby .stage { flex: none; align-self: stretch; align-items: stretch; gap: var(--s4); text-align: center; }
 .big-lobby .stage-kicker, .big-lobby .stage-sub, .big-lobby .stage-note { display: none; }
 .big-lobby .stage-text { display: contents; }
 .big-lobby .stage-caption { order: -1; font-size: min(var(--t-h1), 6.4cqw); }
@@ -119,14 +120,14 @@
   .big-game .stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-rows: 1fr auto auto 1fr; gap: var(--s3) var(--s7); align-items: center; text-align: left; }
   .big-game .stage-prop { grid-column: 1; grid-row: 1 / -1; justify-self: center; margin: 0; }
   .big-game .stage-kicker { grid-column: 2; grid-row: 2; align-self: end; text-align: left; font-size: var(--t-sm); }
-  .big-game .stage-text { grid-column: 2; grid-row: 3; align-self: start; align-items: flex-start; gap: var(--s3); }
+  .big-game .stage-text { grid-column: 2; grid-row: 3; align-self: start; align-items: flex-start; gap: var(--s3); margin: 0; }
   .big-game .stage-caption { font-size: calc(var(--u) * 11); }
   .big-game .stage-sub { font-size: var(--t-lg); }
   .big-game .stage-note { font-size: var(--t-hand-lg); }
   .display .big-game .is-cabin { max-width: min(100%, 80dvh); }
   .display .big-game .is-photo { max-width: min(100%, 62dvh); }
   .display .big-game .is-gazette { max-width: min(100%, 50dvh); }
-  .display .big-game .is-verdict { max-width: min(62%, 46dvh); }
+  .display .big-game .is-verdict { max-width: min(78%, 56dvh); }
   .display .big-game .is-files { max-width: min(100%, 58dvh); }
   .display .big-game .is-closed { max-width: min(100%, 62dvh); }
   /* the pinboard is the widest thing on the desk: it gets more of the stage, and stays close to square */

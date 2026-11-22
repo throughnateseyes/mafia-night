@@ -401,12 +401,12 @@ export function renderNarrator(root, arg) {
       const scenes = Object.entries(SCENES).filter(([key]) => !['dead', 'out'].includes(key) || victim);
       return {
         body: `
-          ${head({ where: 'Put a scene on every screen' })}
+          ${head({ where: 'Put a scene on every screen', text: g.phase === 'lobby' && g.scene.key !== 'lobby' ? 'The waiting room is hidden right now. Tap the cabin to bring it back.' : '' })}
           <div class="narr-scenes">
             ${scenes
               .map(([key, def], i) => {
                 const on = g.scene.key === key;
-                const name = sceneText({ key, name: victim?.name, role: victim?.role }, { players: g.players, round: g.round }).caption;
+                const name = key === 'lobby' ? 'The waiting room' : sceneText({ key, name: victim?.name, role: victim?.role }, { players: g.players, round: g.round }).caption;
                 return `<button class="narr-scene" type="button" data-scene="${key}" aria-pressed="${on}">
                   <span class="pol no-cap" style="transform:rotate(${tilt(i, 0.5)}deg)"><img class="pol-img" src="${sceneThumb({ key })}" alt="" loading="lazy" ${def.colour ? '' : 'style="filter:contrast(1.05) brightness(1.15) sepia(.18)"'}>${on ? circled() : ''}</span>
                   <span class="narr-scene-name">${esc(name)}</span>

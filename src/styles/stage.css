@@ -2,20 +2,23 @@
  * The stage: one composition per scene (see src/ui/stage.js).
  * It fills whatever column it is put in. Props scale with the column width, and are
  * capped by the screen height so the caption never falls off a short phone.
+ *
+ * Layout: the kicker is the running head at the top. The prop and its caption are one group,
+ * centred in what is left, so the words always sit right under the thing they describe.
  */
 .stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--s4); width: 100%; min-height: 0; flex: 1 1 auto; text-align: center; }
 .stage-kicker { align-self: stretch; text-align: center; }
-.stage-text { display: flex; flex-direction: column; gap: var(--s2); align-items: center; animation: slide-in 0.6s var(--ease-out) 0.35s both; }
+.stage-text { display: flex; flex-direction: column; gap: var(--s2); align-items: center; margin: var(--s2) 0 auto; animation: slide-in 0.6s var(--ease-out) 0.35s both; }
 .stage-caption { font: var(--t-h2)/1.1 var(--f-type); }
 .stage-sub { max-width: 30ch; }
 .stage-note { margin-top: var(--s1); transform: rotate(-2deg); }
-.stage-prop { position: relative; width: 100%; margin: auto 0; }
+.stage-prop { position: relative; width: 100%; margin: auto 0 0; }
 
 /* each composition: how wide it may get, given the height of the screen */
 .is-cabin { max-width: min(100%, 54dvh); }
 .is-photo { max-width: min(74%, 42dvh); }
 .is-gazette { max-width: min(92%, 44dvh); }
-.is-verdict { max-width: min(62%, 36dvh); }
+.is-verdict { max-width: min(68%, 40dvh); }
 .is-files { max-width: min(86%, 46dvh); }
 .is-closed { max-width: min(100%, 52dvh); }
 .is-board { align-self: stretch; flex: 1 1 0; min-height: calc(var(--u) * 80); max-height: 62dvh; margin: 0 calc(var(--gutter) * -0.6); padding: var(--s4) var(--s4) var(--s6); border-radius: calc(var(--u) * 2); box-shadow: inset 0 0 calc(var(--u) * 10) rgba(60, 35, 10, 0.55), var(--lift-2); display: flex; flex-direction: column; align-items: center; gap: var(--s4); overflow: hidden; }

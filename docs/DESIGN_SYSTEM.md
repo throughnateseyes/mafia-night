@@ -82,3 +82,17 @@ exclamation marks except the birthday. Roles: Mafia, Medic, Ranger, Camper.
   anything under `src/game`, `src/net`, `src/config`. If a prop is missing or wrong, say so in your report.
 - Don't hand-roll a prop that exists. Don't add new fonts, colours or shadows.
 - Don't change behaviour, routes, element ids or `data-*` hooks.
+
+## Layout rhythm
+
+Every screen reads top to bottom in three bands, and nothing floats between them:
+
+1. **Running head** at the top: the kicker (what this is), in the same place on every screen.
+2. **One group** in the middle: the prop and the words about it, centred together. A caption sits `--s5` under the thing it describes, never at the far end of the screen.
+3. **What you can do** at the bottom: the dock, the button, the hand-written link.
+
+Spacing inside a group uses three steps only: `--s2` between a label and its value, `--s4` between things that belong together, `--s7` between sections. Pick one alignment axis per column (the big-screen lobby hangs on the cabin's centre line) and keep everything in the column on it.
+
+## The field guide
+
+How to play is a small book (`src/ui/rules.js`) that covers the whole screen, with the close button in the same corner on every page. Page 1 is the briefing; the four roles are manila files on it, each with a page number and a pen arrow, so it is obvious they open. Pages turn on a tap, the arrows at the foot, a swipe, or the arrow keys. Anything else that needs explaining at length gets a page in the guide, not a new sheet.

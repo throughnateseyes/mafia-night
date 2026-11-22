@@ -1,43 +1,83 @@
 /*
- * The briefing and the role files (src/ui/rules.js): typed sheets slid up from the bottom of the desk.
- * Compose from props (props.css); only layout and sheet-specific rules live here.
+ * The field guide (src/ui/rules.js): a small book that covers the whole screen.
+ * Each page is its own container, so everything on it is in desk units like the rest of the app.
+ *
+ * Rhythm on a page: sections are --s7 apart, a heading sits --s4 above what it heads,
+ * and things inside a group are --s3 or --s4 apart.
  */
-.rules { display: flex; flex-direction: column; }
-.rules .kicker { padding-right: 44px; } /* clear of the close button */
-.rules .title { margin-top: var(--s1); }
-.rules-head { margin-top: var(--s6); font: var(--t-lg)/1.2 var(--f-type); }
+.guide { position: fixed; inset: 0; width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: none; color: var(--ink); overflow: hidden; }
+.guide[open] { display: flex; align-items: center; justify-content: center; }
+.guide::backdrop { background: rgba(8, 5, 3, 0.82); animation: view-in 0.3s both; }
+.guide-book { position: relative; flex: none; width: min(100%, 560px); height: 100%; perspective: 1800px; perspective-origin: 35% 45%; animation: sheet-up 0.5s var(--ease-out) both; }
+.guide.closing .guide-book { animation: sheet-down 0.26s ease-in both; }
 
-/* the briefing: five typed lines, numbered in red pen */
-.brief { display: flex; flex-direction: column; gap: var(--s3); margin-top: var(--s5); font: var(--t-body)/1.4 var(--f-type); }
+/* always in the same corner, on every page */
+.guide-x { position: absolute; top: calc(env(safe-area-inset-top) + 6px); right: 6px; z-index: 20; width: 48px; height: 48px; display: grid; place-items: center; border: 0; background: none; color: var(--ink); }
+.guide-x:active { opacity: 0.6; }
+
+/* a page: paper, with the shadow of the binding down its left edge */
+.guide-page { position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden; background: linear-gradient(90deg, rgba(70, 45, 15, 0.22), rgba(70, 45, 15, 0) 26px), linear-gradient(rgba(230, 220, 198, 0.4), rgba(230, 220, 198, 0.4)), var(--tex-paper, none) center / cover, var(--paper); transform-origin: 0 50%; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.guide-page:focus { outline: none; }
+.guide-page.under { z-index: 1; }
+.guide-page.turning { z-index: 2; box-shadow: 18px 0 40px rgba(0, 0, 0, 0.35); will-change: transform; }
+.guide-shade { position: absolute; inset: 0; z-index: 10; pointer-events: none; opacity: 0; background: linear-gradient(90deg, rgba(25, 14, 4, 0.15), rgba(25, 14, 4, 0.7)); }
+
+.guide-bar { flex: none; display: flex; align-items: center; min-height: 48px; box-sizing: content-box; padding: calc(env(safe-area-inset-top) + 6px) 56px 0 var(--gutter); }
+.guide-body { flex: 1 1 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: var(--s4) var(--gutter) var(--s7); -webkit-mask-image: linear-gradient(transparent, #000 var(--s4), #000 calc(100% - var(--s5)), transparent); mask-image: linear-gradient(transparent, #000 var(--s4), #000 calc(100% - var(--s5)), transparent); }
+.guide-foot { flex: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s3); min-height: 52px; margin: 0 var(--gutter); padding-bottom: env(safe-area-inset-bottom); border-top: 1px dotted rgba(107, 92, 72, 0.7); }
+.guide-folio { font: var(--t-xs)/1 var(--f-type); color: var(--ink-faint); }
+
+/* typed links with a pen arrow: back to page 1, and the pages either side */
+.guide-nav { display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; padding: 0; border: 0; background: none; font: var(--t-sm)/1 var(--f-type); color: var(--ink); white-space: nowrap; }
+.guide-nav.prev, .guide-nav.back { justify-self: start; }
+.guide-nav.next { justify-self: end; }
+.guide-nav:active { opacity: 0.6; }
+.guide-arrow { flex: none; width: calc(var(--u) * 6); height: calc(var(--u) * 3); color: var(--red); }
+.guide-arrow.prev { transform: scaleX(-1); }
+
+/* ---------- page 1: how this works ---------- */
+.rules { display: flex; flex-direction: column; }
+.guide-title { font: var(--t-h1)/1.05 var(--f-type); }
+.guide-section { margin-top: var(--s7); }
+.rules-head { font: var(--t-h3)/1.15 var(--f-type); }
+
+/* five typed lines, numbered in red pen */
+.brief { display: flex; flex-direction: column; gap: var(--s4); margin-top: var(--s5); font: var(--t-body)/1.45 var(--f-type); }
 .brief li { display: flex; align-items: baseline; gap: var(--s3); }
 .brief-num { flex: none; width: 0.6em; font-size: var(--t-hand-lg); line-height: 0.6; text-align: center; }
 .brief-rule { align-self: flex-start; margin-top: var(--s5); font-size: var(--t-hand-lg); transform: rotate(-2deg); }
 
-/* who you might be: one row per role, tap to pull the file */
-.role-rows { display: flex; flex-direction: column; margin-top: var(--s2); }
-.role-row { display: flex; align-items: center; gap: var(--s4); width: 100%; min-height: 44px; padding: var(--s3) 0; border: 0; border-bottom: 1px dotted var(--ink-faint); background: none; text-align: left; }
-.role-row:last-child { border-bottom: 0; }
-.role-row:active { opacity: 0.7; }
+/* the four files: each is a manila folder you can pick up */
+.guide-hint { display: block; width: fit-content; margin-top: var(--s2); font-size: var(--t-hand); transform: rotate(-1.5deg); transform-origin: 0 50%; }
+.guide-files { display: flex; flex-direction: column; gap: var(--s4); margin-top: var(--s4); }
+.guide-file { position: relative; display: flex; align-items: center; gap: var(--s4); width: 100%; padding: var(--s3) var(--s4) var(--s3) var(--s3); border: 0; border-radius: calc(var(--u) * 1.6); background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 45%, rgba(90, 60, 20, 0.14)), linear-gradient(rgba(214, 180, 122, 0.55), rgba(214, 180, 122, 0.55)), var(--tex-manila, none) center / cover, var(--manila); color: #2a1e12; text-align: left; box-shadow: var(--lift-1); transform: rotate(var(--rot, 0deg)); transition: transform var(--fast) var(--ease-out); }
+.guide-file:active { transform: rotate(var(--rot, 0deg)) scale(0.98); }
 /* the thumbnail is its own container, so the print inside is a true miniature */
-.role-thumb { flex: none; width: calc(var(--u) * 17); container-type: inline-size; }
-.role-row-text { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--s1); }
-.role-row-name { font: var(--t-lg)/1.1 var(--f-type); }
-.role-row-name.red { color: var(--red); }
-.role-row-line { font-size: var(--t-sm); line-height: 1.35; color: var(--ink-soft); }
+.guide-file-thumb { flex: none; width: calc(var(--u) * 17); container-type: inline-size; }
+.guide-file-text { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--s1); }
+.guide-file-name { font: var(--t-lg)/1.1 var(--f-type); }
+.guide-file-name.red { color: var(--red); }
+.guide-file-line { font-size: var(--t-sm); line-height: 1.35; color: #4a3a22; }
+.guide-file-go { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: var(--s2); font: var(--t-xs)/1 var(--f-type); color: #4a3a22; white-space: nowrap; }
 
 /* typed facts: a label, then what it says */
 .role-facts { display: flex; flex-direction: column; gap: var(--s4); margin-top: var(--s5); }
 .role-facts dt { font: var(--t-sm)/1.2 var(--f-type); color: var(--ink-faint); }
-.role-facts dd { margin-top: var(--s1); font-size: var(--t-body); line-height: 1.4; }
+.role-facts dd { margin-top: var(--s1); font-size: var(--t-body); line-height: 1.45; }
 .role-facts .red dt { color: var(--red); }
-.role-facts.wins { margin-top: var(--s3); }
+.role-facts.wins { margin-top: var(--s4); }
 .off-record dd.note { margin-top: var(--s2); font-size: var(--t-hand); line-height: 0.95; transform: rotate(-1deg); transform-origin: 0 50%; }
 
-/* one role's file */
-.role-head { display: flex; align-items: flex-start; gap: var(--s4); margin-top: var(--s5); }
+/* ---------- a role's page ---------- */
+.role-head { display: flex; align-items: flex-start; gap: var(--s5); margin-top: var(--s4); }
 .role-photo { flex: none; width: 42%; }
 .role-id { flex: 1 1 0; min-width: 0; }
 .role-stamp { margin: var(--s1) 0 0 calc(var(--s1) * -1); font-size: inherit; line-height: 1; }
 .role-line { margin-top: var(--s4); font: var(--t-sm)/1.45 var(--f-type); }
-.role-crew { margin-top: var(--s4); font: var(--t-body)/1.3 var(--f-type); }
-.role-crew strong { font-weight: 400; color: var(--red); }
+.role-rules .role-facts { margin-top: var(--s7); }
+
+/* laptop and TV: the book lies on the desk with room around it */
+@media (min-width: 720px) and (min-height: 560px) {
+  .guide-book { height: min(100% - 48px, 940px); filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.55)); }
+  .guide-page { border-radius: 3px 6px 6px 3px; }
+}

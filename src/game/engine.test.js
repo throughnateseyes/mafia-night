@@ -156,3 +156,14 @@ describe('winning', () => {
     expect(s.players.every((p) => p.alive && p.role)).toBe(true);
   });
 });
+
+describe('the waiting room', () => {
+  it('comes back when someone walks in, whatever scene the narrator was trying out', () => {
+    let s = lobby(2);
+    s = reduce(s, { type: 'scene', key: 'night' });
+    expect(s.scene.key).toBe('night');
+    s = reduce(s, { type: 'join', id: 'late', name: 'Late' });
+    expect(s.phase).toBe('lobby');
+    expect(s.scene.key).toBe('lobby');
+  });
+});

@@ -75,6 +75,8 @@ export function reduce(state, cmd, now = Date.now()) {
       if (s.phase !== 'lobby') return fail('The game already started.');
       if (s.players.length >= PLAYER_LIMITS.max) return fail(`The table is full (${PLAYER_LIMITS.max}).`);
       s.players.push({ id: cmd.id, name, avatar: cmd.avatar ?? 0, pub: cmd.pub ?? null, role: null, alive: true, joined: now, seen: now });
+      // someone walking in always brings the waiting room back, whatever scene was being tried out
+      if (s.scene?.key !== 'lobby') setScene(s, 'lobby', {}, now);
       return s;
     }
 

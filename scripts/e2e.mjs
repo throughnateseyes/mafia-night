@@ -120,6 +120,8 @@ async function device(name, { w = 390, h = 844, mobile = true } = {}) {
       await dev.eval(`[...document.querySelectorAll(${q(sel)})].find((e) => e.textContent.includes(${q(text)})).click()`);
     },
     async shot(file) {
+      // photos come over the network: give the ones on screen a moment to arrive, so the tour never shows blanks
+      await dev.waitFor(`[...document.images].every((i) => i.complete || i.loading === 'lazy')`, 6000).catch(() => {});
       const { data } = await s('Page.captureScreenshot', { format: 'png' });
       const buf = Buffer.from(data, 'base64');
       writeFileSync(`${OUT}/${file}.png`, buf);
@@ -232,11 +234,23 @@ try {
     await narr.shot(`06c-narrator-${tab}`);
   }
   await narr.click('[data-tab="tonight"]');
+  // the field guide: page 1, the four files on it, and a page turn into one of them
   await phones[1].click('#how');
+  await phones[1].has('dialog[open] .guide-page[data-page="0"]');
   await sleep(1500);
   await phones[1].shot('05b-phone-how-to');
-  await phones[1].eval(`document.querySelector('dialog[open] .sheet-x')?.click()`);
-  await sleep(500);
+  const cover = await phones[1].eval(`(() => { const b = document.querySelector('dialog[open] .guide-page').getBoundingClientRect(); return b.top <= 0 && b.bottom >= innerHeight - 1 && b.left <= 0 && b.right >= innerWidth - 1; })()`);
+  check(cover, 'the guide covers the whole phone screen');
+  await phones[1].eval(`document.querySelector('dialog[open] .guide-file').scrollIntoView({ block: 'center' })`);
+  await sleep(600);
+  await phones[1].shot('05c-phone-guide-files');
+  await phones[1].click('dialog[open] .guide-file[data-go="1"]');
+  await phones[1].waitFor(`document.querySelectorAll('dialog[open] .guide-page').length === 1 && !!document.querySelector('dialog[open] .role-rules[data-role="mafia"]')`, 8000);
+  await sleep(800);
+  await phones[1].shot('05d-phone-guide-role');
+  check(true, 'tapping a file in the guide turns to that role’s page');
+  await phones[1].click('dialog[open] .guide-x');
+  await phones[1].waitFor(`!document.querySelector('dialog.guide')`, 5000);
   await table.waitFor(`!document.querySelector('#host') && !document.querySelector('.narrator-card')`, 15000).catch(() => {});
   check(!(await table.eval(`!!document.querySelector('.narrator-card')`)), 'table hands control to the narrator phone');
 
@@ -333,11 +347,15 @@ try {
   /* ---------- rules on a phone ---------- */
   const rulesPhone = phones[names.indexOf(doctor)];
   await rulesPhone.click('#rules');
-  await rulesPhone.has('dialog[open] .role-rules');
-  await sleep(1500);
+  await rulesPhone.has('dialog[open] .guide-page[data-page="0"]');
+  await sleep(900);
+  await rulesPhone.click('dialog[open] .guide-file[data-go="2"]');
+  await rulesPhone.waitFor(`document.querySelectorAll('dialog[open] .guide-page').length === 1 && !!document.querySelector('dialog[open] .role-rules[data-role="doctor"]')`, 8000);
+  await sleep(800);
   await rulesPhone.shot('23-phone-role-rules');
-  check(true, 'rules button opens the role sheet');
-  await rulesPhone.eval(`document.querySelector('dialog[open] .sheet-x')?.click()`);
+  check(true, 'rules button opens the guide mid-game');
+  await rulesPhone.click('dialog[open] .guide-x');
+  await rulesPhone.waitFor(`!document.querySelector('dialog.guide')`, 5000);
 
   /* ---------- vote ---------- */
   log('vote');
