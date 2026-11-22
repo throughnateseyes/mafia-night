@@ -55,7 +55,6 @@ export function lobbyHTML(room, state, { below = '' } = {}) {
           ${tapeStrip('top:calc(var(--u) * -3.4);left:50%;margin-left:calc(var(--u) * -11);transform:rotate(3deg)')}
           ${qrCard(links(room).join, 'Scan to join the game')}
           <p class="join-title typed">Scan to get booked</p>
-          <p class="join-note hand">your phone does the rest</p>
         </section>
         ${below}
       </div>

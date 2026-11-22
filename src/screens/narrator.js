@@ -17,6 +17,7 @@ import { navigate } from '../router.js';
 import { $, $$, buzz, countdown, esc, holdToPeek, keepAwake, sheet, statusBadge, toast } from '../ui/kit.js';
 import { circled, face, kraft, mug, stamp, tapeStrip, tilt } from '../ui/props.js';
 import { qrSvg } from '../ui/qr.js';
+import { openPreview } from '../ui/preview.js';
 import { renderStage, sceneText, sceneThumb } from '../ui/stage.js';
 
 const TABS = [
@@ -63,6 +64,7 @@ export function renderNarrator(root, arg) {
   let gone = false; // another phone took over
   let tab = 'tonight';
   let lastPhase = null;
+  let preview = null; // the open look at a player's screen, if any
   let lastKey = '';
   let lastSig = '';
   let stageEl = null;
@@ -91,7 +93,7 @@ export function renderNarrator(root, arg) {
     host.setNarratorHere(true);
     if (gone) return;
     view.innerHTML = `
-      <header class="narr-top"><div class="stage"></div><span class="narr-net"></span></header>
+      <header class="narr-top"><button class="narr-see" type="button" aria-label="See what every player sees right now"><div class="stage"></div></button><span class="narr-net"></span></header>
       <div class="tabs" role="tablist" aria-label="Case folder">
         ${TABS.map(([id, name]) => `<button class="tab" type="button" role="tab" id="narr-tab-${id}" data-tab="${id}" aria-controls="narr-panel" aria-selected="false" tabindex="-1">${name}</button>`).join('')}
       </div>
@@ -114,6 +116,7 @@ export function renderNarrator(root, arg) {
       tab = 'tonight';
     }
     renderStage(stageEl, g.scene, { compact: true, players: publicView(g).players, round: g.round });
+    preview?.update(publicView(g));
     $$('.tab', view).forEach((b) => {
       const on = b.dataset.tab === tab;
       b.setAttribute('aria-selected', String(on));
@@ -437,6 +440,10 @@ export function renderNarrator(root, arg) {
     if (!host || gone) return;
     const d = b.dataset;
     const g = host.game;
+    if (b.classList.contains('narr-see')) {
+      preview = openPreview({ onClose: () => (preview = null) });
+      return preview.update(publicView(g));
+    }
     if (d.tab) return setTab(d.tab);
     if (d.goto === 'fix') return setTab('scenes', { reveal: '.narr-fix' });
     if (d.cmd) return send({ type: d.cmd });
@@ -530,7 +537,7 @@ export function renderNarrator(root, arg) {
 
   function showJoin() {
     sheet(
-      `<div class="narr-code on-paper"><p class="kicker">Join code</p><h2 class="narr-title">Scan to get booked</h2><div class="narr-qr">${tapeStrip('top:calc(var(--u) * -3);left:50%;margin-left:calc(var(--u) * -11);transform:rotate(3deg)')}${qrSvg(links(room).join, { label: 'Join code' })}</div><p class="note">your phone does the rest</p></div>`,
+      `<div class="narr-code on-paper"><p class="kicker">Join code</p><h2 class="narr-title">Scan to get booked</h2><div class="narr-qr">${tapeStrip('top:calc(var(--u) * -3);left:50%;margin-left:calc(var(--u) * -11);transform:rotate(3deg)')}${qrSvg(links(room).join, { label: 'Join code' })}</div></div>`,
       { className: 'code-sheet' },
     );
   }

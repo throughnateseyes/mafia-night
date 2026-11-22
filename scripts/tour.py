@@ -34,6 +34,8 @@ SHEETS = {
         ('14-narrator-night-0', 'Night: read the script'), ('15-narrator-mafia-pick', 'Tap who the Mafia chose'), ('16-narrator-detective', 'Ranger check: thumbs up/down'),
         ('20-narrator-morning', 'Morning: break the news'), ('22-narrator-day', 'Talk timer running'), ('24c-narrator-vote', 'Vote: tap who is out'),
         ('25c-narrator-after-vote', 'After the vote'), ('29-narrator-end', 'The end: play again'),
+        ('06p-narrator-sees-lobby', 'Tap the top strip: their screen'), ('14p-narrator-sees-night', 'Their screen at night'),
+        ('20p-narrator-sees-morning', 'Their screen in the morning'), ('24p-narrator-sees-vote', 'Their screen at the vote'),
     ]),
     '3-big-screen': ('The laptop or TV', 3, 640, [
         ('01-home-laptop', 'Home: open the case'), ('02-table-lobby', 'Join code, before anyone joins'), ('04b-table-lobby-birthday', 'People walk into the cabin'),

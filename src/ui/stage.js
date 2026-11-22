@@ -98,11 +98,12 @@ export function renderStage(el, scene, opts = {}) {
 
   if (opts.compact) {
     el.className = 'stage compact';
-    el.innerHTML = `<img class="stage-thumb" src="${sceneThumb(scene)}" alt=""><div class="stage-compact-text"><p class="kicker">On every screen now</p><p class="stage-compact-caption typed">${esc(t.caption)}</p></div>`;
+    el.innerHTML = `<img class="stage-thumb" src="${sceneThumb(scene)}" alt=""><div class="stage-compact-text"><p class="kicker">On every screen now · tap to see it</p><p class="stage-compact-caption typed">${esc(t.caption)}</p></div>`;
     return true;
   }
 
-  document.body.classList.toggle('lights-out', dark);
+  // a preview (the narrator looking at a player's screen) must not dim the narrator's own desk
+  if (!opts.preview) document.body.classList.toggle('lights-out', dark);
   // the lobby updates in place as people walk in; everything else is set down fresh
   if (sameScene && d.kind === 'cabin' && el.querySelector('.is-cabin')) {
     el.querySelector('.is-cabin').outerHTML = COMPOSE.cabin(scene, ctx, el);

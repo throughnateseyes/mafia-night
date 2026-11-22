@@ -223,6 +223,19 @@ try {
   await sleep(1500);
   await narr.shot('06-narrator-lobby');
 
+  // the narrator can look at a player's screen at any point: tap the strip above the tabs
+  const peek = async (file) => {
+    await narr.click('.narr-see');
+    await narr.has('dialog.peekscreen[open] .stage-caption');
+    await sleep(1400);
+    await narr.shot(file);
+    const caption = await narr.eval(`document.querySelector('dialog.peekscreen .stage-caption').textContent`);
+    await narr.click('dialog.peekscreen .peekscreen-x');
+    await narr.waitFor(`!document.querySelector('dialog.peekscreen')`, 5000);
+    return caption;
+  };
+  await peek('06p-narrator-sees-lobby');
+
   // the tour: mark the birthday girl, then look at the narrator's other tabs and the how-to sheet
   await narr.eval(`[...document.querySelectorAll('.narr-roster li')].find((li) => li.textContent.includes('Steph'))?.querySelector('.narr-cake')?.click()`);
   await sleep(1200);
@@ -297,6 +310,7 @@ try {
   await table.shot('12-table-night');
   await phones[1].shot('13-phone-night');
   await narr.shot('14-narrator-night-0');
+  await peek('14p-narrator-sees-night');
   await narr.click('[data-step="1"]');
   await narr.clickText('.pick', victim);
   await sleep(1500);
@@ -324,6 +338,9 @@ try {
   await victimPhone.shot('18-phone-ghost');
   await phones[names.indexOf(mafia)].shot('19-phone-mafia-morning');
   await narr.shot('20-narrator-morning');
+  const seen = await peek('20p-narrator-sees-morning');
+  const onPhone = await phones[names.indexOf(mafia)].eval(`document.querySelector('.stage-caption').textContent`);
+  check(seen === onPhone && seen.length > 3, `narrator's preview shows what the phones show (“${seen}”)`);
 
   /* ---------- a refresh in the middle of the game ---------- */
   log('refresh mid-game');
@@ -364,6 +381,7 @@ try {
   await table.shot('24-table-vote');
   await phones[1].shot('24b-phone-vote');
   await narr.shot('24c-narrator-vote');
+  await peek('24p-narrator-sees-vote');
   await narr.clickText('.pick', mafia);
   await narr.click('dialog[open] #yes');
   await narr.has('[data-cmd="finish"]');
