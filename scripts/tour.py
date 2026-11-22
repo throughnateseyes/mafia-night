@@ -23,7 +23,7 @@ def font(size, mono=True):
 SHEETS = {
     '1-player-phones': ('Every player\'s phone, in order', 5, 300, [
         ('03-join-form', '1. Get booked'), ('05-player-lobby', '2. Wait in the cabin'), ('05b-phone-how-to', 'The guide (any time)'),
-        ('05c-phone-guide-files', 'Tap a file in the guide'), ('05d-phone-guide-role', 'The page turns to that role'),
+        ('05c-phone-guide-files', 'Tap a file in the guide'), ('05d-phone-guide-role', 'The page turns'),
         ('07-reveal-hidden', '3. Your file arrives'), ('08-reveal-peek', 'Hold to open it'), ('10-play-day0', '4. Files are out'),
         ('13-phone-night', '5. Night falls'), ('19-phone-mafia-morning', '6. The morning paper'), ('18-phone-ghost', 'If you were killed'),
         ('24b-phone-vote', '7. The vote'), ('25b-phone-verdict', '8. The verdict'), ('26b-phone-case-closed', '9. Case closed'), ('28-phone-who-was-who', 'Who was who'),
