@@ -45,8 +45,8 @@ export const SCALING = [
   { min: 11, max: 14, mafia: 4, detective: 1, doctor: 1 },
 ];
 
-/** Show a dead player's role to everyone when they die. */
-export const REVEAL_ROLE_ON_DEATH = true;
+/** Show a dead player’s role to everyone when they die. Off: roles stay secret until the game ends. The narrator can switch it mid-game (Suspects tab). */
+export const REVEAL_ROLE_ON_DEATH = false;
 
 export const TEAMS = {
   mafia: { name: 'The Mafia', short: 'Mafia', win: 'Outnumber the campers. Then the cabin is yours.' },

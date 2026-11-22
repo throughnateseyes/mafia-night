@@ -82,8 +82,21 @@ describe('a night', () => {
     const victim = byRole(s, 'villager')[0];
     s = run(s, { type: 'night' }, { type: 'pick', kind: 'target', id: victim.id }, { type: 'pick', kind: 'save', id: byRole(s, 'doctor')[0].id }, { type: 'dawn' });
     expect(s.players.find((p) => p.id === victim.id).alive).toBe(false);
-    expect(s.scene).toMatchObject({ key: 'dead', name: victim.name, role: 'villager' });
-    expect(publicView(s).players.find((p) => p.id === victim.id).role).toBe('villager');
+    // roles stay secret by default
+    expect(s.scene).toMatchObject({ key: 'dead', name: victim.name, role: null });
+    expect(publicView(s).players.find((p) => p.id === victim.id).role).toBe(null);
+  });
+
+  it('shows a dead player’s role once the narrator switches reveal on, even mid-game', () => {
+    let s = reduce(lobby(9), { type: 'deal' });
+    const [first, second] = byRole(s, 'villager');
+    s = run(s, { type: 'night' }, { type: 'pick', kind: 'target', id: first.id }, { type: 'dawn' });
+    s = reduce(s, { type: 'reveal', on: true });
+    expect(publicView(s).players.find((p) => p.id === first.id).role).toBe('villager');
+    s = run(s, { type: 'vote' }, { type: 'eliminate', id: second.id });
+    expect(s.scene).toMatchObject({ key: 'out', name: second.name, role: 'villager' });
+    s = reduce(s, { type: 'reveal', on: false });
+    expect(publicView(s).players.find((p) => p.id === second.id).role).toBe(null);
   });
 
   it('nobody dies when the doctor saves the target', () => {
