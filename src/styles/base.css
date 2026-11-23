@@ -57,6 +57,17 @@ h1, h2, h3 { text-wrap: balance; font-weight: 400; }
 p { text-wrap: pretty; }
 
 /*
+ * Every block of text is trimmed to its letters: the top of the capitals to the baseline.
+ * The gap tokens are then the gaps you see, whichever face the text is in (a typed title,
+ * a line of body text and a pen note sit the same distance apart). Text that has to line
+ * up with something printed (the ruled index card, the newspaper) and text clipped to one
+ * line keeps its line box.
+ */
+h1, h2, h3, p, dt, dd, legend, .trim { text-box: trim-both cap alphabetic; }
+.icard *, .news *, .ctape, .stamp, .rstamp, .timer, .toast,
+.pol-cap, .mug-name, .tok-name, .chip-name, .pick-name, .oath-name, .folder-tab, .stage-compact-caption { text-box: normal; }
+
+/*
  * Layout frames.
  * .frame  — a phone-width column, centred on the desk. Everything inside is sized in desk units.
  * .frame.wide — the laptop/TV table. Inside it, wrap each column in .cq so its props scale to that column.
@@ -67,7 +78,8 @@ p { text-wrap: pretty; }
 .view {
   min-height: 100dvh;
   display: flex; flex-direction: column;
-  padding: calc(var(--s7) + env(safe-area-inset-top)) var(--gutter) calc(var(--s5) + env(safe-area-inset-bottom));
+  /* every phone screen starts the same distance from the top and ends the same distance from the bottom */
+  padding: calc(var(--gap-m) + env(safe-area-inset-top)) var(--gutter) calc(var(--gap-s) + env(safe-area-inset-bottom));
   animation: view-in 0.5s var(--ease-out) both;
   overflow-x: clip;
 }
@@ -77,10 +89,10 @@ p { text-wrap: pretty; }
 /* type voices */
 .typed { font-family: var(--f-type); }
 .hand { font-family: var(--f-hand); line-height: 1; }
-.kicker { font: var(--t-xs)/1.2 var(--f-type); color: var(--tape); }
+.kicker { font: var(--t-xs)/var(--lh-tight) var(--f-type); color: var(--tape); }
 .on-paper .kicker, .paper .kicker { color: var(--ink-faint); }
-.title { font: var(--t-h2)/1.1 var(--f-type); }
-.lede { font-size: var(--t-body); color: var(--desk-soft); }
+.title { font: var(--t-h2)/var(--lh-tight) var(--f-type); }
+.lede { font-size: var(--t-body); line-height: var(--lh-text); color: var(--desk-soft); }
 .note { font: var(--t-hand)/1 var(--f-hand); }
 .note.red { color: var(--red); }
 .note.gold { color: var(--tape); }

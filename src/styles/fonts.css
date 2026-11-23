@@ -1,0 +1,36 @@
+/*
+ * Two faces served from src/assets/fonts instead of fontsource, each with one fix to its metrics.
+ *
+ * Every line of text is trimmed to its capitals and baseline (`text-box: trim-both cap alphabetic`,
+ * base.css), so the gap tokens are the gaps you see. That only works if a font reports how tall
+ * its capitals really are, and these two didn't:
+ *   Special Elite (typewriter)  reported 713 of 2048 units, the letters are 1412: trimming cut the tops off.
+ *   Reenie Beanie (pen)         reported 700 of 1000, the letters are 579: pen notes kept a strip of
+ *                               empty space on top, so they always sat further away than everything else.
+ * The copies here report the real heights. Nothing else in the files is changed.
+ * Special Elite: Apache 2.0 (LICENSE-special-elite.txt). Reenie Beanie: SIL OFL 1.1 (LICENSE-reenie-beanie.txt).
+ */
+@font-face {
+  font-family: 'Special Elite';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../assets/fonts/special-elite-latin-ext-400.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Special Elite';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../assets/fonts/special-elite-latin-400.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Reenie Beanie';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../assets/fonts/reenie-beanie-latin-400.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

@@ -1,7 +1,6 @@
-import '@fontsource/special-elite/400.css';
+import './styles/fonts.css';
 import '@fontsource/courier-prime/400.css';
 import '@fontsource/courier-prime/700.css';
-import '@fontsource/reenie-beanie/400.css';
 import '@fontsource/pirata-one/400.css';
 import '@fontsource/playfair-display/900.css';
 import '@fontsource/im-fell-english/400.css';

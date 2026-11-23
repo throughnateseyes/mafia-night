@@ -7,18 +7,18 @@
 
 /* ---------- join: suspect intake, form 26-B ---------- */
 /* the sheet is wider than the usual gutter so sixteen mugshots have room */
-.mode-join { padding: calc(var(--s5) + env(safe-area-inset-top)) var(--s4) 0; }
+.mode-join { padding: calc(var(--inset) + env(safe-area-inset-top)) var(--gap-s) 0; }
 .join-form { flex: 1 1 auto; display: flex; flex-direction: column; }
-.intake { padding: var(--s5); transform: rotate(-0.7deg); }
-.intake .title { margin-top: var(--s1); }
+.intake { padding: var(--inset); transform: rotate(-0.7deg); }
+.intake .title { margin-top: var(--gap-s); }
 .intake .field,
 .av-set,
-.oath { margin-top: var(--s5); }
+.oath { margin-top: var(--gap-m); }
 .intake .field input { min-height: 44px; }
 
 .av-set { min-width: 0; margin-inline: 0; padding: 0; border: 0; }
 .av-set legend { padding: 0; }
-.av-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s3); margin-top: var(--s4); }
+.av-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-s); margin-top: var(--gap-s); }
 .av { position: relative; display: block; cursor: pointer; }
 .av input { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
 /* mug() without a name has no bottom border; give the print its white foot back */
@@ -26,18 +26,18 @@
 .av:active .mug { scale: 0.95; }
 .av:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: calc(var(--u) * 1.4); }
 
-.oath { display: flex; align-items: center; gap: var(--s4); }
+.oath { display: flex; align-items: center; gap: var(--gap-s); }
 .thumb-box { flex: none; width: calc(var(--u) * 24); height: calc(var(--u) * 28); padding: calc(var(--u) * 1.6); border: 1px dashed var(--ink-faint); color: var(--red); }
 /* a faint guide until they sign; then the thumb is pressed down */
 .thumbprint { display: block; width: 100%; height: 100%; opacity: 0.13; transform: rotate(-10deg) scale(1.14); transition: opacity var(--fast), transform var(--med) var(--ease-thud); }
 .join-form.signed .thumbprint { opacity: 0.75; transform: rotate(-4deg); }
 .oath-text { flex: 1 1 0; min-width: 0; }
-.oath-line { margin-top: var(--s1); font-size: var(--t-body); line-height: 1.35; opacity: 0.75; }
-.oath-sign { display: flex; align-items: baseline; gap: var(--s2); min-height: 1.15em; margin-top: var(--s2); padding-bottom: var(--s1); border-bottom: 2px dotted var(--ink-faint); font-size: var(--t-hand-lg); white-space: nowrap; }
+.oath-line { margin-top: var(--gap-xs); font-size: var(--t-body); line-height: 1.35; opacity: 0.75; }
+.oath-sign { display: flex; align-items: baseline; gap: var(--gap-xs); min-height: 1.15em; margin-top: var(--gap-xs); padding-bottom: var(--gap-xs); border-bottom: 2px dotted var(--ink-faint); font-size: var(--t-hand-lg); white-space: nowrap; }
 .oath-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
 /* the button rides the bottom edge of the desk; the sheet slides into the dark under it */
-.join-go { position: sticky; bottom: 0; z-index: 3; margin: auto calc(var(--s4) * -1) 0; padding: var(--s4) var(--gutter) calc(var(--s4) + env(safe-area-inset-bottom)); background: linear-gradient(180deg, transparent, rgba(14, 9, 6, 0.86) 46%, rgba(14, 9, 6, 0.96)); pointer-events: none; }
+.join-go { position: sticky; bottom: 0; z-index: 3; margin: auto calc(var(--gap-s) * -1) 0; padding: var(--gap-s) var(--gutter) calc(var(--gap-s) + env(safe-area-inset-bottom)); background: linear-gradient(180deg, transparent, rgba(14, 9, 6, 0.86) 46%, rgba(14, 9, 6, 0.96)); pointer-events: none; }
 .join-go .btn { pointer-events: auto; }
 /* not booked yet: the ink has dried, but the slip stays solid so the form doesn't show through it */
 .join-go .btn:disabled { opacity: 1; color: color-mix(in srgb, #f1e8d6 50%, var(--red)); }
@@ -45,20 +45,20 @@
 
 /* ---------- knocking / locked: nothing on the desk but a label ---------- */
 .mode-knocking,
-.mode-locked { align-items: center; justify-content: center; gap: var(--s5); text-align: center; }
+.mode-locked { align-items: center; justify-content: center; gap: var(--gap-m); text-align: center; }
 .mode-knocking .title,
 .mode-locked .title { max-width: 20ch; font-size: var(--t-h3); line-height: 1.3; }
 .mode-locked .lede { max-width: 28ch; }
 
 /* ---------- lobby: the cabin ---------- */
-.mode-lobby { padding-top: calc(var(--s6) + env(safe-area-inset-top)); padding-bottom: calc(var(--s3) + env(safe-area-inset-bottom)); overflow-x: clip; }
-.lobby-hello { align-self: center; margin-bottom: var(--s3); font-size: var(--t-hand-lg); transform: rotate(-2deg); }
+.mode-lobby { padding-top: calc(var(--gap-m) + env(safe-area-inset-top)); padding-bottom: calc(var(--gap-s) + env(safe-area-inset-bottom)); overflow-x: clip; }
+.lobby-hello { align-self: center; margin-bottom: var(--gap-s); font-size: var(--t-hand-lg); transform: rotate(-2deg); }
 .mode-lobby .is-cabin { max-width: min(100%, 50dvh); }
-.lobby-how { flex: none; margin-top: var(--s2); min-height: 44px; color: var(--desk-text); }
+.lobby-how { flex: none; margin-top: var(--gap-xs); min-height: 44px; color: var(--desk-text); }
 
 /* ---------- reveal: your file ---------- */
-.reveal-title { margin-top: var(--s1); }
-.reveal-desk { flex: 1 1 auto; display: grid; place-items: center; min-height: 0; padding: var(--s3) 0 var(--s4); }
+.reveal-title { margin-top: var(--gap-s); }
+.reveal-desk { flex: 1 1 auto; display: grid; place-items: center; min-height: 0; padding: var(--gap-s) 0 var(--gap-s); }
 /*
  * A folder that is capped by the screen height (so what sits under it never falls off a short phone)
  * is made its own container, with the desk unit restated (full width = the usual unit) and the few
@@ -68,7 +68,7 @@
 .mode-play .is-closed {
   container-type: inline-size;
   --u: min(1.163cqw, 4.8px);
-  --s1: calc(var(--u) * 1); --s2: calc(var(--u) * 2); --s3: calc(var(--u) * 3); --s4: calc(var(--u) * 4); --s5: calc(var(--u) * 6);
+  --gap-xs: calc(var(--u) * 2); --gap-s: calc(var(--u) * 4); --gap-m: calc(var(--u) * 8); --inset: calc(var(--u) * 6);
   --t-xs: max(11px, calc(var(--u) * 3.3)); --t-sm: max(12.5px, calc(var(--u) * 3.7)); --t-hand: max(20px, calc(var(--u) * 7.2)); --t-hand-lg: max(24px, calc(var(--u) * 9));
 }
 .peek-card { width: min(100%, 47dvh); border-radius: 8px; cursor: pointer; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
@@ -80,13 +80,13 @@
 
 /* inside the file */
 .card-front { flex: 1 1 auto; display: flex; flex-direction: column; }
-.file-top { display: flex; align-items: flex-start; gap: var(--s4); }
+.file-top { display: flex; align-items: flex-start; gap: var(--gap-s); }
 .file-top .pol { flex: none; width: 46%; }
-.file-line { flex: 1 1 0; min-width: 0; padding-top: var(--s1); font: var(--t-sm)/1.5 var(--f-type); }
-.file-stamp { display: block; margin-top: var(--s5); padding-left: var(--s3); }
-.file-crew { margin-top: var(--s5); font: var(--t-sm)/1.35 var(--f-type); }
+.file-line { flex: 1 1 0; min-width: 0; padding-top: var(--gap-xs); font: var(--t-sm)/1.5 var(--f-type); }
+.file-stamp { display: block; margin-top: var(--inset); padding-left: var(--gap-s); }
+.file-crew { margin-top: var(--gap-m); font: var(--t-sm)/1.35 var(--f-type); }
 .file-crew strong { font-weight: 400; color: var(--red); }
-.file-note { display: block; margin-top: auto; padding-top: var(--s2); text-align: right; font-size: var(--t-hand-lg); transform: rotate(-3deg); }
+.file-note { display: block; margin-top: auto; padding-top: var(--gap-xs); text-align: right; font-size: var(--t-hand-lg); transform: rotate(-3deg); }
 /* blacked-out words: the bar sits over the word and lifts once the file has been open a moment */
 .censor { position: relative; white-space: nowrap; }
 .censor .redact { position: absolute; inset: -0.08em -0.12em; width: auto !important; height: auto; animation: declassify 0.5s ease calc(1s + var(--i, 0) * 0.4s) both; }
@@ -105,11 +105,11 @@
 
 .reveal-hint { text-align: center; transform: rotate(-1.5deg); }
 /* the button's place is kept, so nothing jumps when it is set down */
-.reveal-go { flex: none; min-height: max(48px, calc(var(--u) * 13.5)); margin-top: var(--s4); }
+.reveal-go { flex: none; min-height: max(48px, calc(var(--u) * 13.5)); margin-top: var(--gap-s); }
 
 /* ---------- play: the stage, a stopwatch, and your file within reach ---------- */
 /* overflow-x: the verdict stamp slams down from 2x and must not widen the page while it does */
-.mode-play { padding-top: calc(var(--s6) + env(safe-area-inset-top)); padding-bottom: 0; overflow-x: clip; }
+.mode-play { padding-top: calc(var(--gap-m) + env(safe-area-inset-top)); padding-bottom: 0; overflow-x: clip; }
 /* the morning paper is capped by the screen height: make it its own container and restate the desk
    unit (full width = the usual unit), so the whole clipping scales down with that cap instead of
    keeping full-size type on a narrower sheet */
@@ -121,40 +121,40 @@
 .mode-play .is-closed { max-width: min(100%, max(72%, calc((100dvh - min(1cqw, 4.8px) * 88) * 86 / (64 + 7.4 * var(--n, 6))))); }
 /* "Case closed" is two words on a narrow folder: let the stamp break like the mock instead of running off the edge */
 .mode-play .stage-closed-stamp .stamp { white-space: normal; line-height: 1; padding-top: calc(var(--u) * 1.6); }
-.mode-play .timer { position: absolute; top: calc(var(--s2) + env(safe-area-inset-top)); left: var(--gutter); z-index: 4; transform: rotate(-3deg); }
+.mode-play .timer { position: absolute; top: calc(var(--gap-xs) + env(safe-area-inset-top)); left: var(--gutter); z-index: 4; transform: rotate(-3deg); }
 
 /* the dock rides the bottom edge of the desk, so the file and the slips stay in reach if a tall scene scrolls */
-.dock { position: sticky; bottom: 0; z-index: 5; flex: none; display: flex; flex-direction: column; gap: var(--s3); margin: var(--s2) calc(var(--gutter) * -1) 0; padding: var(--s3) var(--gutter) calc(var(--s4) + env(safe-area-inset-bottom)); background: linear-gradient(180deg, transparent, rgba(14, 9, 6, 0.8) 55%); }
+.dock { position: sticky; bottom: 0; z-index: 5; flex: none; display: flex; flex-direction: column; gap: var(--gap-s); margin: var(--gap-xs) calc(var(--gutter) * -1) 0; padding: var(--gap-s) var(--gutter) calc(var(--gap-s) + env(safe-area-inset-bottom)); background: linear-gradient(180deg, transparent, rgba(14, 9, 6, 0.8) 55%); }
 .dock-status:empty { display: none; }
-.dock-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--s3); }
+.dock-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--gap-s); }
 .peek-hold { flex: none; display: grid; place-items: center; min-height: 44px; padding: 0; border: 0; background: none; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .peek-hold .kraft { pointer-events: none; transition: scale var(--fast) var(--ease-out); }
 .peek-hold.held .kraft { scale: 0.96; }
-.dock-rules { flex: none; width: auto; min-height: 44px; padding: var(--s2) var(--s1); color: var(--tape); opacity: 0.9; }
+.dock-rules { flex: none; width: auto; min-height: 44px; padding: var(--gap-xs) var(--gap-xs); color: var(--tape); opacity: 0.9; }
 
 /* slips of paper left on the desk */
-.dock-banner.ghost { padding: var(--s3) var(--s4); font: var(--t-sm)/1.4 var(--f-type); color: var(--ink); text-align: left; transform: rotate(-0.8deg); filter: drop-shadow(0 calc(var(--u) * 1) calc(var(--u) * 1.4) rgba(0, 0, 0, 0.45)); }
+.dock-banner.ghost { padding: var(--gap-s) var(--gap-s); font: var(--t-sm)/1.4 var(--f-type); color: var(--ink); text-align: left; transform: rotate(-0.8deg); filter: drop-shadow(0 calc(var(--u) * 1) calc(var(--u) * 1.4) rgba(0, 0, 0, 0.45)); }
 .dock-banner.ghost strong { font-weight: 400; color: var(--red); }
 .dock-banner .whowas-result { color: var(--red); }
 
 /* the file, pulled halfway out of the drawer while the label is held */
 .peek-pop { position: absolute; left: 50%; bottom: 100%; z-index: 6; width: 72%; pointer-events: none; opacity: 0; visibility: hidden; transform: translate(-50%, 45%) rotate(6deg); transition: transform 0.24s ease-in, opacity 0.2s ease-in, visibility 0s 0.24s; }
 .peek-pop.show { opacity: 1; visibility: visible; transform: translate(-50%, 0) rotate(-2deg); transition: transform 0.36s var(--ease-out), opacity 0.1s; }
-.pop-stamp { display: block; padding: var(--s1) 0 var(--s2); text-align: center; }
+.pop-stamp { display: block; padding: var(--gap-xs) 0 var(--gap-xs); text-align: center; }
 .peek-pop .file-crew { text-align: center; }
 
 /* ---------- who was who ---------- */
-.who .title { margin-top: var(--s1); }
-.who-list { margin-top: var(--s4); }
-.who-row { align-items: center; padding: var(--s2) 0; font-size: var(--t-body); line-height: 1.2; }
+.who .title { margin-top: var(--gap-s); }
+.who-list { margin-top: var(--gap-m); }
+.who-row { align-items: center; padding: var(--gap-xs) 0; font-size: var(--t-body); line-height: 1.2; }
 .who-row::before { transform: translateY(0.4em); }
-.who-who { display: inline-flex; align-items: center; gap: var(--s3); min-width: 0; }
+.who-who { display: inline-flex; align-items: center; gap: var(--gap-s); min-width: 0; }
 .who-who .face { flex: none; width: calc(var(--u) * 10); }
 /* .chip-role is also styled (unscoped) by the narrator and big-screen sheets; here it is plain typed text */
 .who-list .who-row .chip-role { all: unset; order: 2; flex: none; font: inherit; color: inherit; white-space: nowrap; }
 .who-out { font-size: var(--t-xs); opacity: 0.65; }
-.who-you { display: inline-block; margin-left: var(--s1); font-size: var(--t-hand); line-height: 0.5; transform: rotate(-4deg); }
-.who-foot { margin-top: var(--s5); transform: rotate(-1.5deg); }
+.who-you { display: inline-block; margin-left: var(--gap-xs); font-size: var(--t-hand); line-height: 0.5; transform: rotate(-4deg); }
+.who-foot { margin-top: var(--gap-m); transform: rotate(-1.5deg); }
 
 /* on a laptop the phone column sits in the middle of the desk: the dark under the sticky bars pools
    in the middle and thins out sideways instead of ending in a hard edge */

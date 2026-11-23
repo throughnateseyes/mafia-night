@@ -8,7 +8,7 @@
  * Screenshots land in .art-preview/e2e/. Exits non-zero on any failure or page error.
  */
 import { spawn } from 'node:child_process';
-import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import jsQR from 'jsqr';
@@ -20,6 +20,9 @@ const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/M
 const PORT = Number(process.env.E2E_PORT ?? 9333);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (...a) => console.log('·', ...a);
+// the spacing audit (scripts/rhythm.js) runs on every screen as it is photographed
+const RHYTHM = readFileSync(new URL('./rhythm.js', import.meta.url), 'utf8');
+const rhythm = {};
 
 mkdirSync(OUT, { recursive: true });
 const profile = mkdtempSync(join(tmpdir(), 'mn-e2e-'));
@@ -125,6 +128,10 @@ async function device(name, { w = 390, h = 844, mobile = true } = {}) {
       const { data } = await s('Page.captureScreenshot', { format: 'png' });
       const buf = Buffer.from(data, 'base64');
       writeFileSync(`${OUT}/${file}.png`, buf);
+      try {
+        rhythm[file] = await dev.eval(RHYTHM);
+        writeFileSync(`${OUT}/rhythm.json`, JSON.stringify(rhythm, null, 1));
+      } catch {}
       return buf;
     },
     async shotOf(sel, file) {

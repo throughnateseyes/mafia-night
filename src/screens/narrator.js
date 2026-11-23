@@ -159,11 +159,11 @@ export function renderNarrator(root, arg) {
   /* ---------- pieces ---------- */
 
   /** The top of a page: where we are (typed kicker), then either the script to read out or a plain title. */
-  const head = ({ where, count = '', say = '', title = '', text = '' }) => `
+  const head = ({ where, count = '', say = '', title = '', sub = '', text = '' }) => `
     <header class="narr-head">
       <p class="kicker narr-where"><span>${where}</span>${count ? `<span>${count}</span>` : ''}</p>
       ${say ? `<p class="narr-say">“${esc(say)}”</p>` : ''}
-      ${title ? `<h2 class="narr-title">${title}</h2>` : ''}
+      ${title ? `<div class="narr-titleset"><h2 class="narr-title">${title}</h2>${sub ? `<p class="narr-hint mix">${sub}</p>` : ''}</div>` : ''}
       ${text ? `<p class="narr-text">${text}</p>` : ''}
     </header>`;
 
@@ -223,9 +223,9 @@ export function renderNarrator(root, arg) {
           ${head({
             where: 'The cabin · before the first night',
             title: n === 0 ? 'Nobody’s booked yet' : `${num(n)} suspect${n === 1 ? '' : 's'} booked`,
+            sub: mixLine(n),
             text: n === 0 ? 'Show the join code and let them scan in.' : '',
           })}
-          <p class="narr-hint mix">${mixLine(n)}</p>
           ${n ? `${roster(g, { cake: true, kick: true })}${cakeLine}` : ''}`,
         foot: `
           <button class="btn" data-cmd="deal" type="button" ${n < PLAYER_LIMITS.min ? 'disabled' : ''}>Hand out the files</button>

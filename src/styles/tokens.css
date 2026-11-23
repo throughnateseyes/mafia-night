@@ -60,16 +60,29 @@
   --t-hand: max(20px, calc(var(--u) * 7.2));
   --t-hand-lg: max(24px, calc(var(--u) * 9));
 
-  /* spacing scale */
-  --s1: calc(var(--u) * 1);
-  --s2: calc(var(--u) * 2);
-  --s3: calc(var(--u) * 3);
-  --s4: calc(var(--u) * 4);
-  --s5: calc(var(--u) * 6);
-  --s6: calc(var(--u) * 8);
-  --s7: calc(var(--u) * 12);
-  --s8: calc(var(--u) * 16);
-  --gutter: calc(var(--u) * 7);
+  /*
+   * Spacing. Five steps for the space between things, one for edges. Nothing else.
+   * Text is trimmed to its letters (base.css), so these are the gaps you actually see,
+   * from the baseline of one line to the top of the capitals of the next.
+   *
+   *   --gap-xs  2u   a label and the value under it
+   *   --gap-s   4u   lines and items that belong together (a caption, its sub line, its pen note)
+   *   --gap-m   8u   one group and the next (a prop and the words about it)
+   *   --gap-l  12u   sections
+   *   --gap-xl 16u   rare: the one big pause on a screen
+   *   --inset   6u   in from an edge: the page gutter, and the padding inside every card and sheet
+   */
+  --gap-xs: calc(var(--u) * 2);
+  --gap-s: calc(var(--u) * 4);
+  --gap-m: calc(var(--u) * 8);
+  --gap-l: calc(var(--u) * 12);
+  --gap-xl: calc(var(--u) * 16);
+  --inset: calc(var(--u) * 6);
+  --gutter: var(--inset);
+
+  /* line spacing inside a block of text (the space around a block comes from the gaps above) */
+  --lh-tight: 1.12; /* typed headings */
+  --lh-text: 1.45; /* anything you read */
 
   /* motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);

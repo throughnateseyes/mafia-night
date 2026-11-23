@@ -29,8 +29,8 @@ built from the shared props below, and work at every screen size.
    consistent shadow (`--lift-1`, `--lift-2`).
 7. **Motion is physical.** Things are set down (`.drop`), slid in (`.slide`), stamped (`thud`),
    or drawn by a pen. Nothing fades up from nowhere, nothing bounces. Respect reduced motion (base.css does).
-8. **Spacing.** Use the `--s1…--s8` scale and `--gutter`. Text blocks get `--s4`–`--s5` between them;
-   props get `--s5`–`--s6` of air. Never let text touch a prop's edge or another prop.
+8. **Spacing.** Only the gap tokens and `--inset` (see Layout rhythm). Never a raw number, never
+   a negative margin to pull something closer. Never let text touch a prop's edge or another prop.
 
 ## Sizing: desk units
 
@@ -88,10 +88,34 @@ exclamation marks except the birthday. Roles: Mafia, Medic, Ranger, Camper.
 Every screen reads top to bottom in three bands, and nothing floats between them:
 
 1. **Running head** at the top: the kicker (what this is), in the same place on every screen.
-2. **One group** in the middle: the prop and the words about it, centred together. A caption sits `--s5` under the thing it describes, never at the far end of the screen.
+2. **One group** in the middle: the prop and the words about it, centred together. A caption sits `--gap-m` under the thing it describes, never at the far end of the screen.
 3. **What you can do** at the bottom: the dock, the button, the hand-written link.
 
-Spacing inside a group uses three steps only: `--s2` between a label and its value, `--s4` between things that belong together, `--s7` between sections. Pick one alignment axis per column (the big-screen lobby hangs on the cabin's centre line) and keep everything in the column on it.
+### The spacing scale
+
+Five steps and an inset, all in desk units (`tokens.css`). Each step has one job:
+
+| token | units | used for |
+|---|---|---|
+| `--gap-xs` | 2 | a label and its value: a fact's label over its text, a title over its subline |
+| `--gap-s` | 4 | lines that belong together: kicker over title, caption, sub line, pen note |
+| `--gap-m` | 8 | one group to the next: a prop and its caption, one fact to the next |
+| `--gap-l` | 12 | sections of a page |
+| `--gap-xl` | 16 | rare: a break bigger than a section |
+| `--inset` | 6 | the edge of the screen (`--gutter`) and the padding inside paper |
+
+**Gaps are measured letter to letter.** Every line of text is trimmed to its capitals and baseline
+(`text-box: trim-both cap alphabetic` in base.css), so a 4u gap is 4u of empty paper between the bottom
+of one line's letters and the top of the next, whatever the font size or line height. Two fonts reported
+the wrong cap height for this, Special Elite and Reenie Beanie; the copies in `src/assets/fonts`
+are fixed (fonts.css says how). Elements that are props rather than lines (stamps, tape, the timer,
+names on photos) opt out in base.css, and so must anything new of that kind.
+
+**Check it.** `scripts/rhythm.js` runs on every screenshot the end-to-end test takes and writes
+`rhythm.json`: every gap between two lines on the same piece of paper, in units, with the tilt taken
+out. Anything off the scale or touching is a bug.
+
+Pick one alignment axis per column (the big-screen lobby hangs on the cabin's centre line) and keep everything in the column on it.
 
 ## The field guide
 
